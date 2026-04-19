@@ -1,0 +1,37 @@
+{
+  "models": [
+    {
+      "title": "Claude 3.5 Sonnet",
+      "provider": "openrouter",
+      "model": "anthropic/claude-3.5-sonnet"
+    }
+  ],
+  "systemPrompt": "You are an AI assistant working on the AIMS College Chatbot project. Before implementing ANY features, read and understand these files:\n\n1. .ai-context.md (current directory)\n2. project-brain/1_context.md\n3. project-brain/3_decisions.md\n4. project-brain/memory.json\n\nYou MUST:\n- Follow the documented technical decisions\n- Respect the modular architecture\n- Check current phase before making changes\n- Do NOT use external APIs (local-first MVP)\n- Update project-brain/memory.json after completing work\n- Reference these constraints in every response\n\nKey Constraints:\n- Embeddings: Sentence-Transformers (local, no OpenAI)\n- Vector Search: FAISS (no Pinecone)\n- Backend: FastAPI async\n- Responses: Template-based (deterministic)\n- Phase: RAG Implementation (COMPLETE)\n- Next: Database integration + Lead capture\n\nAlways be consistent with documented decisions.",
+  "slashCommands": [
+    {
+      "name": "brain",
+      "description": "Show current project brain status",
+      "step": {
+        "type": "runTerminalCommand",
+        "command": "cat /Users/maneeth/Desktop/Chat-Bot/project-brain/memory.json"
+      }
+    },
+    {
+      "name": "context",
+      "description": "Read AI context and architecture",
+      "step": {
+        "type": "readFile",
+        "path": ".ai-context.md"
+      }
+    },
+    {
+      "name": "decisions",
+      "description": "Review technical decisions",
+      "step": {
+        "type": "readFile",
+        "path": "project-brain/3_decisions.md"
+      }
+    }
+  ],
+  "contextLength": 8192
+}
