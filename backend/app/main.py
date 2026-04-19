@@ -10,6 +10,7 @@ from app.api import chat, leads, analytics, health
 from app.services.data_ingestion import test_with_sample_data
 from app.services.embeddings.embedding_service import load_embedding_model
 from app.services.retrieval.faiss_index import get_index
+from app.core.brain import BRAIN
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -23,9 +24,18 @@ async def lifespan(app: FastAPI):
     logger.info("🚀 Starting College Chatbot Backend")
     logger.info(f"Environment: {get_settings().app_name}")
     
+    # Load project brain (reads memory.json)
+    logger.info("\n📖 Loading Project Brain...")
+    brain_dict = BRAIN.load()
+    logger.info(f"   Project: {brain_dict.get('project_name')}")
+    logger.info(f"   Phase: {brain_dict.get('current_phase')} - {brain_dict.get('phase_status')}")
+    logger.info(f"   Completed: {len(brain_dict.get('completed_modules', []))} modules")
+    logger.info(f"   Pending: {len(brain_dict.get('pending_modules', []))} modules")
+    logger.info(f"   Identified Risks: {len(brain_dict.get('risks', []))}")
+    
     try:
         # Load embedding model
-        logger.info("Loading embedding model...")
+        logger.info("\n🧠 Loading embedding model...")
         load_embedding_model("all-MiniLM-L6-v2")
         logger.info("✅ Embedding model loaded")
         
@@ -40,7 +50,7 @@ async def lifespan(app: FastAPI):
             result = test_with_sample_data()
             logger.info(f"Sample data loaded: {result}")
         
-        logger.info("✅ RAG system initialized and ready")
+        logger.info("✅ RAG system initialized and ready\n")
     
     except Exception as e:
         logger.error(f"Startup error: {e}", exc_info=True)

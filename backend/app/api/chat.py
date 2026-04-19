@@ -9,6 +9,7 @@ import time
 from app.services.embeddings.embedding_service import embed_text
 from app.services.retrieval.faiss_index import get_index
 from app.services.llm.response_generator import get_generator
+from app.core.brain import BRAIN
 
 router = APIRouter(prefix="/api/v1", tags=["chat"])
 logger = logging.getLogger(__name__)
@@ -37,6 +38,7 @@ class ChatResponse(BaseModel):
     is_fallback: bool = False
     fallback_reason: Optional[str] = None
     processing_time_ms: float = 0
+    project_phase: Optional[str] = None  # Current project phase from brain
 
 
 @router.post("/chat", response_model=ChatResponse)
@@ -78,7 +80,8 @@ async def chat(request: ChatRequest):
                 sources=[],
                 is_fallback=True,
                 fallback_reason="no_results_found",
-                processing_time_ms=int((time.time() - start_time) * 1000)
+                processing_time_ms=int((time.time() - start_time) * 1000),
+                project_phase=BRAIN.get_current_phase()
             )
         
         # 3. Generate response
@@ -105,7 +108,8 @@ async def chat(request: ChatRequest):
             sources=sources,
             recommendations=[],
             is_fallback=is_fallback,
-            processing_time_ms=processing_time
+            processing_time_ms=processing_time,
+            project_phase=BRAIN.get_current_phase()
         )
     
     except HTTPException:
