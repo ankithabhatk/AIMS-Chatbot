@@ -1,17 +1,18 @@
 """
-Main Data Ingestion Orchestration Script
+Minimal Data Ingestion Pipeline (SYNCHRONOUS, LOCAL-ONLY)
 
 Pipeline:
-URL → Scrape → Clean → Chunk → Embed → Dedup → Supabase → FAISS Index
+Scrape → Clean → Chunk → Embed → FAISS Index → Save Locally
+
+No async, no database — just local validation.
 """
 
 import logging
-import asyncio
 import json
 import sys
-from typing import List, Dict
+import os
+from typing import List, Dict, Tuple
 from datetime import datetime
-import uuid
 
 # Add parent to path
 sys.path.insert(0, '/Users/maneeth/Desktop/Chat-Bot/backend')
@@ -20,107 +21,93 @@ from app.services.scraper.web_scraper import WebScraper
 from app.services.data_cleaning import TextCleaner, SmartChunker, chunk_documents
 from app.services.embeddings.embed_pipeline import EmbeddingPipeline
 from app.services.retrieval.faiss_builder import build_faiss_index_from_embeddings
-from app.services.database.supabase_client import SupabaseClient
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(message)s'
 )
 logger = logging.getLogger(__name__)
 
 
 class DataIngestionPipeline:
-    """Complete data ingestion orchestrator"""
+    """Minimal, testable data ingestion pipeline"""
     
     def __init__(self):
         self.scraper = WebScraper(max_depth=2, delay=0.5)
         self.cleaner = TextCleaner()
         self.chunker = SmartChunker()
         self.embeddings = EmbeddingPipeline()
-        self.db = SupabaseClient()
         
         self.stats = {
             'scraped_pages': 0,
             'cleaned_documents': 0,
             'chunks_created': 0,
             'embeddings_generated': 0,
-            'stored_documents': 0,
-            'failed_documents': 0,
-            'duplicates_skipped': 0
+            'faiss_saved': False
         }
     
-    async def run(self, url: str, source: str = "college_website") -> Dict:
-        """
-        Execute full ingestion pipeline
-        
-        Args:
-            url: Website URL to scrape
-            source: Source identifier (e.g., 'aims_website')
-        
-        Returns:
-            Ingestion results summary
-        """
-        logger.info(f"\n{'='*60}")
-        logger.info(f"Starting data ingestion pipeline")
-        logger.info(f"URL: {url}, Source: {source}")
-        logger.info(f"{'='*60}\n")
+    def run(self, url: str = "https://www.theaims.ac.in") -> Dict:
+        """Execute full ingestion pipeline synchronously"""
+        logger.info("\n" + "="*60)
+        logger.info("STARTING DATA INGESTION PIPELINE")
+        logger.info(f"URL: {url}")
+        logger.info("="*60 + "\n")
         
         try:
-            # Step 1: Scrape
+            # STEP 1: Scrape
             logger.info("STEP 1: Web Scraping")
             logger.info("-" * 40)
-            scraped = await self._scrape_website(url)
+            scraped = self._scrape_website(url)
             
-            # Step 2: Clean
+            # STEP 2: Clean
             logger.info("\nSTEP 2: Text Cleaning")
             logger.info("-" * 40)
-            cleaned = await self._clean_documents(scraped)
+            cleaned = self._clean_documents(scraped)
             
-            # Step 3: Chunk
+            # STEP 3: Chunk
             logger.info("\nSTEP 3: Intelligent Chunking")
             logger.info("-" * 40)
-            chunks = await self._chunk_documents(cleaned)
+            chunks = self._chunk_documents(cleaned)
             
-            # Step 4: Embed
+            # STEP 4: Embed
             logger.info("\nSTEP 4: Generate Embeddings")
             logger.info("-" * 40)
-            embeddings, metadata, chunk_ids = await self._embed_chunks(chunks)
+            embeddings, metadata, chunk_ids = self._embed_chunks(chunks)
             
-            # Step 5: Dedup & Store
-            logger.info("\nSTEP 5: Deduplication & Supabase Storage")
+            # STEP 5: Build FAISS Index
+            logger.info("\nSTEP 5: Build FAISS Index")
             logger.info("-" * 40)
-            stored_docs = await self._store_in_supabase(
-                embeddings, metadata, chunk_ids, source
-            )
+            index_path = self._build_faiss_index(chunk_ids, embeddings, metadata)
             
-            # Step 6: Build Index
-            logger.info("\nSTEP 6: Build FAISS Index")
+            # STEP 6: Save Checkpoints
+            logger.info("\nSTEP 6: Save Local Checkpoints")
             logger.info("-" * 40)
-            await self._build_faiss_index(stored_docs, embeddings)
+            self._save_checkpoints(chunks, embeddings, metadata, chunk_ids)
             
             # Summary
-            logger.info(f"\n{'='*60}")
-            logger.info("INGESTION COMPLETE")
-            logger.info(f"{'='*60}")
-            logger.info(self._format_summary())
+            logger.info("\n" + "="*60)
+            logger.info("✓ INGESTION COMPLETE")
+            logger.info("="*60)
+            self._print_summary(index_path)
             
             return {
                 'success': True,
-                'timestamp': datetime.now().isoformat(),
-                'stats': self.stats
+                'stats': self.stats,
+                'index_path': index_path,
+                'timestamp': datetime.now().isoformat()
             }
         
         except Exception as e:
-            logger.error(f"Pipeline failed: {e}", exc_info=True)
+            logger.error(f"\n❌ PIPELINE FAILED: {e}", exc_info=True)
             return {
                 'success': False,
                 'error': str(e),
-                'timestamp': datetime.now().isoformat(),
-                'stats': self.stats
+                'stats': self.stats,
+                'timestamp': datetime.now().isoformat()
             }
     
-    async def _scrape_website(self, url: str) -> List[Dict]:
+    def _scrape_website(self, url: str) -> List[Dict]:
         """Scrape website and return raw documents"""
         logger.info(f"Scraping: {url}")
         
@@ -129,13 +116,15 @@ class DataIngestionPipeline:
         
         logger.info(f"✓ Scraped {len(documents)} pages")
         for doc in documents[:3]:
-            logger.info(f"  - {doc['title'][:60]}... ({len(doc['content'])} chars)")
+            title = doc.get('title', '')[:60]
+            content_len = len(doc.get('content', ''))
+            logger.info(f"  • {title}... ({content_len} chars)")
         if len(documents) > 3:
             logger.info(f"  ... and {len(documents)-3} more")
         
         return documents
     
-    async def _clean_documents(self, documents: List[Dict]) -> List[Dict]:
+    def _clean_documents(self, documents: List[Dict]) -> List[Dict]:
         """Clean scraped documents"""
         logger.info(f"Cleaning {len(documents)} documents")
         
@@ -153,30 +142,30 @@ class DataIngestionPipeline:
         
         return cleaned
     
-    async def _chunk_documents(self, documents: List[Dict]) -> List[Dict]:
+    def _chunk_documents(self, documents: List[Dict]) -> List[Dict]:
         """Chunk documents into 400-600 token pieces"""
         logger.info(f"Chunking {len(documents)} documents")
         
         chunks = chunk_documents(
             documents,
             target_tokens=500,
-            min_tokens=300,
-            max_tokens=700,
             overlap_tokens=75
         )
         
         self.stats['chunks_created'] = len(chunks)
         
         logger.info(f"✓ Created {len(chunks)} chunks")
-        stats = self._chunk_statistics(chunks)
-        logger.info(f"  - Avg tokens per chunk: {stats['avg_tokens']:.0f}")
-        logger.info(f"  - Token range: {stats['min_tokens']}-{stats['max_tokens']}")
+        if chunks:
+            tokens = [c.get('tokens', 0) for c in chunks]
+            avg = sum(tokens) / len(tokens) if tokens else 0
+            logger.info(f"  • Avg tokens: {avg:.0f}")
+            logger.info(f"  • Range: {min(tokens)}-{max(tokens)}")
         
         return chunks
     
-    async def _embed_chunks(self, chunks: List[Dict]) -> tuple:
+    def _embed_chunks(self, chunks: List[Dict]) -> Tuple[List, List, List]:
         """Generate embeddings for chunks"""
-        logger.info(f"Generating embeddings for {len(chunks)} chunks")
+        logger.info(f"Embedding {len(chunks)} chunks")
         
         texts = [chunk['content'] for chunk in chunks]
         embeddings = self.embeddings.embed_batch(texts)
@@ -198,69 +187,19 @@ class DataIngestionPipeline:
         
         self.stats['embeddings_generated'] = len(embeddings)
         logger.info(f"✓ Generated {len(embeddings)} embeddings")
-        logger.info(f"  - Shape: {embeddings.shape}")
-        logger.info(f"  - Type: {embeddings.dtype}")
+        logger.info(f"  • Shape: {embeddings.shape}")
+        logger.info(f"  • Type: {embeddings.dtype}")
         
         return embeddings.tolist(), metadata, chunk_ids
     
-    async def _store_in_supabase(
-        self,
-        embeddings: List[List[float]],
-        metadata: List[Dict],
-        chunk_ids: List[str],
-        source: str
-    ) -> List[str]:
-        """Store chunks in Supabase with deduplication"""
-        logger.info(f"Storing {len(embeddings)} documents in Supabase")
-        
-        stored_docs = []
-        
-        for embedding, meta, chunk_id in zip(embeddings, metadata, chunk_ids):
-            try:
-                # Check if already exists (dedup)
-                # Note: This is a simple check - production would use vector similarity
-                existing = await self.db.document_store.get_all_documents()
-                if any(d.get('chunk_id') == chunk_id for d in existing):
-                    self.stats['duplicates_skipped'] += 1
-                    continue
-                
-                # Create document record
-                doc_id = str(uuid.uuid4())
-                
-                # Store in Supabase
-                result = await self.db.document_store.store_document(
-                    id=doc_id,
-                    content=meta,  # Store metadata as content for now
-                    url=meta['url'],
-                    heading=meta['heading'],
-                    chunk_index=meta['chunk_index'],
-                    source=source,
-                    tokens=meta['tokens']
-                )
-                
-                stored_docs.append(doc_id)
-                self.stats['stored_documents'] += 1
-            
-            except Exception as e:
-                logger.warning(f"Failed to store document: {e}")
-                self.stats['failed_documents'] += 1
-                continue
-        
-        logger.info(f"✓ Stored {len(stored_docs)} documents")
-        logger.info(f"  - Duplicates skipped: {self.stats['duplicates_skipped']}")
-        logger.info(f"  - Failed: {self.stats['failed_documents']}")
-        
-        return stored_docs
-    
-    async def _build_faiss_index(
+    def _build_faiss_index(
         self,
         doc_ids: List[str],
-        embeddings: List[List[float]]
-    ) -> None:
+        embeddings: List[List[float]],
+        metadata: List[Dict]
+    ) -> str:
         """Build FAISS index from embeddings"""
         logger.info(f"Building FAISS index for {len(doc_ids)} documents")
-        
-        metadata = [{'doc_id': doc_id} for doc_id in doc_ids]
         
         index = build_faiss_index_from_embeddings(
             embeddings=embeddings,
@@ -268,53 +207,62 @@ class DataIngestionPipeline:
             doc_ids=doc_ids
         )
         
-        logger.info(f"✓ FAISS index built and saved")
-        logger.info(f"  - Total vectors: {index.index.ntotal}")
-        logger.info(f"  - Index path: {index.index_path}")
+        logger.info(f"✓ FAISS index built")
+        logger.info(f"  • Vectors: {index.index.ntotal}")
+        logger.info(f"  • Path: {index.index_path}")
+        
+        self.stats['faiss_saved'] = True
+        return index.index_path
     
-    def _chunk_statistics(self, chunks: List[Dict]) -> Dict:
-        """Calculate chunk statistics"""
-        tokens = [chunk.get('tokens', 0) for chunk in chunks]
-        return {
-            'total_chunks': len(chunks),
-            'avg_tokens': sum(tokens) / len(tokens) if tokens else 0,
-            'min_tokens': min(tokens) if tokens else 0,
-            'max_tokens': max(tokens) if tokens else 0
-        }
+    def _save_checkpoints(
+        self,
+        chunks: List[Dict],
+        embeddings: List[List[float]],
+        metadata: List[Dict],
+        chunk_ids: List[str]
+    ) -> None:
+        """Save data locally for checkpoint/debugging"""
+        checkpoint_dir = "/tmp/chatbot_ingest"
+        os.makedirs(checkpoint_dir, exist_ok=True)
+        
+        # Save chunks
+        chunks_file = os.path.join(checkpoint_dir, "chunks.json")
+        with open(chunks_file, 'w') as f:
+            json.dump(chunks, f, indent=2)
+        logger.info(f"✓ Saved chunks: {chunks_file}")
+        
+        # Save metadata
+        metadata_file = os.path.join(checkpoint_dir, "metadata.json")
+        with open(metadata_file, 'w') as f:
+            json.dump({
+                'chunk_ids': chunk_ids,
+                'metadata': metadata,
+                'total_embeddings': len(embeddings)
+            }, f, indent=2)
+        logger.info(f"✓ Saved metadata: {metadata_file}")
     
-    def _format_summary(self) -> str:
-        """Format ingestion summary"""
-        lines = [
-            f"\nPages scraped:       {self.stats['scraped_pages']}",
-            f"Documents cleaned:   {self.stats['cleaned_documents']}",
-            f"Chunks created:      {self.stats['chunks_created']}",
-            f"Embeddings:          {self.stats['embeddings_generated']}",
-            f"Stored in Supabase:  {self.stats['stored_documents']}",
-            f"Duplicates skipped:  {self.stats['duplicates_skipped']}",
-            f"Failed:              {self.stats['failed_documents']}",
-        ]
-        return "\n".join(lines)
+    def _print_summary(self, index_path: str) -> None:
+        """Print final summary"""
+        logger.info(f"\nPipeline Statistics:")
+        logger.info(f"  Scraped pages:        {self.stats['scraped_pages']}")
+        logger.info(f"  Cleaned documents:    {self.stats['cleaned_documents']}")
+        logger.info(f"  Chunks created:       {self.stats['chunks_created']}")
+        logger.info(f"  Embeddings generated: {self.stats['embeddings_generated']}")
+        logger.info(f"  FAISS index saved:    {self.stats['faiss_saved']}")
+        logger.info(f"\nOutput locations:")
+        logger.info(f"  FAISS index:    {index_path}/")
+        logger.info(f"  Checkpoints:    /tmp/chatbot_ingest/")
 
 
-async def main():
+def main():
     """Main entry point"""
     pipeline = DataIngestionPipeline()
+    result = pipeline.run(url="https://www.theaims.ac.in")
     
-    # Ingest AIMS website
-    result = await pipeline.run(
-        url="https://www.theaims.ac.in",
-        source="aims_website"
-    )
-    
-    # Save result
-    with open('/tmp/ingest_result.json', 'w') as f:
-        json.dump(result, f, indent=2)
-    
-    logger.info(f"\nResult saved to /tmp/ingest_result.json")
-    
+    # Exit with status
     return 0 if result['success'] else 1
 
 
 if __name__ == '__main__':
-    exit_code = asyncio.run(main())
+    exit_code = main()
     sys.exit(exit_code)
