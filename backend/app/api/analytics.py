@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 @router.get("/analytics/dashboard")
-async def get_analytics_dashboard(time_range: str = Query("7d", regex="^(1d|7d|30d)$")):
+async def get_analytics_dashboard(time_range: str = Query("7d", pattern="^(1d|7d|30d)$")):
     """
     Get analytics dashboard data
     

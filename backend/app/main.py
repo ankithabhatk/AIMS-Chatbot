@@ -7,6 +7,9 @@ import logging
 
 from app.config import get_settings
 from app.api import chat, leads, analytics, health
+from app.services.data_ingestion import test_with_sample_data
+from app.services.embeddings.embedding_service import load_embedding_model
+from app.services.retrieval.faiss_index import get_index
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +22,32 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("🚀 Starting College Chatbot Backend")
     logger.info(f"Environment: {get_settings().app_name}")
+    
+    try:
+        # Load embedding model
+        logger.info("Loading embedding model...")
+        load_embedding_model("all-MiniLM-L6-v2")
+        logger.info("✅ Embedding model loaded")
+        
+        # Initialize vector index
+        logger.info("Initializing vector index...")
+        index = get_index()
+        logger.info(f"Index initialized. Stats: {index.get_stats()}")
+        
+        # Load sample data if index is empty
+        if index.doc_count == 0:
+            logger.info("Index empty, loading sample data...")
+            result = test_with_sample_data()
+            logger.info(f"Sample data loaded: {result}")
+        
+        logger.info("✅ RAG system initialized and ready")
+    
+    except Exception as e:
+        logger.error(f"Startup error: {e}", exc_info=True)
+        # Continue anyway, but log the error
+
     yield
+    
     # Shutdown
     logger.info("🛑 Shutting down College Chatbot Backend")
 
@@ -54,7 +82,8 @@ async def root():
     return {
         "message": "College Chatbot API",
         "version": settings.app_version,
-        "docs": "/docs"
+        "docs": "/docs",
+        "status": "ready"
     }
 
 
