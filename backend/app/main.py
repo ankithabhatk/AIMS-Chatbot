@@ -6,10 +6,7 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.config import get_settings
-from app.api import chat, leads, analytics, health
-from app.services.data_ingestion import test_with_sample_data
-from app.services.embeddings.embedding_service import load_embedding_model
-from app.services.retrieval.faiss_index import get_index
+from app.api import chat_v2, leads, analytics, health
 from app.core.brain import BRAIN
 
 # Configure logging
@@ -34,23 +31,16 @@ async def lifespan(app: FastAPI):
     logger.info(f"   Identified Risks: {len(brain_dict.get('risks', []))}")
     
     try:
-        # Load embedding model
-        logger.info("\n🧠 Loading embedding model...")
-        load_embedding_model("all-MiniLM-L6-v2")
-        logger.info("✅ Embedding model loaded")
+        # Initialize retrieval engine (FAISS + embeddings)
+        logger.info("\n⚡ Initializing Retrieval Engine...")
+        chat_v2.initialize_retrieval()
+        logger.info("✅ Retrieval engine ready")
         
-        # Initialize vector index
-        logger.info("Initializing vector index...")
-        index = get_index()
-        logger.info(f"Index initialized. Stats: {index.get_stats()}")
+        health_result = await chat_v2.health_check()
+        logger.info(f"   FAISS vectors: {health_result.get('faiss_vectors')}")
+        logger.info(f"   Chunks loaded: {health_result.get('chunks_loaded')}")
         
-        # Load sample data if index is empty
-        if index.doc_count == 0:
-            logger.info("Index empty, loading sample data...")
-            result = test_with_sample_data()
-            logger.info(f"Sample data loaded: {result}")
-        
-        logger.info("✅ RAG system initialized and ready\n")
+        logger.info("✅ Chatbot fully initialized and ready\n")
     
     except Exception as e:
         logger.error(f"Startup error: {e}", exc_info=True)
@@ -81,7 +71,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health.router)
-app.include_router(chat.router)
+app.include_router(chat_v2.router)
 app.include_router(leads.router)
 app.include_router(analytics.router)
 
