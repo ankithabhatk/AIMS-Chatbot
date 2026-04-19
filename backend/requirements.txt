@@ -27,3 +27,5 @@ sentence-transformers==2.2.2
 faiss-cpu==1.7.4
 numpy==1.24.3
 lxml==4.9.3
+supabase==2.0.3
+python-multipart==0.0.6
