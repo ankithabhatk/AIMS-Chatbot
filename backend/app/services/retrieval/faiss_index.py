@@ -86,7 +86,7 @@ class FAISSIndex:
             
         Returns:
             List of (text, score, url, heading)
-            Score is L2 distance (lower = more similar)
+            Score is similarity (0-1, higher = more similar)
         """
         if self.doc_count == 0:
             logger.warning("Search on empty index")
@@ -98,23 +98,47 @@ class FAISSIndex:
         # Search
         distances, indices = self.index.search(query_embedding, min(k, self.doc_count))
         
+        logger.debug(f"FAISS returned {len(indices[0])} results. Metadata has {len(self.metadata)} entries.")
+        
         results = []
         for dist, idx in zip(distances[0], indices[0]):
             if idx < 0:  # Invalid result
                 continue
             
+            # CRITICAL: Check bounds to prevent KeyError
+            if idx >= len(self.metadata):
+                logger.error(
+                    f"Index mismatch: FAISS returned idx={idx} "
+                    f"but metadata only has {len(self.metadata)} entries. "
+                    f"FAISS index has {self.index.ntotal} vectors. "
+                    f"This indicates index corruption - skipping this result."
+                )
+                continue
+            
             meta = self.metadata[idx]
+            
+            # Handle both metadata formats
+            # FAISSIndex format: {full_text, url, heading, id}
+            # FAISSIndexBuilder format: {text, url, heading, chunk_index, tokens}
+            full_text = meta.get("full_text") or meta.get("text", "")
+            
+            if not full_text:
+                logger.warning(f"No text found in metadata for idx={idx}")
+                continue
+            
             # Convert L2 distance to similarity score (0-1)
             # Lower distance = higher similarity
             similarity = 1.0 / (1.0 + dist)
             
             results.append((
-                meta["full_text"],
+                full_text,
                 float(similarity),
-                meta["url"],
-                meta["heading"]
+                meta.get("url", ""),
+                meta.get("heading", ""),
+                meta.get("id") or meta.get("index_position") or idx  # Document ID for tracing
             ))
         
+        logger.debug(f"Search returned {len(results)} valid results")
         return results
     
     def save(self) -> None:
@@ -132,22 +156,83 @@ class FAISSIndex:
         try:
             if os.path.exists(INDEX_FILE):
                 self.index = faiss.read_index(INDEX_FILE)
+                
+                # Load metadata with format detection
                 with open(METADATA_FILE, "r") as f:
-                    self.metadata = json.load(f)
+                    data = json.load(f)
+                
+                # Handle two formats:
+                # 1. List format from FAISSIndex: [{id, text, url, heading, full_text}, ...]
+                # 2. Dict format from FAISSIndexBuilder: {metadata: [...], doc_id_map: {...}, ...}
+                if isinstance(data, list):
+                    # Direct list format
+                    self.metadata = data
+                elif isinstance(data, dict) and 'metadata' in data:
+                    # FAISSIndexBuilder format
+                    self.metadata = data['metadata']
+                    logger.info(f"Converted from FAISSIndexBuilder format")
+                else:
+                    logger.error(f"Unknown metadata format: {type(data)}")
+                    self.metadata = []
+                
                 self.doc_count = len(self.metadata)
+                faiss_size = self.index.ntotal
+                
+                if faiss_size != self.doc_count:
+                    logger.error(
+                        f"⚠️ Index/Metadata mismatch on load:\n"
+                        f"  FAISS vectors: {faiss_size}\n"
+                        f"  Metadata entries: {self.doc_count}\n"
+                        f"  This might cause search errors"
+                    )
+                
                 logger.info(f"✅ Loaded existing index ({self.doc_count} documents)")
             else:
                 logger.info("No existing index found, starting fresh")
         except Exception as e:
             logger.warning(f"Could not load index: {e}, starting fresh")
+            self.metadata = []
+            self.doc_count = 0
     
     def get_stats(self) -> Dict[str, int]:
         """Get index statistics"""
         return {
             "document_count": self.doc_count,
             "index_size": self.index.ntotal,
-            "dimension": self.dimension
+            "dimension": self.dimension,
+            "metadata_count": len(self.metadata),
+            "synced": self.doc_count == self.index.ntotal == len(self.metadata)
         }
+    
+    def validate_integrity(self) -> bool:
+        """
+        Check if index and metadata are in sync
+        
+        Returns:
+            True if valid, False if corrupted
+        """
+        faiss_size = self.index.ntotal
+        metadata_size = len(self.metadata)
+        
+        if faiss_size != metadata_size:
+            logger.error(
+                f"❌ INDEX CORRUPTION DETECTED:\n"
+                f"  FAISS vectors: {faiss_size}\n"
+                f"  Metadata entries: {metadata_size}\n"
+                f"  Synced: {faiss_size == metadata_size}"
+            )
+            return False
+        
+        if faiss_size != self.doc_count:
+            logger.error(
+                f"❌ DOC COUNT MISMATCH:\n"
+                f"  FAISS vectors: {faiss_size}\n"
+                f"  doc_count: {self.doc_count}"
+            )
+            return False
+        
+        logger.info(f"✅ Index integrity OK ({self.doc_count} documents)")
+        return True
 
 
 # Global instance

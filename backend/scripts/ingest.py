@@ -21,6 +21,7 @@ from app.services.scraper.web_scraper import WebScraper
 from app.services.data_cleaning import TextCleaner, SmartChunker, chunk_documents
 from app.services.embeddings.embed_pipeline import EmbeddingPipeline
 from app.services.retrieval.faiss_builder import build_faiss_index_from_embeddings
+from app.services.improved_content_filter import ImprovedContentFilter
 
 # Configure logging
 logging.basicConfig(
@@ -60,10 +61,15 @@ class DataIngestionPipeline:
             logger.info("-" * 40)
             scraped = self._scrape_website(url)
             
+            # STEP 1.5: Filter low-quality content (IMPROVED version)
+            logger.info("\nSTEP 1.5: Content Quality Filtering (Improved)")
+            logger.info("-" * 40)
+            filtered = ImprovedContentFilter.filter_documents_v2(scraped)
+            
             # STEP 2: Clean
             logger.info("\nSTEP 2: Text Cleaning")
             logger.info("-" * 40)
-            cleaned = self._clean_documents(scraped)
+            cleaned = self._clean_documents(filtered)
             
             # STEP 3: Chunk
             logger.info("\nSTEP 3: Intelligent Chunking")
@@ -170,8 +176,10 @@ class DataIngestionPipeline:
         texts = [chunk['content'] for chunk in chunks]
         embeddings = self.embeddings.embed_batch(texts)
         
+        # Include the full chunk content in metadata (required for synthesis)
         metadata = [
             {
+                'text': chunk['content'],  # IMPORTANT: Include actual chunk text
                 'url': chunk['url'],
                 'heading': chunk.get('heading', ''),
                 'chunk_index': chunk.get('chunk_index', 0),

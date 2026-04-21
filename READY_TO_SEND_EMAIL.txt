@@ -1,0 +1,86 @@
+Subject: Student Chatbot Integration — AIMS Data Request (Deadline: [INSERT DATE 5 DAYS FROM TODAY])
+
+---
+
+Dear [AIMS Principal / Admissions Director Name],
+
+I hope this email finds you well.
+
+We've developed an AI chatbot for the AIMS website to help prospective and current students get instant answers about admissions, fees, placements, and campus life. 
+
+**Current Status:** We tested the chatbot with 30 real student questions and it successfully answered 32% of them. However, 68% required fallback to manual support — not because the system is broken, but because critical information isn't yet on your website.
+
+**The Problem:** Students are asking questions we can't answer:
+
+- "What is the MBA program fee?" ❌
+- "What is AIMS' placement rate?" ❌  
+- "Does AIMS have a hostel / gym?" ❌
+- "What scholarships are available?" ❌
+- "What are the admission requirements?" (Partial answer only)
+
+**The Solution:** We need 5 key documents to feed the chatbot's knowledge base. Once integrated, these same student questions will be answered instantly — improving student experience and reducing admin workload.
+
+---
+
+## Documents Needed
+
+Please share any available version of these (PDF, Excel, Word, internal docs — we handle all formats):
+
+1. **Fee Structure** — All programs (MBA, courses, payment options, scholarships/waivers)
+2. **Placement Data** — Last 3 years (highest/average/median packages, top companies, placement rate)
+3. **Campus Facilities** — Hostel, gym, library, labs, IT infrastructure, food, transportation
+4. **Admission Requirements** — Full admission process, entrance exams, eligibility by program, deadlines
+5. **Scholarship Info** — Available scholarships, eligibility, award amounts, application process
+
+---
+
+## Timeline & Commitment
+
+We can integrate this **within 1 week of receiving the documents**.
+
+**Expected improvement:** 32% → 70%+ answer rate
+
+**Deadline:** [INSERT DATE - 5 DAYS FROM TODAY]
+
+Please confirm:
+- Received this email ✓
+- Who will be responsible for sharing data ✓
+- Document delivery date ✓
+
+---
+
+## Why This Matters
+
+Your chatbot isn't just a feature — it's:
+- **24/7 support** for common questions
+- **Faster admissions experience** (students don't wait for email replies)
+- **Better engagement metrics** (students spend more time on site)
+- **Reduced admin burden** (fewer repetitive inquiries)
+
+This is your competitive advantage — most colleges still reply via email.
+
+---
+
+## Next Steps
+
+1. Reply to confirm receipt
+2. Identify the point person for data sharing
+3. Share documents by the deadline
+
+Once I have the files, integration takes 3–5 days. Then we'll show you the improvement.
+
+---
+
+**Contact:** [Your Name]  
+**Phone:** [Your Number]  
+**Email:** [Your Email]
+
+Thank you for supporting this initiative. Let's make AIMS the most student-friendly college in the city.
+
+Best regards,  
+[Your Name]
+
+---
+
+**P.S.** If all 5 documents aren't available, send what you have — we can start with partial data and improve iteratively. Quality matters more than completeness.
+

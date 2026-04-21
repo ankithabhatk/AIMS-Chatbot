@@ -6,7 +6,8 @@ from contextlib import asynccontextmanager
 import logging
 
 from app.config import get_settings
-from app.api import chat_v2, leads, analytics, health
+from app.api import health, stats, leads, analytics
+from app.api import chat_phase4
 from app.core.brain import BRAIN
 
 # Configure logging
@@ -18,33 +19,32 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     # Startup
-    logger.info("🚀 Starting College Chatbot Backend")
+    logger.info("🚀 Starting College Chatbot Backend - Phase 4")
     logger.info(f"Environment: {get_settings().app_name}")
     
-    # Load project brain (reads memory.json)
-    logger.info("\n📖 Loading Project Brain...")
-    brain_dict = BRAIN.load()
-    logger.info(f"   Project: {brain_dict.get('project_name')}")
-    logger.info(f"   Phase: {brain_dict.get('current_phase')} - {brain_dict.get('phase_status')}")
-    logger.info(f"   Completed: {len(brain_dict.get('completed_modules', []))} modules")
-    logger.info(f"   Pending: {len(brain_dict.get('pending_modules', []))} modules")
-    logger.info(f"   Identified Risks: {len(brain_dict.get('risks', []))}")
-    
     try:
-        # Initialize retrieval engine (FAISS + embeddings)
+        # Initialize FAISS index and embeddings
         logger.info("\n⚡ Initializing Retrieval Engine...")
-        chat_v2.initialize_retrieval()
-        logger.info("✅ Retrieval engine ready")
+        from app.services.retrieval.faiss_index import get_index
+        from app.services.embeddings.embedding_service import load_embedding_model
         
-        health_result = await chat_v2.health_check()
-        logger.info(f"   FAISS vectors: {health_result.get('faiss_vectors')}")
-        logger.info(f"   Chunks loaded: {health_result.get('chunks_loaded')}")
+        # Load FAISS index
+        index = get_index()
+        stats = index.get_stats()
+        logger.info(f"   FAISS Index: {stats['document_count']} documents")
+        logger.info(f"   Synced: {stats['synced']}")
         
-        logger.info("✅ Chatbot fully initialized and ready\n")
+        # Load embedding model
+        model = load_embedding_model()
+        logger.info(f"   Embedding Model: Loaded")
+        
+        logger.info("\n✅ API Ready - POST /api/v1/chat")
+        logger.info("   GET /api/v1/health")
+        logger.info("   GET /api/v1/stats")
     
     except Exception as e:
         logger.error(f"Startup error: {e}", exc_info=True)
-        # Continue anyway, but log the error
+        # Continue anyway, endpoints will handle gracefully
 
     yield
     
@@ -63,15 +63,26 @@ app = FastAPI(
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://www.theaims.ac.in"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5000",
+        "http://localhost:8001",  # Frontend server
+        "http://localhost:8080",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:5000",
+        "http://127.0.0.1:8001",  # Frontend server (127.0.0.1)
+        "http://127.0.0.1:8080",
+        "https://www.theaims.ac.in",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include routers
+# Include routers (Phase 4 endpoints)
 app.include_router(health.router)
-app.include_router(chat_v2.router)
+app.include_router(stats.router)
+app.include_router(chat_phase4.router)
 app.include_router(leads.router)
 app.include_router(analytics.router)
 

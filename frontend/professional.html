@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIMS Chatbot Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* Professional Header */
+        .header {
+            background: linear-gradient(135deg, #1a2332 0%, #2c3e50 100%);
+            padding: 15px 20px;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo {
+            width: 32px;
+            height: 32px;
+            background: #0066cc;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .header-text h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .header-text p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin: 2px 0 0 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Left Panel - Info */
+        .info-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-panel h2 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #1a2332;
+        }
+
+        .info-item {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .info-item-title {
+            font-weight: 600;
+            color: #0066cc;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .info-item-text {
+            color: #555;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .info-link {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .info-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Right Panel - Chat */
+        .chat-panel {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: calc(100vh - 110px);
+        }
+
+        .chat-header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .chat-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a2332;
+            margin: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 8px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .message.user .message-content {
+            background: #0066cc;
+            color: white;
+            border-radius: 12px 12px 0 12px;
+        }
+
+        .message.bot .message-content {
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 12px 12px 12px 0;
+        }
+
+        .message.bot .message-content.error {
+            background: #ffe5e5;
+            color: #c62828;
+        }
+
+        .message.bot .message-content.loading {
+            background: #fff3e0;
+            color: #e65100;
+            font-style: italic;
+        }
+
+        .metadata {
+            font-size: 11px;
+            margin-top: 6px;
+            color: #999;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .sources {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 11px;
+        }
+
+        .source-link {
+            display: block;
+            color: #0066cc;
+            text-decoration: none;
+            margin: 4px 0;
+        }
+
+        .source-link:hover {
+            text-decoration: underline;
+        }
+
+        .suggestions {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .suggestion-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 6px;
+        }
+
+        .suggestion-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 6px 8px;
+            margin: 4px 0;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            color: #0066cc;
+            text-decoration: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .suggestion-btn:hover {
+            background: #e8f5e9;
+            border-color: #2e7d32;
+        }
+
+        /* Input Area */
+        .chat-input-area {
+            padding: 16px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+        }
+
+        .send-btn {
+            padding: 10px 16px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: #0052a3;
+            box-shadow: 0 2px 4px rgba(0, 102, 204, 0.3);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-panel {
+                max-height: 60vh;
+            }
+
+            .message-content {
+                max-width: 90%;
+            }
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 13px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-logo">🎓</div>
+        <div class="header-text">
+            <h1>AIMS Intelligent Assistant</h1>
+            <p><span class="status-indicator"></span>Powered by AI • Available 24/7</p>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Panel -->
+        <div class="info-panel">
+            <h2>Quick Info</h2>
+
+            <div class="info-item">
+                <div class="info-item-title">📚 Programs Offered</div>
+                <div class="info-item-text">
+                    MBA, BBA, BBA Aviation, PhD Programs, and more. Ask about specific programs.
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item-title">🎯 Placement Support</div>
+                <div class="info-item-text">
+                    Partner with 100+ recruiters including EY, Infosys, Deloitte & Accenture.
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item-title">🏫 Campus Life</div>
+                <div class="info-item-text">
+                    Industry labs, cultural clubs, fests, and peer learning programs throughout the year.
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item-title">📞 Contact Details</div>
+                <div class="info-item-text">
+                    📧 Admissions: <a href="tel:+918150001994" class="info-link">+91-815-000-1994</a>
+                    <br/>📍 Bangalore, Karnataka
+                </div>
+            </div>
+
+            <div class="info-item">
+                <div class="info-item-title">ℹ️ About AIMS</div>
+                <div class="info-item-text">
+                    Since 1994, AIMS has focused on discipline, direction, and real-world skills for business, hospitality, IT, and commerce education.
+                </div>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 16px; border-top: 1px solid #e0e0e0;">
+                <div class="info-item-text" style="font-size: 12px; color: #999;">
+                    💡 <strong>Tip:</strong> Ask me about programs, fees, placements, facilities, or admission requirements!
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Chat -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h3>Ask Me Anything</h3>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty-state">
+                    <div class="empty-state-icon">💬</div>
+                    <div class="empty-state-text">
+                        <strong>Welcome to AIMS Chatbot!</strong>
+                        <br/>Ask questions about programs, admissions, placements, facilities, or fees.
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="queryInput"
+                        placeholder="Ask about AIMS programs, fees, placements..."
+                        autocomplete="off"
+                    />
+                    <button class="send-btn" id="sendBtn" onclick="sendQuery()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api/v1/chat';
+        const chatMessages = document.getElementById('chatMessages');
+        const queryInput = document.getElementById('queryInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        let sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substring(7);
+        let isLoading = false;
+
+        function clearEmptyState() {
+            const emptyState = chatMessages.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+
+        function formatAnswer(text) {
+            // Make it readable by adding line breaks
+            return text.replace(/\. /g, '.<br/>');
+        }
+
+        function addMessage(content, isUser = false, metadata = null) {
+            clearEmptyState();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+
+            if (isUser) {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = content;
+                messageDiv.appendChild(contentDiv);
+            } else {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+
+                if (metadata && metadata.error) {
+                    contentDiv.classList.add('error');
+                    contentDiv.innerHTML = content;
+                } else if (metadata && metadata.loading) {
+                    contentDiv.classList.add('loading');
+                    contentDiv.textContent = content;
+                } else {
+                    contentDiv.innerHTML = formatAnswer(content);
+                }
+
+                messageDiv.appendChild(contentDiv);
+
+                // Add confidence & sources
+                if (metadata && !metadata.error && !metadata.loading) {
+                    if (metadata.confidence !== undefined) {
+                        const badge = document.createElement('div');
+                        badge.className = 'confidence-badge';
+                        badge.textContent = `✓ Confidence: ${(metadata.confidence * 100).toFixed(0)}%`;
+                        messageDiv.appendChild(badge);
+                    }
+
+                    if (metadata.sources && metadata.sources.length > 0) {
+                        const sourcesDiv = document.createElement('div');
+                        sourcesDiv.className = 'sources';
+                        sourcesDiv.innerHTML = '<strong>📚 Sources:</strong>';
+
+                        metadata.sources.forEach(source => {
+                            const link = document.createElement('a');
+                            link.className = 'source-link';
+                            link.href = source.url;
+                            link.target = '_blank';
+                            link.textContent = '→ ' + (source.title || source.url);
+                            sourcesDiv.appendChild(link);
+                        });
+
+                        messageDiv.appendChild(sourcesDiv);
+                    }
+
+                    if (metadata.suggestions && metadata.suggestions.length > 0) {
+                        const suggestionsDiv = document.createElement('div');
+                        suggestionsDiv.className = 'suggestions';
+                        suggestionsDiv.innerHTML = '<div class="suggestion-title">💡 Related questions:</div>';
+
+                        metadata.suggestions.forEach(suggestion => {
+                            const btn = document.createElement('button');
+                            btn.className = 'suggestion-btn';
+                            btn.textContent = suggestion;
+                            btn.onclick = () => {
+                                queryInput.value = suggestion;
+                                sendQuery();
+                            };
+                            suggestionsDiv.appendChild(btn);
+                        });
+
+                        messageDiv.appendChild(suggestionsDiv);
+                    }
+                }
+            }
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        async function sendQuery() {
+            const query = queryInput.value.trim();
+
+            if (!query) return;
+            if (isLoading) return;
+
+            // Add user message
+            addMessage(query, true);
+            queryInput.value = '';
+            queryInput.focus();
+            isLoading = true;
+            sendBtn.disabled = true;
+
+            // Loading indicator
+            const loadingMsg = addMessage('Searching AIMS knowledge base...', false, { loading: true });
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: query,
+                        session_id: sessionId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Remove loading
+                loadingMsg.remove();
+
+                const answer = data.answer || data.message || 'No answer found';
+                const metadata = {
+                    confidence: data.confidence || 0,
+                    sources: data.sources || [],
+                    suggestions: data.suggestions || [],
+                    error: data.fallback === true
+                };
+
+                addMessage(answer, false, metadata);
+
+            } catch (error) {
+                loadingMsg.remove();
+                addMessage(
+                    '⚠️ <strong>Connection Error:</strong><br/>Could not reach the API. Make sure the backend is running at localhost:8000.',
+                    false,
+                    { error: true }
+                );
+            } finally {
+                isLoading = false;
+                sendBtn.disabled = false;
+            }
+        }
+
+        // Enter key to send
+        queryInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isLoading) {
+                sendQuery();
+            }
+        });
+
+        queryInput.focus();
+    </script>
+</body>
+</html>

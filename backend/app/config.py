@@ -17,8 +17,13 @@ class Settings(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 8000
     
-    # Database
+    # Database - Supabase
     database_url: str = "postgresql://user:password@localhost:5432/chatbot"
+    
+    # Supabase Configuration
+    supabase_url: str = ""
+    supabase_publishable_key: str = ""
+    supabase_jwt_secret: str = ""
     
     # Redis
     redis_url: str = "redis://localhost:6379/0"
@@ -49,7 +54,7 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     
     class Config:
-        env_file = ".env"
+        env_file = "backend/.env"
         case_sensitive = False
 
 

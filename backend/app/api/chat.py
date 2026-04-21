@@ -1,4 +1,4 @@
-"""Chat Endpoint - RAG-based Query Processing"""
+"""Chat Endpoint - RAG-based Query Processing with Answer Synthesis"""
 
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
@@ -8,7 +8,9 @@ import time
 
 from app.services.embeddings.embedding_service import embed_text
 from app.services.retrieval.faiss_index import get_index
-from app.services.llm.response_generator import get_generator
+from app.services.llm.answer_generator import get_answer_generator
+from app.services.response.filter import filter_results_by_relevance
+from app.services.response.confidence import calculate_confidence, get_confidence_label
 from app.core.brain import BRAIN
 from app.services.database.supabase_client import (
     get_document_store,
@@ -52,11 +54,14 @@ async def chat(request: ChatRequest):
     
     Flow:
     1. Embed query using sentence-transformers
-    2. Search FAISS index for similar chunks (local, fast)
-    3. Fetch full documents from Supabase (persistent storage)
-    4. Generate response from retrieved context
-    5. Log interaction to Supabase
-    6. Return with sources and confidence
+    2. Validate FAISS index integrity
+    3. Search FAISS index for similar chunks (local, fast)
+    4. Filter results by relevance (remove low-quality matches)
+    5. Calculate confidence score
+    6. Check fallback threshold (0.4)
+    7. Synthesize answer from filtered chunks
+    8. Fetch full documents from Supabase for sources
+    9. Log interaction and return response
     """
     start_time = time.time()
     
@@ -74,26 +79,72 @@ async def chat(request: ChatRequest):
         # 1. Embed query
         query_embedding = embed_text(query)
         
-        # 2. Search FAISS index (fast, local)
+        # 2. Check index integrity FIRST
         index = get_index()
-        retrieved_chunks = index.search(query_embedding, k=5)
+        stats = index.get_stats()
+        logger.info(f"Index stats: {stats}")
         
-        # 3. Fetch full documents from Supabase
+        if not index.validate_integrity():
+            logger.error("Index corruption detected - returning fallback")
+            return ChatResponse(
+                response="System error: Please try again later.",
+                confidence_score=0.0,
+                sources=[],
+                is_fallback=True,
+                fallback_reason="system_error",
+                processing_time_ms=int((time.time() - start_time) * 1000),
+                project_phase=BRAIN.get_current_phase()
+            )
+        
+        # 3. Search FAISS index (fast, local)
+        retrieved_chunks = index.search(query_embedding, k=5)
+        logger.info(f"Retrieved {len(retrieved_chunks) if retrieved_chunks else 0} chunks from FAISS")
+        
+        # 3. Filter results by relevance (remove low-quality matches)
+        if retrieved_chunks:
+            filtered_chunks = filter_results_by_relevance(retrieved_chunks, min_score=0.3)
+            logger.info(f"Filtered: {len(retrieved_chunks)} → {len(filtered_chunks)} chunks")
+        else:
+            filtered_chunks = []
+            logger.warning("No chunks retrieved from FAISS")
+        
+        # 4. Calculate confidence score from filtered results
+        confidence = calculate_confidence(filtered_chunks) if filtered_chunks else 0.0
+        confidence_label = get_confidence_label(confidence)
+        logger.info(f"Confidence: {confidence:.2f} ({confidence_label})")
+        
+        # 5. Check if we should return fallback
+        # CALIBRATED: 0.45 threshold allows good queries (0.48+) through
+        # while catching wrong queries (< 0.35)
+        # - Good queries (0.53+ scores) → confidence 0.48+ → answer
+        # - Bad queries (< 0.45 scores) → confidence 0.0-0.35 → fallback
+        # - Wrong queries (0.48 scores) → confidence 0.48 → answer (acceptable)
+        fallback_threshold = 0.45
+        is_fallback = confidence < fallback_threshold or not filtered_chunks
+        
+        # 6. Fetch full documents from Supabase for sources
         doc_store = get_document_store()
         sources_data = []
         
-        if retrieved_chunks:
+        if filtered_chunks:
             # Extract document IDs from FAISS results
-            doc_ids = [chunk[4] if len(chunk) > 4 else None for chunk in retrieved_chunks]
+            doc_ids = [chunk[4] if len(chunk) > 4 else None for chunk in filtered_chunks]
             doc_ids = [d for d in doc_ids if d]  # Filter None values
+            logger.debug(f"Document IDs from chunks: {doc_ids}")
             
             # Fetch full documents from Supabase
             if doc_ids:
                 full_docs = await doc_store.get_documents_by_ids(doc_ids)
                 sources_data = full_docs[:3]  # Top 3
+                logger.info(f"Fetched {len(sources_data)} full documents from Supabase")
         
-        if not retrieved_chunks or not sources_data:
-            logger.warning(f"No results found for: {query}")
+        if is_fallback:
+            logger.warning(f"Low confidence ({confidence:.2f} < {fallback_threshold}) - returning fallback")
+            
+            fallback_text = (
+                "I don't have information about that in my knowledge base. "
+                "Please contact admissions@theaims.ac.in for more details."
+            )
             
             # Log fallback response
             chat_log_store = get_chat_log_store()
@@ -101,10 +152,10 @@ async def chat(request: ChatRequest):
                 user_email = request.user_context.get("email") if request.user_context else None
                 await chat_log_store.log_chat(
                     query=query,
-                    response="I don't have information about that in my knowledge base.",
+                    response=fallback_text,
                     session_id=request.session_id,
                     user_email=user_email,
-                    confidence_score=0.0,
+                    confidence_score=confidence,
                     processing_time_ms=int((time.time() - start_time) * 1000),
                     is_fallback=True
                 )
@@ -112,20 +163,20 @@ async def chat(request: ChatRequest):
                 logger.error(f"Failed to log fallback: {log_error}")
             
             return ChatResponse(
-                response="I don't have information about that in my knowledge base. Please contact admissions@theaims.ac.in",
-                confidence_score=0.0,
+                response=fallback_text,
+                confidence_score=confidence,
                 sources=[],
                 is_fallback=True,
-                fallback_reason="no_results_found",
+                fallback_reason=f"low_confidence_{confidence_label}",
                 processing_time_ms=int((time.time() - start_time) * 1000),
                 project_phase=BRAIN.get_current_phase()
             )
         
-        # 4. Generate response
-        generator = get_generator(use_openai=False)
-        response_text, confidence, is_fallback = generator.generate(query, retrieved_chunks)
+        # 7. Generate synthesized answer from filtered chunks
+        answer_gen = get_answer_generator()
+        response_text = answer_gen.synthesize(query, filtered_chunks)
         
-        # 5. Build sources from Supabase data
+        # 8. Build sources from Supabase data
         sources = [
             SourceCitation(
                 url=doc.get("url", ""),
@@ -137,7 +188,7 @@ async def chat(request: ChatRequest):
         
         processing_time = int((time.time() - start_time) * 1000)
         
-        # 6. Log interaction to Supabase
+        # 9. Log interaction to Supabase
         chat_log_store = get_chat_log_store()
         try:
             user_email = request.user_context.get("email") if request.user_context else None
@@ -148,20 +199,20 @@ async def chat(request: ChatRequest):
                 user_email=user_email,
                 confidence_score=confidence,
                 processing_time_ms=processing_time,
-                is_fallback=is_fallback
+                is_fallback=False
             )
         except Exception as log_error:
             logger.error(f"Failed to log chat: {log_error}")
             # Don't fail the response if logging fails
         
-        logger.info(f"Response generated. Confidence: {confidence:.2f}, Time: {processing_time}ms")
+        logger.info(f"Response generated. Confidence: {confidence:.2f} ({confidence_label}), Time: {processing_time}ms")
         
         return ChatResponse(
             response=response_text,
             confidence_score=confidence,
             sources=sources,
             recommendations=[],
-            is_fallback=is_fallback,
+            is_fallback=False,
             processing_time_ms=processing_time,
             project_phase=BRAIN.get_current_phase()
         )
