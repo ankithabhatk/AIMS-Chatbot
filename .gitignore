@@ -86,3 +86,44 @@ yarn-error.log
 *.tmp
 *.temp
 *.bak
+
+# FAISS Index & Vector Database
+/tmp/chatbot_faiss/
+*.faiss
+*.pkl
+faiss_index/
+
+# API Keys & Secrets
+OPENAI_API_KEY
+SUPABASE_*
+JWT_SECRET
+DATABASE_PASSWORD
+*.pem
+*.key
+*.crt
+secrets/
+credentials/
+.env.production
+
+# Cache
+.cache/
+.eslintcache
+.pytest_cache/
+
+# FAISS temporary
+index.faiss
+metadata.json
+
+# IDE Extensions
+.vscode/extensions.json
+.vscode/launch.json
+
+# Production builds
+.next/
+out/
+build/
+
+# MacOS
+.AppleDouble
+.LSOverride
+*.swp
