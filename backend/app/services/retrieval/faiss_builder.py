@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class FAISSIndexBuilder:
     """Build and manage FAISS index with metadata"""
     
-    def __init__(self, index_path: str = "/tmp/chatbot_faiss", dimension: int = 384):
+    def __init__(self, index_path: str = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index", dimension: int = 384):
         """
         Initialize index builder
         
@@ -183,7 +183,7 @@ def build_faiss_index_from_embeddings(
     embeddings: List[List[float]],
     documents: List[Dict],
     doc_ids: List[str],
-    index_path: str = "/tmp/chatbot_faiss"
+    index_path: str = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index"
 ) -> FAISSIndexBuilder:
     """
     Build FAISS index from embeddings

@@ -141,7 +141,9 @@ class FAISSIndex:
                 float(similarity),
                 meta.get("url", ""),
                 meta.get("heading", ""),
-                meta.get("id") or meta.get("index_position") or idx  # Document ID for tracing
+                meta.get("id") or meta.get("index_position") or idx,  # Document ID
+                meta.get("source", "web"),      # ← official vs web
+                meta.get("priority", 1),         # ← 2 = official, 1 = scraped
             ))
         
         logger.debug(f"Search returned {len(results)} valid results")

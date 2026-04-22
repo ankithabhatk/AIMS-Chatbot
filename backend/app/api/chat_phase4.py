@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 # Constants
 FAISS_K = 25
 MAX_ANSWER_LENGTH = 800
-CONFIDENCE_THRESHOLD = 0.55
+CONFIDENCE_THRESHOLD = 0.38   # Lowered: avoid over-triggering fallback on valid academic queries
 RERANK_MIN_SCORE = 0.65
 MIN_QUERY_LENGTH = 3
 MIN_SCORE_FILTER = 0.3
@@ -333,16 +333,19 @@ async def chat_endpoint(request: ChatRequest):
         from app.services.reranker import simple_rerank
         
         # Convert FAISS tuples to dicts for reranker
-        # Format: (text, score, url, heading, doc_id)
-        candidate_dicts = [
-            {
+        # Format: (text, score, url, heading, doc_id, source, priority)
+        candidate_dicts = []
+        for c in retrieved_chunks:
+            d = {
                 "content": c[0],
                 "score": c[1],
                 "url": c[2],
                 "heading": c[3],
-                "id": c[4] if len(c) > 4 else None
-            } for c in retrieved_chunks
-        ]
+                "id": c[4] if len(c) > 4 else None,
+                "source": c[5] if len(c) > 5 else "web",
+                "priority": c[6] if len(c) > 6 else 1,
+            }
+            candidate_dicts.append(d)
         
         # Rerank and pick top 5 (increased for better synthesis)
         reranked_dicts = simple_rerank(rewritten_query, candidate_dicts, min_score=MIN_SCORE_FILTER)
@@ -467,18 +470,16 @@ async def chat_endpoint(request: ChatRequest):
             brain_instruction=brain_instruction
         )
         
-        # Add disclaimer if confidence is in the medium range
-        if confidence < CONFIDENCE_THRESHOLD:
-            logger.info(f"[{session_id}] Medium confidence disclaimer added")
-            answer += "\n\nFor more specific details or verification, please contact the AIMS admissions office."
-        
         # ================================================================
-        # 9. GATE INVITATION (On first 'free' turn)
+        # 9. GATE INVITATION — only for fee/financial queries on ungated sessions
         # ================================================================
         from app.services.lead_handler import get_gate_invitation
         
-        if session["query_count"] == 1 and not session["has_lead"]:
-            logger.info(f"[{session_id}] Appending gate invitation to first answer")
+        FEE_ADJACENT_KEYWORDS = ["fee", "cost", "scholarship", "financial", "tuition", "afford", "price"]
+        is_fee_query = any(kw in query.lower() for kw in FEE_ADJACENT_KEYWORDS)
+        
+        if is_fee_query and not session["has_lead"]:
+            logger.info(f"[{session_id}] Fee-adjacent query — appending gate invitation")
             answer = f"{answer}\n\n{get_gate_invitation()}"
         
         if not answer or answer.strip() == "":
@@ -541,8 +542,8 @@ async def chat_endpoint(request: ChatRequest):
         # 13. BUILD SUCCESS RESPONSE
         # ================================================================
         status = "unlock"
-        # Rule: Turn 1 is free, Turn 2 is gated (Status: lock)
-        if intent not in ["GREETING", "EXIT"] and session["query_count"] >= 2 and not session["has_lead"]:
+        # Rule: 2 free turns, then soft-gate (UI shows form but answer is still visible)
+        if intent not in ["GREETING", "EXIT"] and session["query_count"] >= 3 and not session["has_lead"]:
             status = "lock"
             session["gate_active"] = True
             logger.info(f"[{session_id}] Turn {session['query_count']} - Activating lead gate")

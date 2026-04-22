@@ -18,6 +18,7 @@ from datetime import datetime
 sys.path.insert(0, '/Users/maneeth/Desktop/Chat-Bot/backend')
 
 from app.services.scraper.web_scraper import WebScraper
+from app.services.scraper.playwright_scraper import scrape_aims_website_enhanced
 from app.services.data_cleaning import TextCleaner, SmartChunker, chunk_documents
 from app.services.embeddings.embed_pipeline import EmbeddingPipeline
 from app.services.retrieval.faiss_builder import build_faiss_index_from_embeddings
@@ -36,7 +37,8 @@ class DataIngestionPipeline:
     """Minimal, testable data ingestion pipeline with dual storage (FAISS + Supabase)"""
     
     def __init__(self):
-        self.scraper = WebScraper(max_depth=3, delay=0.5)  # Increased from max_depth=2 to 3 for deeper crawl
+        self.scraper = WebScraper(max_depth=3, delay=0.5)  # Fallback static scraper
+        self.use_playwright = True  # Use JS-aware scraper as primary
         self.cleaner = TextCleaner()
         self.chunker = SmartChunker()
         self.embeddings = EmbeddingPipeline()
@@ -84,11 +86,38 @@ class DataIngestionPipeline:
             logger.info("-" * 40)
             cleaned = self._clean_documents(filtered)
             
-            # STEP 3: Chunk
             logger.info("\nSTEP 3: Intelligent Chunking")
             logger.info("-" * 40)
             chunks = self._chunk_documents(cleaned)
-            
+
+            # STEP 3.5: Inject OFFICIAL knowledge (PRIMARY data source)
+            # Official chunks: institution-provided, verified, tagged priority=2
+            # These beat all scraped data in the reranker
+            logger.info("\nSTEP 3.5: Injecting Official Knowledge Base (PRIMARY SOURCE)")
+            logger.info("-" * 40)
+            from app.services.knowledge.official_knowledge import get_official_chunks
+            from app.services.data_cleaning import TextCleaner, estimate_tokens
+            cleaner_ok = TextCleaner()
+            official_raw = get_official_chunks()
+            official_chunks = []
+            for doc in official_raw:
+                # Official KB chunks are already clean structured text.
+                # Do NOT run through TextCleaner — it collapses newlines/bullets
+                # which breaks the sentence splitter in answer_generator.
+                content = doc.get('content', '').strip()
+                official_chunks.append({
+                    'content': content,
+                    'url': doc.get('url', ''),
+                    'heading': doc.get('title', 'Official Knowledge'),
+                    'chunk_index': 0,
+                    'tokens': estimate_tokens(content),
+                    'source': 'official',   # ← reranker uses this
+                    'priority': 2,           # ← highest priority
+                    'category': doc.get('category', 'general'),
+                })
+            chunks = chunks + official_chunks
+            logger.info(f"✓ Injected {len(official_chunks)} official knowledge chunks (total: {len(chunks)})")
+
             # STEP 4: Embed
             logger.info("\nSTEP 4: Generate Embeddings")
             logger.info("-" * 40)
@@ -127,27 +156,28 @@ class DataIngestionPipeline:
             }
     
     def _scrape_website(self) -> List[Dict]:
-        """Scrape website and supplement with browser-extracted data"""
-        logger.info("Scraping website...")
-        
-        # 1. Live Recrusive Crawl (Depth 3)
-        documents = self.scraper.scrape_website()
-        
-        # 2. Supplemental Deep Data (from browser subagent)
+        """Scrape website using Playwright (JS-aware) + static knowledge injection"""
+        logger.info("Scraping website (Playwright + static knowledge)...")
+
+        # PRIMARY: Playwright JS-aware scraper (handles Next.js)
+        if self.use_playwright:
+            try:
+                documents = scrape_aims_website_enhanced()
+                logger.info(f"✓ Playwright + static knowledge: {len(documents)} documents")
+            except Exception as e:
+                logger.warning(f"⚠️  Playwright scrape failed ({e}), falling back to requests scraper")
+                documents = self.scraper.scrape_website()
+        else:
+            documents = self.scraper.scrape_website()
+
+        # SUPPLEMENTAL: Load any manually saved browser data
         supplemental_path = os.path.join(os.path.dirname(__file__), 'aims_browser_data.json')
         if os.path.exists(supplemental_path):
             try:
-                import json
                 with open(supplemental_path, 'r') as f:
                     supplemental_data = json.load(f)
-                
-                # Check for duplicates by URL
                 existing_urls = {doc.get('url') for doc in documents}
-                new_docs = []
-                for s_doc in supplemental_data:
-                    if s_doc.get('url') not in existing_urls:
-                        new_docs.append(s_doc)
-                
+                new_docs = [d for d in supplemental_data if d.get('url') not in existing_urls]
                 if new_docs:
                     logger.info(f"➕  Added {len(new_docs)} supplemental documents from JSON")
                     documents.extend(new_docs)
@@ -156,7 +186,6 @@ class DataIngestionPipeline:
 
         self.stats['scraped_pages'] = len(documents)
         logger.info(f"✓ Total pages for ingestion: {len(documents)}")
-        
         return documents
     
     def _clean_documents(self, documents: List[Dict]) -> List[Dict]:
@@ -214,7 +243,10 @@ class DataIngestionPipeline:
                 'heading': chunk.get('heading', ''),
                 'chunk_index': chunk.get('chunk_index', 0),
                 'tokens': chunk.get('tokens', 0),
-                'type': chunk.get('type', 'page')  # Preserve FAQ type
+                'type': chunk.get('type', 'page'),   # Preserve FAQ type
+                'source': chunk.get('source', 'web'),    # ← official or web
+                'priority': chunk.get('priority', 1),    # ← 2=official, 1=scraped
+                'category': chunk.get('category', ''),
             }
             for chunk in chunks
         ]

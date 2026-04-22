@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class AnswerGenerator:
     """Generate coherent answers from multiple retrieved chunks"""
     
-    def __init__(self, max_answer_length: int = 800, min_sentence_length: int = 20):
+    def __init__(self, max_answer_length: int = 1200, min_sentence_length: int = 20):
         """
         Initialize answer generator
         
@@ -80,8 +80,8 @@ class AnswerGenerator:
             similarity = chunk[1]
             heading = chunk[3] if len(chunk) > 3 else "unknown"
             
-            # Split by sentence boundaries
-            raw_sentences = re.split(r'(?<=[.!?])\s+', text)
+            # Split by sentence boundaries AND newlines (official KB uses newline-delimited facts)
+            raw_sentences = re.split(r'(?<=[.!?])\s+|\n+', text)
             
             for sent in raw_sentences:
                 sent = sent.strip()
@@ -137,34 +137,70 @@ class AnswerGenerator:
         query_lower = query.lower()
         ranked = []
         
-        factual_keywords = ["lpa", "package", "recruiter", "company", "placement", "salary", "admission", "apply", "brands", "corporates", "amazon", "deloitte", "infosys", "ey", "accenture", "kpmg", "hostel", "residential", "accommodation", "mess"]
-        
-        # Determine if query is asking for admission/eligibility
+        # Query-aware factual keyword groups — only boost terms relevant to this specific query
+        FACTUAL_GROUPS = {
+            'placement': {
+                'triggers': ['recruiter', 'placement', 'package', 'salary', 'lpa', 'placed', 'company', 'hiring'],
+                'boost_terms': ['lpa', 'package', 'recruiter', 'amazon', 'deloitte', 'ey', 'kpmg', 'accenture',
+                                'infosys', 'wipro', 'tcs', 'cognizant', '27', '16.5', '84%', 'placement']
+            },
+            'hostel': {
+                'triggers': ['hostel', 'accommodation', 'stay', 'dorm', 'resident'],
+                'boost_terms': ['hostel', 'mess', 'security', 'cctv', 'biometric', 'wi-fi', 'wifi', 'laundry', 'furnished']
+            },
+            'accreditation': {
+                'triggers': ['accreditat', 'naac', 'iacbe', 'aicte', 'ranking', 'nirf'],
+                'boost_terms': ['naac', 'iacbe', 'aicte', 'accredited', 'accreditation', 'nirf', 'a grade']
+            },
+            'admission': {
+                'triggers': ['admission', 'eligibility', 'eligible', 'apply', 'entrance', 'exam'],
+                'boost_terms': ['eligibility', 'cat', 'mat', 'xat', 'cmat', '65', '70', 'percentile',
+                                'bachelor', '50%', '45%', 'pgcet', 'entrance']
+            },
+            'specialization': {
+                'triggers': ['specializ', 'subject', 'stream', 'track', 'course'],
+                'boost_terms': ['finance', 'marketing', 'hr', 'analytics', 'healthcare', 'bfsi', 'logistics', 'operations']
+            },
+            'programs': {
+                'triggers': ['program', 'course', 'degree', 'offer'],
+                'boost_terms': ['mba', 'bba', 'mca', 'bca', 'b.com', 'phd', 'bachelor', 'master']
+            },
+        }
+
+        # Determine which factual group applies to this query
+        active_boost_terms = set()
+        for group_name, group in FACTUAL_GROUPS.items():
+            if any(t in query_lower for t in group['triggers']):
+                active_boost_terms.update(group['boost_terms'])
+
+        # Fallback: use all terms if no group matched
+        if not active_boost_terms:
+            active_boost_terms = {'lpa', 'package', 'recruiter', 'hostel', 'admission', 'apply'}
+
         is_admission_query = any(k in query_lower for k in ["admission", "eligibility", "criteria", "process", "apply"])
 
         for sent, score, heading in sentences:
-            # Base score from FAISS
             relevance = float(score)
-            
-            # Boost if sentence contains query terms
             sent_lower = sent.lower()
+
+            # Boost if sentence contains query terms
             term_matches = sum(1 for term in query_terms if term in sent_lower)
             relevance += (term_matches * 0.05)
-            
-            # FACTUAL PRIORITY BOOST (Strongly prioritize real metrics/brands)
-            if any(k in sent_lower for k in factual_keywords):
-                relevance += 0.8  # Aggressive boost to ensure facts are selected
-            
+
+            # FACTUAL PRIORITY BOOST — only for query-relevant factual terms
+            if any(k in sent_lower for k in active_boost_terms):
+                relevance += 0.8
+
             # ELIGIBILITY FILTER: Skip eligibility text for non-admission queries
             if "applicant must satisfy" in sent_lower and not is_admission_query:
-                relevance -= 0.6  # Penalize mismatched boilerplate
-            
+                relevance -= 0.6
+
             # Prefer well-formed sentences
             if sent.endswith(('.', '!', '?')):
                 relevance += 0.02
-            
+
             ranked.append((sent, relevance, heading))
-        
+
         # Sort by relevance (descending)
         ranked.sort(key=lambda x: x[1], reverse=True)
         
@@ -183,8 +219,13 @@ class AnswerGenerator:
         logger.debug(f"Building structured answer from {len(ranked_sentences)} sentences")
         
         for i, (sent, score, heading) in enumerate(ranked_sentences):
-            # Format as bullet point
-            bullet_sent = f"• {sent}"
+            # Avoid double-prefix: if sentence already starts with '-' or '•', don't add another '•'
+            stripped = sent.strip()
+            if stripped.startswith('-') or stripped.startswith('•'):
+                bullet_sent = stripped          # keep as-is
+            else:
+                bullet_sent = f"• {stripped}"
+            
             sent_length = len(bullet_sent) + 1  # +1 for newline
             
             # Stop if answer would exceed max length
@@ -195,7 +236,7 @@ class AnswerGenerator:
             current_length += sent_length
         
         if not answer_parts:
-            # Fallback: simple text without bullets
+            # Fallback: use raw first chunk content — always better than empty
             return self._fallback_to_first_chunk(ranked_sentences[0][0])
         
         # Join with newlines — no artificial header
@@ -208,7 +249,7 @@ class AnswerGenerator:
             r'^\s*[a-z]\s*$',  # Single letters
             r'click here',
             r'learn more',
-            r'^\s*[•\-\*]\s*',  # Bullet points
+            # NOTE: Do NOT filter bullet points — our official KB uses '- ' format for key facts
             r'deadline.*admission',  # Date-based announcements
             r'apply now',
             r'newsletter',
