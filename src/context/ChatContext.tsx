@@ -28,8 +28,12 @@ interface ChatContextType {
   deleteConversation: (id: string) => void;
   renameConversation: (id: string, newTitle: string) => void;
   saveProfile: (details: Omit<UserProfile, 'joinedAt'>) => void;
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
+  theme: 'light' | 'dark' | 'high-contrast';
+  setThemeMode: (mode: 'light' | 'dark' | 'high-contrast') => void;
+  isChatOpen: boolean;
+  setIsChatOpen: (isOpen: boolean) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (isOpen: boolean) => void;
   restartSession: () => void;
 }
 
@@ -47,13 +51,18 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfileState] = useState<UserProfile | null>(null);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'dark' | 'high-contrast'>('light');
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Initial load
   useEffect(() => {
-    const loadedColorTheme = localStorage.getItem('aims_theme') as 'light' | 'dark';
-    if (loadedColorTheme) {
+    const loadedColorTheme = localStorage.getItem('aims_theme') as any;
+    const themes = ['light', 'dark', 'high-contrast'];
+    if (loadedColorTheme && themes.includes(loadedColorTheme)) {
       setTheme(loadedColorTheme);
+    } else {
+      setTheme('light');
     }
 
     const loaded = loadConversations();
@@ -71,16 +80,13 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
 
   // Theme support
   useEffect(() => {
-    if (theme === 'dark') {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
+    document.body.classList.remove('light', 'dark', 'high-contrast');
+    document.body.classList.add(theme);
     localStorage.setItem('aims_theme', theme);
   }, [theme]);
 
-  const toggleTheme = useCallback(() => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  const setThemeMode = useCallback((mode: 'light' | 'dark' | 'high-contrast') => {
+    setTheme(mode);
   }, []);
 
   // Sync to storage on conversations change
@@ -90,6 +96,29 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [conversations]);
 
+  const captureLead = async (profile: UserProfile, sessionId: string) => {
+    try {
+      const names = profile.name.split(' ');
+      const firstName = names[0];
+      const lastName = names.slice(1).join(' ') || 'Student';
+      
+      await fetch('http://127.0.0.1:8000/api/v1/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          first_name: firstName,
+          last_name: lastName,
+          email: profile.email,
+          phone: profile.mobile,
+          interested_programs: [profile.course]
+        })
+      });
+    } catch (error) {
+      console.error('Lead capture failed:', error);
+    }
+  };
+
   const saveProfile = useCallback((details: Omit<UserProfile, 'joinedAt'>) => {
     const fullProfile: UserProfile = {
       ...details,
@@ -97,7 +126,12 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     };
     setProfileState(fullProfile);
     saveProfileStorage(fullProfile);
-  }, []);
+    
+    // Attempt to sync with backend if we have a session
+    if (currentConversationId) {
+      captureLead(fullProfile, currentConversationId);
+    }
+  }, [currentConversationId]);
 
   const switchConversation = useCallback((id: string) => {
     const conv = conversations.find(c => c.id === id);
@@ -252,7 +286,11 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       renameConversation,
       saveProfile,
       theme,
-      toggleTheme,
+      setThemeMode,
+      isChatOpen,
+      setIsChatOpen,
+      isSidebarOpen,
+      setIsSidebarOpen,
       restartSession
     }}>
       {children}

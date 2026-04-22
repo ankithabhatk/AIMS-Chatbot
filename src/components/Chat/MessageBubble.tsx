@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from 'react';
+"use client";
+
+import React from 'react';
+import { motion } from 'framer-motion';
 import { ChatMessage, useChat } from '../../context/ChatContext';
+import { FeedbackButtons } from './FeedbackButtons';
+import { UserSummaryCard } from './UserSummaryCard';
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -7,52 +12,59 @@ interface MessageBubbleProps {
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const { profile } = useChat();
-  const [mounted, setMounted] = useState(false);
   const isUser = message.isUser;
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   
   const senderName = isUser ? (profile?.name || "Student") : "AIMS Assistant";
   
-  // Try to parse timestamp from ID, or use current time if ID is not a timestamp
-  let timestamp = "";
-  if (mounted) {
-    try {
-      const idNum = parseInt(message.id);
-      if (!isNaN(idNum) && idNum > 1000000000000) {
-        timestamp = new Date(idNum).toLocaleTimeString([], { 
-          hour: '2-digit', 
-          minute: '2-digit', 
-          hour12: true 
-        });
-      } else {
-        timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-      }
-    } catch (e) {
-      timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-    }
-  }
+  // Format timestamp
+  const timestamp = new Date(parseInt(message.id) > 1000000000 ? parseInt(message.id) : Date.now())
+    .toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-  // Initials for User, "AI" for Bot
   const initials = isUser 
-    ? (profile?.name || "Student").split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 1)
+    ? (profile?.name || "S").split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 1)
     : "AI";
 
+  // Check if this is an onboarding summary message
+  const isOnboardingSummary = isUser && message.content.startsWith("Name: ") && message.content.includes("Course: ");
+
   return (
-    <div className={`message-row ${isUser ? 'user' : 'bot'}`}>
+    <motion.div 
+      className={`message-row ${isUser ? 'user' : 'bot'}`}
+      initial={{ opacity: 0, x: isUser ? 20 : -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className={`message-avatar ${isUser ? 'user-avatar' : 'bot-avatar'}`}>
         {initials}
       </div>
       
-      <div className="message-container">
-        <div className="sender-info">{senderName}</div>
-        <div className={`message-bubble ${isUser ? 'user-bubble' : 'bot-bubble'}`}>
-          <div className="message-content" dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br/>') }} />
+      <div className="message-content-wrapper">
+        <div className="sender-info" style={{ 
+          fontSize: '12px', 
+          fontWeight: '700', 
+          color: 'var(--text-main)', 
+          marginBottom: '4px',
+          textAlign: isUser ? 'right' : 'left'
+        }}>
+          {senderName}
         </div>
-        <div className="message-timestamp">{timestamp}</div>
+
+        {isOnboardingSummary ? (
+          <UserSummaryCard profile={profile!} />
+        ) : (
+          <div className={`message-bubble ${isUser ? 'user-bubble' : 'bot-bubble'}`}>
+            <div 
+              className="message-content" 
+              dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br/>') }} 
+            />
+          </div>
+        )}
+
+        <div className="message-footer" style={{ display: 'flex', alignItems: 'center', justifyContent: isUser ? 'flex-end' : 'flex-start', gap: '12px' }}>
+          <div className="message-timestamp">{timestamp}</div>
+          {!isUser && !isOnboardingSummary && <FeedbackButtons />}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

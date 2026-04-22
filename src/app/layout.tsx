@@ -1,20 +1,29 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "AIMS Institutes Chatbot",
-  description: "Official Chatbot for AIMS Institutes, powered by AI",
+  title: "AIMS Chat Interface — Automated Academic Reference System",
+  description:
+    "Get instant answers about AIMS Institutes — courses, admissions, fees, scholarships, campus life and more from our AI-powered academic assistant.",
+  keywords: "AIMS, chatbot, college, admissions, MBA, MCA, BBA, BCA, M.Com, B.Com",
+  openGraph: {
+    title: "AIMS Chat Interface",
+    description: "Your AI-powered academic assistant for AIMS Institutes.",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -23,11 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en">
+      <body className={`${inter.variable} font-inter antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }

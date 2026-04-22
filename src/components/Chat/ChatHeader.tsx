@@ -1,39 +1,54 @@
+"use client";
+
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
+import { ThemeToggle } from '../UI/ThemeToggle';
+import Image from 'next/image';
 
 export const ChatHeader: React.FC = () => {
-  const { theme, toggleTheme } = useChat();
+  const { isSidebarOpen, setIsSidebarOpen } = useChat();
 
   return (
     <header className="chat-header">
-      <div className="chat-header-info">
-        <h2>AIMS Chat Interface</h2>
-        <p className="chat-subtitle">Automated Academic Reference System</p>
+      <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        {/* Hamburger — visible only on mobile via CSS; hidden on desktop */}
+        <button
+          className="mobile-hamburger"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          aria-label="Toggle navigation menu"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+
+        <motion.div
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          style={{ display: 'flex', alignItems: 'center', gap: '20px' }}
+        >
+          <div className="header-logo-container" style={{ position: 'relative', height: '40px', width: '40px' }}>
+            <Image 
+              src="/aims logo.jpg" 
+              alt="AIMS Logo" 
+              fill
+              style={{ objectFit: 'contain' }}
+              priority
+            />
+          </div>
+          <div className="header-title-container">
+            <h1 style={{ lineHeight: '1.2' }}>AIMS Chat Interface</h1>
+            <p className="header-subtitle">Automated Academic Reference System</p>
+          </div>
+        </motion.div>
       </div>
       
-      <button 
-        onClick={toggleTheme} 
-        className="theme-toggle-btn"
-        title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-      >
-        {theme === 'light' ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-        )}
-      </button>
+      <div className="header-right">
+        <ThemeToggle />
+      </div>
     </header>
   );
 };

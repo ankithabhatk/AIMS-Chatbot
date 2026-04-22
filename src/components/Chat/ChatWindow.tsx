@@ -1,15 +1,19 @@
 "use client";
 
 import React, { useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 import { MessageBubble } from './MessageBubble';
-import { TypingIndicator } from './TypingIndicator';
+import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { WelcomeMessage } from './WelcomeMessage';
-import { ChatHeader } from './ChatHeader';
+import { AnnouncementBanner } from './AnnouncementBanner';
+import { QuickReplies } from './QuickReplies';
+import { FAQAccordion } from './FAQAccordion';
+import { ImportantDates } from './ImportantDates';
 
 export const ChatWindow: React.FC = () => {
-  const { messages, isLoading, profile, sendMessage } = useChat();
+  const { messages, isLoading, profile, sendMessage, isChatOpen } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -17,68 +21,59 @@ export const ChatWindow: React.FC = () => {
   };
 
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 0 || isLoading) {
+      scrollToBottom();
+    }
   }, [messages, isLoading]);
 
+  if (!isChatOpen) return null;
+
   return (
-    <section className="chat-container">
+    <motion.section 
+      className="chat-main"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <ChatHeader />
 
-      <div className="chat-body">
-        <div className="messages-wrapper">
+      <div className="chat-body" style={{ position: 'relative' }}>
+        <div className="messages-container">
+          <AnnouncementBanner />
+          
           {!profile ? (
             <WelcomeMessage />
           ) : (
             <>
-              {messages.length === 0 ? (
-                <div className="message-row bot">
+              {messages.length === 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <FAQAccordion />
+                  <ImportantDates />
+                </div>
+              )}
+
+              {messages.map((msg) => (
+                <MessageBubble key={msg.id} message={msg} />
+              ))}
+              
+              {isLoading && (
+                <motion.div 
+                  className="message-row bot"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                >
                   <div className="message-avatar bot-avatar">AI</div>
                   <div className="message-container">
                     <div className="sender-info">AIMS Assistant</div>
-                    <div className="message-bubble bot-bubble">
-                      <div className="message-content">
-                        Welcome back, {profile.name.split(' ')[0]}. How can I assist you today?
+                    <div className="message-bubble bot-bubble" style={{ padding: '12px 20px' }}>
+                      <div className="typing-indicator-bubble">
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                messages.map((msg) => (
-                  <MessageBubble key={msg.id} message={msg} />
-                ))
-              )}
-              
-              {messages.length > 0 && 
-               !messages[messages.length - 1].isUser && 
-               messages[messages.length - 1].metadata?.suggestions && 
-               !isLoading && (
-                <div className="suggestions-container">
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', maxWidth: '85%' }}>
-                    {messages[messages.length - 1].metadata!.suggestions!.map((sug, i) => (
-                      <button
-                        key={i}
-                        onClick={() => sendMessage(sug)}
-                        className="suggestion-btn"
-                      >
-                        {sug}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {isLoading && (
-                <div className="message-row bot">
-                  <div className="message-avatar bot-avatar">AI</div>
-                  <div className="message-container">
-                    <div className="sender-info">AIMS Assistant</div>
-                    <div className="typing-indicator-bubble">
-                      <div className="typing-dot"></div>
-                      <div className="typing-dot"></div>
-                      <div className="typing-dot"></div>
-                    </div>
-                  </div>
-                </div>
+                </motion.div>
               )}
             </>
           )}
@@ -86,7 +81,12 @@ export const ChatWindow: React.FC = () => {
         </div>
       </div>
 
-      <ChatInput />
-    </section>
+      <div className="chat-input-section">
+        {profile && !isLoading && (
+          <QuickReplies onSelect={(query) => sendMessage(query)} />
+        )}
+        <ChatInput />
+      </div>
+    </motion.section>
   );
 };

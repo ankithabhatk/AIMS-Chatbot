@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 
 export const ChatInput: React.FC = () => {
   const { sendMessage, isLoading } = useChat();
   const [query, setQuery] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSend = () => {
-    if (query.trim()) {
+    if (query.trim() && !isLoading) {
       sendMessage(query);
       setQuery('');
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     }
   };
 
@@ -21,30 +26,40 @@ export const ChatInput: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [query]);
+
   return (
-    <div className="chat-input-container">
-      <div className="chat-input-wrapper">
-        <textarea
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type your inquiry here..."
-          className="chat-textarea"
-          disabled={isLoading}
-          aria-label="Chat input field"
-          rows={1}
-        />
-        <button
+    <div className="input-container">
+      <textarea
+        ref={textareaRef}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Type your inquiry here..."
+        className="chat-textarea"
+        disabled={isLoading}
+        rows={1}
+      />
+      
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        {/* Voice button could go here */}
+        <motion.button
           onClick={handleSend}
           disabled={isLoading || !query.trim()}
-          className="chat-send-btn"
-          aria-label="Send message button"
-          title="Send message"
+          className={`send-btn ${query.trim() ? 'active' : ''}`}
+          whileHover={query.trim() ? { scale: 1.1 } : {}}
+          whileTap={query.trim() ? { scale: 0.9 } : {}}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.01 21L23 12L2.01 3L2 10l15 2-15 2z" fill="currentColor" />
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
           </svg>
-        </button>
+        </motion.button>
       </div>
     </div>
   );

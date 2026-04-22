@@ -35,7 +35,7 @@ class FAISSIndex:
         self.doc_count = 0
         
         # Create index directory if needed
-        persist_dir = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index"
+        persist_dir = INDEX_DIR
         os.makedirs(persist_dir, exist_ok=True)
         
         # Default paths

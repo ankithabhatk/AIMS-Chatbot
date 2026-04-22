@@ -1,4 +1,7 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 
 export const WelcomeMessage: React.FC = () => {
@@ -19,24 +22,26 @@ export const WelcomeMessage: React.FC = () => {
     "MBA", "MCA", "M.Com", "BBA", "BCA", "B.Com", "BHM", "BBA Aviation"
   ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
+  const handleCourseSelect = (course: string) => {
+    setFormData(prev => ({ ...prev, course }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.course) return;
 
-    // Save profile with automatic joinedAt timestamp via ChatContext
     saveProfile(formData);
 
-    // Format user message for display in chat
+    // Format for display
     const userMessage = `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.mobile || 'N/A'}\nCourse: ${formData.course}`;
 
-    // Trigger the flow with first name for personal greeting
     const firstName = formData.name.trim().split(' ')[0];
     sendMessage(userMessage, true, firstName);
   };
@@ -46,16 +51,23 @@ export const WelcomeMessage: React.FC = () => {
     : "";
 
   return (
-    <div className="message-row bot">
+    <motion.div 
+      className="message-row bot"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
       <div className="message-avatar bot-avatar">AI</div>
-      <div className="message-container">
+      <div className="message-container" style={{ maxWidth: '600px' }}>
         <div className="sender-info">AIMS Assistant</div>
-        <div className="message-bubble bot-bubble">
+        <div className="message-bubble bot-bubble" style={{ padding: '32px' }}>
           <div className="message-content">
-            <p style={{ marginBottom: '16px', fontWeight: '500' }}>Welcome to AIMS Institutes. Please provide your details to continue.</p>
-            <form className="onboarding-form" onSubmit={handleSubmit}>
-              <div className="onboarding-input-group">
-                <label className="onboarding-label">Full Name:</label>
+            <h3 style={{ marginBottom: '24px', fontSize: '18px', fontWeight: '700' }}>
+              Welcome to AIMS Institutes. Please provide your details to continue.
+            </h3>
+            
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="form-field" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <label style={{ width: '100px', fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Full Name:</label>
                 <input
                   name="name"
                   type="text"
@@ -64,11 +76,12 @@ export const WelcomeMessage: React.FC = () => {
                   onChange={handleChange}
                   placeholder="Enter your name"
                   required
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--sidebar-bg)', color: 'var(--text-main)', fontSize: '14px', outline: 'none' }}
                 />
               </div>
-              
-              <div className="onboarding-input-group">
-                <label className="onboarding-label">Email ID:</label>
+
+              <div className="form-field" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <label style={{ width: '100px', fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Email ID:</label>
                 <input
                   name="email"
                   type="email"
@@ -77,52 +90,65 @@ export const WelcomeMessage: React.FC = () => {
                   onChange={handleChange}
                   placeholder="Enter your email"
                   required
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--sidebar-bg)', color: 'var(--text-main)', fontSize: '14px', outline: 'none' }}
                 />
               </div>
 
-              <div className="onboarding-input-group">
-                <label className="onboarding-label">Phone:</label>
+              <div className="form-field" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <label style={{ width: '100px', fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Phone:</label>
                 <input
                   name="mobile"
-                  type="number"
+                  type="tel"
                   className="onboarding-input"
                   value={formData.mobile}
                   onChange={handleChange}
                   placeholder="Enter phone number"
                   required
+                  style={{ flex: 1, padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--sidebar-bg)', color: 'var(--text-main)', fontSize: '14px', outline: 'none' }}
                 />
               </div>
 
-              <div className="onboarding-input-group" style={{ alignItems: 'flex-start' }}>
-                <label className="onboarding-label" style={{ marginTop: '8px' }}>Course:</label>
-                <div className="onboarding-radio-group">
+              <div className="form-field" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <label style={{ fontSize: '12px', fontWeight: '800', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Course Interested:</label>
+                <div className="onboarding-radio-grid">
                   {courses.map(course => (
-                    <label key={course} className={`onboarding-radio-option ${formData.course === course ? 'selected' : ''}`}>
-                      <input
-                        type="radio"
-                        name="course"
-                        value={course}
-                        checked={formData.course === course}
-                        onChange={handleChange}
-                        required
-                      />
+                    <div 
+                      key={course}
+                      className={`radio-card ${formData.course === course ? 'selected' : ''}`}
+                      onClick={() => handleCourseSelect(course)}
+                    >
                       <div className="radio-custom-circle"></div>
                       <span className="onboarding-radio-label">{course}</span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '20px' }}>
-                <button type="submit" className="onboarding-submit-btn" style={{ background: 'var(--aims-primary)', color: 'white', padding: '10px 24px', borderRadius: '8px', fontWeight: '700', border: 'none', cursor: 'pointer' }}>Submit</button>
+              <div style={{ marginTop: '12px' }}>
+                <motion.button
+                  type="submit"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    backgroundColor: 'var(--aims-primary)',
+                    color: 'white',
+                    padding: '12px 32px',
+                    borderRadius: '10px',
+                    fontWeight: '700',
+                    fontSize: '14px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  Submit
+                </motion.button>
               </div>
             </form>
           </div>
         </div>
-        <div className="message-timestamp">
-          {timestamp}
-        </div>
+        <div className="message-timestamp">{timestamp}</div>
       </div>
-    </div>
+    </motion.div>
   );
 };

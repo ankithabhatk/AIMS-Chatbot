@@ -1,0 +1,20 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+
+/**
+ * Returns true when viewport width is below the given breakpoint (default 768px).
+ * Safe for SSR — defaults to false on server, hydrates correctly on client.
+ */
+export function useIsMobile(breakpoint = 768): boolean {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < breakpoint);
+    check(); // run once immediately
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [breakpoint]);
+
+  return isMobile;
+}
