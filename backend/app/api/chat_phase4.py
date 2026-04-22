@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 # Constants
 FAISS_K = 25
 MAX_ANSWER_LENGTH = 800
-CONFIDENCE_THRESHOLD = 0.55
+CONFIDENCE_THRESHOLD = 0.45  # Lowered from 0.55 — placements/hostel content scores ~0.50–0.55
 RERANK_MIN_SCORE = 0.65
 MIN_QUERY_LENGTH = 3
 MIN_SCORE_FILTER = 0.3
@@ -524,6 +524,12 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         # ================================================================
         answer_gen = get_answer_generator()
         answer = answer_gen.synthesize(query, filtered_chunks)
+
+        # Safety net: if synthesis returns empty but we have chunks, use top chunk text
+        if (not answer or not answer.strip()) and filtered_chunks:
+            top_chunk = filtered_chunks[0][0] if isinstance(filtered_chunks[0], (list, tuple)) else str(filtered_chunks[0])
+            answer = top_chunk.strip()[:1200]
+            logger.warning(f"[{session_id}] Synthesis returned empty — using top chunk as fallback answer")
         
         # ================================================================
         # 8.5 POST-PROCESS ANSWER (Apply Brain Modifications)
