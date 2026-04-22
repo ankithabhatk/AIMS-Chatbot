@@ -214,11 +214,18 @@ def persist_session_summary(session_id: str) -> bool:
         "message_count":           profile["messages"],
         "has_lead":                False,
         "updated_at":              "now()",
+        # Predictive layer fields
+        "conversion_timeline":     profile.get("conversion_timeline", ""),
+        "next_expected_queries":   profile.get("next_expected_queries", []),
     }
 
     try:
         _with_retry(lambda: client.table("session_summaries").upsert(payload).execute())
-        logger.debug(f"[DB][{session_id}] ✅ Summary persisted (score={profile['lead_score']}, prob={profile['conversion_probability']})")
+        logger.debug(
+            f"[DB][{session_id}] ✅ Summary persisted — "
+            f"score={profile['lead_score']} | {profile['conversion_probability']} | "
+            f"timeline: {profile.get('conversion_timeline','?')}"
+        )
         return True
     except Exception as e:
         logger.error(f"[DB][{session_id}] ❌ Summary persist FAILED: {type(e).__name__}: {e}")

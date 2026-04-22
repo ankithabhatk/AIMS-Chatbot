@@ -2,13 +2,17 @@
 Summary Engine — Rule-Based + Predictive Scoring
 ==================================================
 Generates student intelligence profiles from chat history.
-No LLM required → instant, reliable for demo.
+No LLM required → deterministic, instant, reliable.
 
 Architecture:
-  Chat history → keyword extraction → intent scoring → lead prediction
+  Chat history
+    → keyword extraction (courses, intents, sentiment)
+    → lead scoring    (intent weights + message depth + breadth)
+    → predictive layer (conversion timeline + next query prediction)
+    → structured summary (6–8 lines, presentable to management)
 """
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -16,65 +20,93 @@ from typing import List, Dict
 # ─────────────────────────────────────────────────────────────────────────────
 
 _COURSE_KEYWORDS = {
-    "MBA":              ["mba", "master of business", "post graduate", "pgdm"],
-    "BBA":              ["bba", "bachelor of business", "under graduate", "ug", "aviation management"],
-    "MCA":              ["mca", "master of computer", "computer applications"],
-    "BCA":              ["bca", "bachelor of computer"],
-    "B.Com":            ["b.com", "commerce", "accounting", "bcom"],
-    "PhD":              ["phd", "doctoral", "research programme"],
+    "MBA":   ["mba", "master of business", "post graduate", "pgdm"],
+    "BBA":   ["bba", "bachelor of business", "under graduate", "ug", "aviation management"],
+    "MCA":   ["mca", "master of computer", "computer applications"],
+    "BCA":   ["bca", "bachelor of computer"],
+    "B.Com": ["b.com", "commerce", "accounting", "bcom"],
+    "PhD":   ["phd", "doctoral", "research programme"],
 }
 
 _INTENT_KEYWORDS = {
-    "Fees Inquiry":        [
+    "Fees Inquiry": [
         "fee", "fees", "cost", "tuition", "afford", "price", "lakh", "rupee",
         "payment", "scholarship", "loan", "how much", "expensive", "financial",
         "fee structure", "total cost", "annual fee",
     ],
-    "Admission Inquiry":   [
+    "Admission Inquiry": [
         "admission", "apply", "apply online", "eligibility", "eligible",
         "entrance", "cat", "mat", "xat", "cmat", "pgcet", "document",
         "last date", "deadline", "when does admission", "how to join",
         "registration", "application form",
     ],
-    "Placement Interest":  [
+    "Placement Interest": [
         "placement", "package", "lpa", "salary", "recruiter", "hiring",
         "job", "career", "company", "deloitte", "accenture", "highest package",
         "average salary", "placement record", "placement stats", "ctc",
         "placement percentage", "companies visit",
     ],
-    "Campus / Hostel":     [
+    "Campus / Hostel": [
         "hostel", "campus", "facility", "lab", "library", "sports",
         "canteen", "accommodation", "infrastructure", "wifi", "mess",
         "room", "living",
     ],
-    "Program Details":     [
+    "Program Details": [
         "specialization", "subject", "curriculum", "semester", "syllabus",
         "duration", "course", "program", "what courses",
     ],
 }
 
 _SENTIMENT_SIGNALS = {
-    "Serious":     ["i want", "i am planning", "confirm", "when does", "how soon", "deadline", "i have decided", "apply now"],
-    "Exploring":   ["tell me", "what are", "can you explain", "just want to know", "curious", "what is"],
-    "Confused":    ["i don't understand", "still not clear", "repeat", "what does that mean", "clarify", "confused"],
+    "Serious":   ["i want", "i am planning", "confirm", "when does", "how soon",
+                  "deadline", "i have decided", "apply now", "i will apply",
+                  "planning to join", "want to enrol"],
+    "Exploring": ["tell me", "what are", "can you explain", "just want to know",
+                  "curious", "what is", "just checking"],
+    "Confused":  ["i don't understand", "still not clear", "repeat",
+                  "what does that mean", "clarify", "confused", "not sure"],
 }
 
-# Lead score weights per intent
+# Lead score weights per intent (higher = stronger buying signal)
 _LEAD_WEIGHTS = {
-    "Fees Inquiry":        4,   # Highest — student is evaluating affordability (decision stage)
-    "Admission Inquiry":   3,   # Strongly signal intent to apply
-    "Placement Interest":  2,   # Career-driven student, likely serious
-    "Campus / Hostel":     2,   # Logistics inquiry — thinking about joining
-    "Program Details":     1,   # Still exploring
+    "Fees Inquiry":       4,   # Student evaluating affordability → decision stage
+    "Admission Inquiry":  3,   # Strong intent to apply
+    "Placement Interest": 2,   # Career-driven, likely serious
+    "Campus / Hostel":    2,   # Logistics → thinking about joining
+    "Program Details":    1,   # Still exploring options
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PREDICTIVE TABLES
+# ─────────────────────────────────────────────────────────────────────────────
+
+# What intents typically follow a given primary intent
+_NEXT_QUERY_MAP: Dict[str, List[str]] = {
+    "Fees Inquiry":       ["scholarship availability", "EMI / payment plans", "hostel fees"],
+    "Admission Inquiry":  ["fee structure", "entrance exam cut-off", "document checklist"],
+    "Placement Interest": ["average / highest salary", "companies that visit campus", "placement percentage"],
+    "Campus / Hostel":    ["hostel fee", "campus facilities tour", "library / lab access"],
+    "Program Details":    ["fee structure", "admission eligibility", "placement record"],
+    "General Inquiry":    ["available programs", "admission process", "fee structure"],
+}
+
+# Conversion timeline prediction based on intent combination
+_CONVERSION_TIMELINE: Dict[frozenset, str] = {
+    frozenset(["Fees Inquiry", "Admission Inquiry"]):                "Likely to convert within 3–7 days",
+    frozenset(["Fees Inquiry", "Placement Interest"]):               "Likely to convert within 7–14 days",
+    frozenset(["Fees Inquiry", "Admission Inquiry",
+               "Campus / Hostel"]):                                  "Likely to convert within 1–3 days",
+    frozenset(["Placement Interest", "Admission Inquiry"]):          "Likely to convert within 7–14 days",
+    frozenset(["Campus / Hostel", "Admission Inquiry"]):             "Likely to convert within 14–21 days",
 }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# HELPER
+# HELPERS
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _user_text(chat_history: List[Dict]) -> str:
-    """Concatenate all user messages into lowercase string."""
+    """Concatenate all user messages into a single lowercase string."""
     return " ".join(c.get("user", "") for c in chat_history).lower()
 
 
@@ -90,39 +122,32 @@ def _all_text(chat_history: List[Dict]) -> str:
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _detect_courses(text: str) -> List[str]:
-    found = []
-    for course, keywords in _COURSE_KEYWORDS.items():
-        if any(kw in text for kw in keywords):
-            found.append(course)
-    return found or ["General"]
+    return [c for c, kws in _COURSE_KEYWORDS.items() if any(kw in text for kw in kws)] or ["General"]
 
 
 def _detect_intents(text: str) -> List[str]:
-    found = []
-    for intent_label, keywords in _INTENT_KEYWORDS.items():
-        if any(kw in text for kw in keywords):
-            found.append(intent_label)
-    return found or ["General Inquiry"]
+    return [label for label, kws in _INTENT_KEYWORDS.items() if any(kw in text for kw in kws)] or ["General Inquiry"]
 
 
 def _detect_sentiment(text: str) -> str:
     for sentiment, signals in _SENTIMENT_SIGNALS.items():
         if any(s in text for s in signals):
             return sentiment
-    return "Exploring"  # default
+    return "Exploring"
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LEAD SCORING
+# ─────────────────────────────────────────────────────────────────────────────
 
 def _lead_score(intents: List[str], message_count: int = 0) -> Dict:
-    score = 0
-    for intent in intents:
-        score += _LEAD_WEIGHTS.get(intent, 0)
+    score = sum(_LEAD_WEIGHTS.get(i, 0) for i in intents)
 
-    # Breadth bonus: asking 3+ distinct topics signals serious exploration
+    # Breadth bonus: 3+ distinct topics = serious exploration
     if len(intents) >= 3:
         score += 2
 
-    # Depth bonus: more messages = stronger engagement signal
-    # 4–5 msgs = +1, 6–8 msgs = +2, 9+ msgs = +3
+    # Depth bonus: more messages = stronger engagement
     if message_count >= 9:
         score += 3
     elif message_count >= 6:
@@ -132,28 +157,79 @@ def _lead_score(intents: List[str], message_count: int = 0) -> Dict:
 
     if score >= 8:
         probability = "Very High"
-        action = "📞 Contact immediately — high-intent student ready to enrol"
-        priority = 1
+        action      = "📞 Contact immediately — high-intent student ready to enrol"
+        priority    = 1
     elif score >= 5:
         probability = "High"
-        action = "📧 Send admission brochure + fee structure within 24 hrs"
-        priority = 2
+        action      = "📧 Send admission brochure + fee structure within 24 hrs"
+        priority    = 2
     elif score >= 3:
         probability = "Moderate"
-        action = "📋 Add to nurture list — follow up in 3–5 days"
-        priority = 3
+        action      = "📋 Add to nurture list — follow up in 3–5 days"
+        priority    = 3
     else:
         probability = "Low"
-        action = "🔔 Monitor — student is still in early exploration"
-        priority = 4
+        action      = "🔔 Monitor — student is still in early exploration"
+        priority    = 4
 
-    return {
-        "score": score,
-        "conversion_probability": probability,
-        "recommended_action": action,
-        "priority": priority,
+    return {"score": score, "conversion_probability": probability,
+            "recommended_action": action, "priority": priority}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PREDICTIVE LAYER
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _predict_conversion_timeline(intents: List[str], score: int, message_count: int) -> str:
+    """
+    Rule-based timeline prediction using intent combinations.
+    Falls back to score-based estimate when no exact match exists.
+    """
+    intent_set = frozenset(intents)
+
+    # Try exact combination match first
+    for combo, timeline in _CONVERSION_TIMELINE.items():
+        if combo.issubset(intent_set):
+            return timeline
+
+    # Score-based fallback
+    if score >= 8:
+        return "Likely to convert within 1–5 days"
+    elif score >= 5:
+        return "Likely to convert within 7–14 days"
+    elif score >= 3:
+        return "Possibly converting in 2–4 weeks — nurture needed"
+    else:
+        return "No clear conversion signal yet — early exploration stage"
+
+
+def _predict_next_queries(primary_intent: str, intents: List[str]) -> List[str]:
+    """
+    Predict what the student will ask next based on their primary intent
+    and already-covered topics. Filters out topics already asked.
+    """
+    candidates = _NEXT_QUERY_MAP.get(primary_intent, _NEXT_QUERY_MAP["General Inquiry"])
+
+    # Heuristic: remove suggestions that seem already covered
+    covered_keywords = {
+        "Fees Inquiry":       ["fee", "cost", "scholarship"],
+        "Admission Inquiry":  ["admission", "document", "deadline"],
+        "Placement Interest": ["placement", "salary", "package"],
+        "Campus / Hostel":    ["hostel", "campus", "facility"],
+        "Program Details":    ["program", "course", "syllabus"],
     }
+    already_asked = set()
+    for intent in intents:
+        already_asked.update(covered_keywords.get(intent, []))
 
+    # Return up to 3 most-likely next questions
+    filtered = [q for q in candidates if not any(kw in q.lower() for kw in already_asked)]
+    return (filtered or candidates)[:3]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUMMARY TEXT BUILDER
+# ─────────────────────────────────────────────────────────────────────────────
 
 def _build_summary_text(
     courses: List[str],
@@ -162,18 +238,20 @@ def _build_summary_text(
     prediction: Dict,
     message_count: int,
     primary_intent: str,
+    conversion_timeline: str,
+    next_queries: List[str],
 ) -> str:
     """
-    Produces a structured 5–7 line intelligence summary.
-    Max 10 lines even for 50-message sessions.
+    Produces a structured 7–9 line intelligence summary.
+    Presentable to college management — max 10 lines even for 50-message sessions.
     """
-    courses_str  = ", ".join(courses) if courses else "General"
-    intents_str  = ", ".join(intents) if intents else "General Inquiry"
-    score        = prediction['score']
-    prob         = prediction['conversion_probability']
-    action       = prediction['recommended_action']
+    courses_str = ", ".join(courses) if courses else "General"
+    intents_str = ", ".join(intents) if intents else "General Inquiry"
+    score       = prediction["score"]
+    prob        = prediction["conversion_probability"]
+    action      = prediction["recommended_action"]
+    next_q_str  = " | ".join(next_queries) if next_queries else "N/A"
 
-    # Depth label
     if message_count >= 9:
         depth = "deep engagement"
     elif message_count >= 5:
@@ -184,12 +262,14 @@ def _build_summary_text(
         depth = "single-message contact"
 
     lines = [
-        f"Course Interest  : {courses_str}",
-        f"Primary Intent   : {primary_intent}",
-        f"Topics Covered   : {intents_str}",
-        f"Sentiment        : {sentiment} ({depth}, {message_count} messages)",
-        f"Lead Score       : {score}/10+  |  Conversion: {prob}",
-        f"Recommended Action: {action}",
+        f"Course Interest    : {courses_str}",
+        f"Primary Intent     : {primary_intent}",
+        f"Topics Covered     : {intents_str}",
+        f"Sentiment          : {sentiment} ({depth}, {message_count} messages)",
+        f"Lead Score         : {score}/10+  |  Conversion: {prob}",
+        f"Conversion Timeline: {conversion_timeline}",
+        f"Next Expected Query: {next_q_str}",
+        f"Recommended Action : {action}",
     ]
     return "\n".join(lines)
 
@@ -204,55 +284,67 @@ def generate_summary(chat_history: List[Dict]) -> Dict:
 
     Returns:
         {
-          summary, courses, primary_intent, all_intents,
-          sentiment, lead_score, conversion_probability,
-          recommended_action, priority, messages, topics_covered
+          summary, courses, primary_intent, all_intents, sentiment,
+          lead_score, conversion_probability, recommended_action, priority,
+          conversion_timeline, next_expected_queries, messages, topics_covered
         }
     """
     if not chat_history:
         return {
-            "summary": "No messages recorded.",
-            "courses": [],
-            "primary_intent": "Unknown",
-            "all_intents": [],
-            "sentiment": "Unknown",
-            "lead_score": 0,
+            "summary":                "No messages recorded.",
+            "courses":                [],
+            "primary_intent":         "Unknown",
+            "all_intents":            [],
+            "sentiment":              "Unknown",
+            "lead_score":             0,
             "conversion_probability": "Low",
-            "recommended_action": "No action needed",
-            "priority": 5,
-            "messages": 0,
-            "topics_covered": 0,
+            "recommended_action":     "No action needed",
+            "conversion_timeline":    "No signal yet",
+            "next_expected_queries":  [],
+            "priority":               5,
+            "messages":               0,
+            "topics_covered":         0,
         }
 
-    user_text = _user_text(chat_history)
+    user_text     = _user_text(chat_history)
     message_count = len(chat_history)
 
-    courses  = _detect_courses(user_text)
-    intents  = _detect_intents(user_text)
-    sentiment = _detect_sentiment(user_text)
-    prediction = _lead_score(intents, message_count)  # pass depth
+    courses       = _detect_courses(user_text)
+    intents       = _detect_intents(user_text)
+    sentiment     = _detect_sentiment(user_text)
+    prediction    = _lead_score(intents, message_count)
 
     # Determine primary (highest-weight) intent
     primary_intent = max(
         intents,
         key=lambda i: _LEAD_WEIGHTS.get(i, 0),
-        default="General Inquiry"
+        default="General Inquiry",
     )
 
+    # Predictive layer
+    conversion_timeline = _predict_conversion_timeline(
+        intents, prediction["score"], message_count
+    )
+    next_queries = _predict_next_queries(primary_intent, intents)
+
     summary_text = _build_summary_text(
-        courses, intents, sentiment, prediction, message_count, primary_intent
+        courses, intents, sentiment, prediction,
+        message_count, primary_intent,
+        conversion_timeline, next_queries,
     )
 
     return {
-        "summary":               summary_text,
-        "courses":               courses,
-        "primary_intent":        primary_intent,
-        "all_intents":           intents,
-        "sentiment":             sentiment,
-        "lead_score":            prediction["score"],
+        "summary":                summary_text,
+        "courses":                courses,
+        "primary_intent":         primary_intent,
+        "all_intents":            intents,
+        "sentiment":              sentiment,
+        "lead_score":             prediction["score"],
         "conversion_probability": prediction["conversion_probability"],
-        "recommended_action":    prediction["recommended_action"],
-        "priority":              prediction["priority"],
-        "messages":              len(chat_history),
-        "topics_covered":        len(intents),
+        "recommended_action":     prediction["recommended_action"],
+        "conversion_timeline":    conversion_timeline,
+        "next_expected_queries":  next_queries,
+        "priority":               prediction["priority"],
+        "messages":               message_count,
+        "topics_covered":         len(intents),
     }
