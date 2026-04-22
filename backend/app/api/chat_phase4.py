@@ -7,7 +7,7 @@ POST /api/v1/chat
 - Features: Real-time RAG, confidence calibration, fallback safety, analytics logging
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from typing import Optional
 import logging
 import time
@@ -39,7 +39,7 @@ MIN_SCORE_FILTER = 0.3
 
 
 @router.post("/chat")
-async def chat_endpoint(request: ChatRequest):
+async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks):
     """
     Main chat endpoint - Production RAG Pipeline
     
@@ -563,7 +563,7 @@ async def chat_endpoint(request: ChatRequest):
             session["gate_active"] = True
             logger.info(f"[{session_id}] Turn {session['query_count']} - Activating lead gate")
 
-        # ── Log this turn for admin intelligence ──────────────────────
+        # ── Log this turn — in-memory (admin API) + Supabase (persistent) ──
         try:
             from app.services.chat_logger import log_chat as _log_chat
             _log_chat(
@@ -575,8 +575,33 @@ async def chat_endpoint(request: ChatRequest):
                 status      = status,
             )
         except Exception as _log_err:
-            logger.debug(f"[{session_id}] Chat log skipped: {_log_err}")
-        # ─────────────────────────────────────────────────────────────
+            logger.debug(f"[{session_id}] In-memory log skipped: {_log_err}")
+
+        # Supabase persistent log — runs after response is sent, never blocks
+        def _write_to_supabase():
+            try:
+                import os
+                from supabase import create_client
+                _url = os.getenv("SUPABASE_URL", "")
+                _key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_ANON_KEY", "")
+                if not _url or not _key:
+                    return
+                _client = create_client(_url, _key)
+                _client.table("chat_logs").insert({
+                    "session_id":         session_id,
+                    "query":              query,
+                    "response":           answer[:2000],
+                    "intent":             intent,
+                    "confidence_score":   confidence,
+                    "processing_time_ms": response_time_ms,
+                    "status":             status,
+                    "is_fallback":        False,
+                }).execute()
+            except Exception as _e:
+                logger.warning(f"[{session_id}] Supabase write: {_e}")
+
+        background_tasks.add_task(_write_to_supabase)
+        # ─────────────────────────────────────────────────────────────────
 
         return {
             "answer": answer,

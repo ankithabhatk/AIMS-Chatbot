@@ -33,10 +33,15 @@ class SupabaseClient:
         """Get or create Supabase client (singleton)"""
         if cls._instance is None:
             url = os.getenv("SUPABASE_URL", "")
-            key = os.getenv("SUPABASE_ANON_KEY", "")
+            # Accept either key name (service role preferred for backend writes)
+            key = (
+                os.getenv("SUPABASE_SERVICE_ROLE_KEY") or
+                os.getenv("SUPABASE_ANON_KEY") or
+                ""
+            )
             
             if not url or not key:
-                raise ValueError("SUPABASE_URL and SUPABASE_ANON_KEY must be set")
+                raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set")
             
             try:
                 cls._instance = create_client(url, key)
