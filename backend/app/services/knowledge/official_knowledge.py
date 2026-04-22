@@ -524,6 +524,112 @@ Saturday: 9:00 AM – 1:00 PM (Admissions office)
 ]
 
 # ─────────────────────────────────────────────────────────────────────────────
+# FEES (most-searched query — answer what we can, gate exact amounts)
+# ─────────────────────────────────────────────────────────────────────────────
+
+FEES = [
+    _chunk(
+        title="AIMS Fee Structure — MBA, BBA, MCA, BCA Programs",
+        content="""
+AIMS Institutes Fee Information:
+
+Important Note:
+Exact fee amounts vary by batch and are confirmed by the admissions office
+to reflect the latest government-approved rates. Contact for current figures:
+Email: admissions@theaims.ac.in | Phone: +91-80-40789999
+
+General Fee Guidance (approximate — verify with admissions):
+- MBA: Regulated by Bangalore City University fee committee
+  Structured as annual installments over 2 years
+  Merit scholarship holders receive waiver on a portion of tuition
+- BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms
+  More affordable than PG programs; installment options available
+- MCA: Postgraduate technical program; fees aligned with MBA bracket
+
+What is included in fees:
+- Tuition and university exam fees
+- Library and digital database access
+- Wi-Fi and computer lab usage
+- Sports and cultural activity access
+- Placement cell support and pre-placement training
+
+Additional charges (optional / separate):
+- Hostel: Annual charges for accommodation + mess (separate from tuition)
+- Transport: Available on select routes; charges apply
+- Study materials: Recommended books purchased separately
+
+Payment Options:
+- Installment plan available (semester-wise payments)
+- Education loans: Bank tie-ups with SBI, Canara Bank, HDFC Bank, Axis Bank
+- Government scholarships deductible from fee if sanctioned
+- Online payment via the college portal
+
+For exact current fee structure contact: admissions@theaims.ac.in
+        """,
+        url="https://www.theaims.ac.in/student-information-zone",
+        category="fees",
+    ),
+]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FREQUENTLY ASKED QUESTIONS (FAQs)
+# ─────────────────────────────────────────────────────────────────────────────
+
+FAQS = [
+    _chunk(
+        title="AIMS FAQs — Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+        content="""
+Frequently Asked Questions about AIMS Institutes:
+
+Q: Is hostel compulsory at AIMS?
+A: No, hostel is not compulsory. It is optional. AIMS provides separate hostel
+   facilities for boys and girls. Most local students commute from home.
+
+Q: Is an entrance exam required for MBA admission?
+A: Yes, for the merit quota. CAT (65 percentile+), MAT/XAT/CMAT/ATMA (70 percentile+),
+   or PGCET Karnataka score is required. Management quota allows direct
+   admission based on academic merit without an entrance exam.
+
+Q: Is an entrance exam required for BBA / BCA / B.Com?
+A: No. Admission to UG programs (BBA, BCA, B.Com) is based on 10+2 marks
+   and a Personal Interview. No entrance exam is mandatory.
+
+Q: Is education loan available for AIMS programs?
+A: Yes. AIMS has tie-ups with SBI, Canara Bank, HDFC Bank, and Axis Bank.
+   Students apply for loans with the AIMS admission offer letter.
+
+Q: Are scholarships available at AIMS?
+A: Yes. Merit scholarships for high CAT/MAT scores, sports scholarships,
+   NCC/NSS, defence quota, and government Karnataka scholarships are all available.
+
+Q: Is lateral entry available at AIMS?
+A: Lateral entry into BCA/B.Com 2nd year may be available for diploma holders
+   subject to university norms. Contact admissions for current eligibility.
+
+Q: What is the medium of instruction at AIMS?
+A: English is the primary medium of instruction for all programs at AIMS.
+
+Q: Can I visit the AIMS campus before applying?
+A: Yes. Campus visits are welcome on working days (Mon–Fri, 9 AM – 5 PM).
+   Call +91-80-40789999 to schedule a counselling session.
+
+Q: How is the placement record at AIMS?
+A: Highest package: ₹27 LPA (overall), ₹16.5 LPA (current batch).
+   Placement rate: 84% of eligible students. 300+ recruiters including
+   Deloitte, EY, KPMG, Amazon, Accenture, TCS visit campus annually.
+
+Q: Does AIMS have on-campus hostel or off-campus?
+A: AIMS has on-campus hostel (separate blocks for boys and girls) with
+   24/7 security, CCTV, Wi-Fi, mess facility, and medical support.
+        """,
+        url="https://www.theaims.ac.in/student-information-zone",
+        category="faqs",
+    ),
+]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # MASTER EXPORT
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -536,6 +642,8 @@ OFFICIAL_KNOWLEDGE_BASE: List[Dict] = (
     + CAMPUS
     + SCHOLARSHIPS
     + ACCREDITATIONS
+    + FEES
+    + FAQS
     + GENERAL
 )
 
