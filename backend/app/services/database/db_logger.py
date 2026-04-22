@@ -135,3 +135,92 @@ def db_health_check() -> dict:
         latency_ms = round((time.time() - start) * 1000)
         logger.error(f"[DB] Health check failed: {e}")
         return {"status": "error", "detail": str(e), "latency_ms": latency_ms}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PUBLIC: fetch_chat_history
+# ─────────────────────────────────────────────────────────────────────────────
+
+def fetch_chat_history(session_id: str) -> list:
+    """
+    Read all chat turns for a session from Supabase chat_logs.
+    Returns a list in the format expected by summary_engine.generate_summary():
+      [{"user": "...", "bot": "...", "timestamp": "..."}, ...]
+    """
+    client = _get_supabase_client()
+    if client is None:
+        return []
+    try:
+        result = client.table("chat_logs") \
+            .select("query, response, intent, confidence_score, created_at") \
+            .eq("session_id", session_id) \
+            .order("created_at") \
+            .execute()
+        return [
+            {
+                "user":      row["query"],
+                "bot":       row["response"],
+                "timestamp": row["created_at"],
+                "intent":    row.get("intent", ""),
+                "confidence": row.get("confidence_score", 0),
+            }
+            for row in (result.data or [])
+        ]
+    except Exception as e:
+        logger.error(f"[DB] fetch_chat_history({session_id}) failed: {e}")
+        return []
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PUBLIC: persist_session_summary
+# ─────────────────────────────────────────────────────────────────────────────
+
+def persist_session_summary(session_id: str) -> bool:
+    """
+    Generate an intelligence profile for session_id and upsert it to
+    the session_summaries table.
+
+    Called as a BackgroundTask after each chat turn — keeps summaries
+    current without blocking the response.
+
+    Returns True on success, False on failure.
+    """
+    from app.services.summary_engine import generate_summary
+
+    # 1. Pull chat history from Supabase
+    history = fetch_chat_history(session_id)
+    if not history:
+        logger.debug(f"[DB][{session_id}] No history to summarise")
+        return False
+
+    # 2. Generate intelligence profile (rule-based, instant)
+    profile = generate_summary(history)
+
+    # 3. Upsert to session_summaries (insert or update on conflict)
+    client = _get_supabase_client()
+    if client is None:
+        return False
+
+    payload = {
+        "session_id":              session_id,
+        "courses":                 profile["courses"],
+        "primary_intent":          profile["primary_intent"],
+        "all_intents":             profile["all_intents"],
+        "sentiment":               profile["sentiment"],
+        "lead_score":              profile["lead_score"],
+        "conversion_probability":  profile["conversion_probability"],
+        "recommended_action":      profile["recommended_action"],
+        "summary_text":            profile["summary"],
+        "message_count":           profile["messages"],
+        "has_lead":                False,
+        "updated_at":              "now()",
+    }
+
+    try:
+        _with_retry(lambda: client.table("session_summaries").upsert(payload).execute())
+        logger.debug(f"[DB][{session_id}] ✅ Summary persisted (score={profile['lead_score']}, prob={profile['conversion_probability']})")
+        return True
+    except Exception as e:
+        logger.error(f"[DB][{session_id}] ❌ Summary persist FAILED: {type(e).__name__}: {e}")
+        return False
+

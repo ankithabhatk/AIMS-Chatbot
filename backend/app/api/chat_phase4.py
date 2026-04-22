@@ -471,6 +471,18 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
                 session_id=session_id
             )
             
+            fallback_response_ms = int((time.time() - start_time) * 1000)
+            # Persist fallback turn to Supabase
+            from app.services.database.db_logger import persist_chat_turn as _p, persist_session_summary as _s
+            background_tasks.add_task(
+                _p,
+                session_id=session_id, query=query, response=fallback_msg,
+                intent=intent, confidence_score=confidence,
+                processing_time_ms=fallback_response_ms,
+                status="fallback", is_fallback=True,
+            )
+            background_tasks.add_task(_s, session_id)
+
             return {
                 "answer": fallback_msg,
                 "sources": [],
@@ -478,7 +490,7 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
                 "confidence_label": _get_confidence_label(confidence),
                 "fallback": True,
                 "suggestions": ["Admission requirements", "Available programs", "Campus facilities"],
-                "meta": {"response_time_ms": int((time.time() - start_time) * 1000), "session_id": session_id}
+                "meta": {"response_time_ms": fallback_response_ms, "session_id": session_id}
             }
 
         # ================================================================
@@ -606,6 +618,9 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
             status             = status,
             is_fallback        = False,
         )
+        # Background task 2: update session intelligence summary in Supabase
+        from app.services.database.db_logger import persist_session_summary as _summarise
+        background_tasks.add_task(_summarise, session_id)
         # ─────────────────────────────────────────────────────────────────
 
         return {
