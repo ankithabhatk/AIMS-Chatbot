@@ -4,10 +4,13 @@ Admin API — Chat Intelligence Dashboard
 Provides session summaries and lead intelligence to authorized admins.
 
 Routes:
-  GET  /api/v1/admin/summaries          → all session profiles (sorted by priority)
-  GET  /api/v1/admin/summaries/{sid}    → single session detail
-  GET  /api/v1/admin/stats              → aggregate stats (total users, intents, etc.)
-  GET  /api/v1/admin/db-health          → live Supabase connectivity check (no key needed)
+  GET   /api/v1/admin/summaries              → all session profiles (sorted by priority)
+  GET   /api/v1/admin/summaries/{sid}        → single session detail
+  GET   /api/v1/admin/stats                  → aggregate stats (total users, intents, etc.)
+  GET   /api/v1/admin/db-health              → live Supabase connectivity check (no key needed)
+  PATCH /api/v1/admin/sessions/{id}/feedback → mark prediction correct/incorrect
+  GET   /api/v1/admin/accuracy-stats         → model accuracy report from human reviews
+  GET   /api/v1/admin/export-reviewed-data   → training dataset export (JSON or CSV)
 
 Security:
   Protected by X-Admin-Key header (except db-health).
@@ -256,4 +259,100 @@ def get_accuracy_stats(x_admin_key: Optional[str] = Header(default=None)):
                                  ("good" if accuracy_pct and accuracy_pct >= 85 else "needs_tuning"),
         }
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/export-reviewed-data")
+def export_reviewed_data(
+    format: str = "json",
+    reviewed_only: bool = True,
+    x_admin_key: Optional[str] = Header(default=None),
+):
+    """
+    Export session intelligence profiles + human feedback as a training dataset.
+    Each reviewed row = one labeled example for future ML model training.
+
+    Query params:
+      format        : "json" (default) or "csv"
+      reviewed_only : true (default) — only export rows with human labels
+
+    Examples:
+      curl "http://localhost:8000/api/v1/admin/export-reviewed-data" \\
+           -H "X-Admin-Key: aims-admin-2024"
+
+      curl "http://localhost:8000/api/v1/admin/export-reviewed-data?format=csv" \\
+           -H "X-Admin-Key: aims-admin-2024" -o training_data.csv
+    """
+    _require_admin(x_admin_key)
+
+    import io
+    import csv
+    import datetime
+    from fastapi.responses import StreamingResponse
+
+    from app.services.database.db_logger import _get_supabase_client
+    client = _get_supabase_client()
+    if client is None:
+        raise HTTPException(status_code=503, detail="Database unavailable")
+
+    try:
+        query = client.table("session_summaries").select(
+            "session_id, courses, primary_intent, all_intents, sentiment, "
+            "lead_score, conversion_probability, conversion_timeline, "
+            "message_count, is_prediction_correct, review_notes, "
+            "reviewed_by, reviewed_at, updated_at"
+        )
+        if reviewed_only:
+            query = query.not_.is_("is_prediction_correct", "null")
+
+        result = query.order("updated_at", desc=True).execute()
+        rows   = result.data or []
+
+        if not rows:
+            return {
+                "message": "No reviewed data yet. Run: python scripts/review_predictions.py",
+                "rows": 0,
+            }
+
+        if format.lower() == "csv":
+            fields = [
+                "session_id", "primary_intent", "all_intents", "courses",
+                "sentiment", "lead_score", "conversion_probability",
+                "conversion_timeline", "message_count",
+                "is_prediction_correct", "review_notes",
+                "reviewed_by", "reviewed_at", "updated_at",
+            ]
+            output = io.StringIO()
+            writer = csv.DictWriter(output, fieldnames=fields, extrasaction="ignore")
+            writer.writeheader()
+            for row in rows:
+                row["all_intents"] = " | ".join(row.get("all_intents") or [])
+                row["courses"]     = " | ".join(row.get("courses")     or [])
+                writer.writerow({f: row.get(f, "") for f in fields})
+
+            output.seek(0)
+            return StreamingResponse(
+                iter([output.getvalue()]),
+                media_type="text/csv",
+                headers={"Content-Disposition": "attachment; filename=aims_training_data.csv"},
+            )
+
+        # JSON (default)
+        return {
+            "exported_at":   datetime.datetime.utcnow().isoformat() + "Z",
+            "total_rows":    len(rows),
+            "reviewed_only": reviewed_only,
+            "schema": {
+                "is_prediction_correct": "boolean — human label (true=correct, false=wrong)",
+                "lead_score":            "float 0–10 — model predicted score",
+                "conversion_probability":"string — Very High / High / Moderate / Low",
+                "review_notes":          "string — reason it was wrong (key training signal)",
+            },
+            "data": rows,
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"[Admin] Export failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
