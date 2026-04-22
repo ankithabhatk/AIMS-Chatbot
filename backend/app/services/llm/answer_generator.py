@@ -162,8 +162,12 @@ class AnswerGenerator:
                 'boost_terms': ['finance', 'marketing', 'hr', 'analytics', 'healthcare', 'bfsi', 'logistics', 'operations']
             },
             'programs': {
-                'triggers': ['program', 'course', 'degree', 'offer'],
-                'boost_terms': ['mba', 'bba', 'mca', 'bca', 'b.com', 'phd', 'bachelor', 'master']
+                'triggers': ['program', 'course', 'degree', 'offer', 'phd', 'doctoral'],
+                'boost_terms': ['mba', 'bba', 'mca', 'bca', 'b.com', 'phd', 'bachelor', 'master', 'doctoral']
+            },
+            'faqs': {
+                'triggers': ['compulsory', 'mandatory', 'medium', 'english', 'instruction', 'lateral', 'visit', 'loan'],
+                'boost_terms': ['optional', 'not compulsory', 'english', 'yes', 'no', 'loan', 'sbi', 'bank', 'visit']
             },
         }
 

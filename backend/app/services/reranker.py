@@ -39,6 +39,8 @@ def simple_rerank(query: str, results: list, min_score: float = 0.2):
          ['scholarship', 'fees', 'financial']),
         (['accredit', 'naac', 'iacbe', 'ranking', 'nirf'],
          ['accreditation', 'ranking', 'naac']),
+        (['is', 'does', 'can', 'how', 'what', 'compulsory', 'loan', 'lateral', 'medium'],
+         ['faqs', 'frequently asked questions']),
     ]
 
     def heading_boost(chunk):
