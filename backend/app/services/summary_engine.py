@@ -25,11 +25,32 @@ _COURSE_KEYWORDS = {
 }
 
 _INTENT_KEYWORDS = {
-    "Fees Inquiry":        ["fee", "fees", "cost", "tuition", "afford", "price", "lakh", "rupee", "payment", "scholarship", "loan"],
-    "Admission Inquiry":   ["admission", "apply", "apply online", "eligibility", "eligible", "entrance", "cat", "mat", "xat", "cmat", "pgcet", "document"],
-    "Placement Interest":  ["placement", "package", "lpa", "salary", "recruiter", "hiring", "job", "career", "company", "deloitte", "accenture"],
-    "Campus / Hostel":     ["hostel", "campus", "facility", "lab", "library", "sports", "canteen", "accommodation"],
-    "Program Details":     ["specialization", "subject", "curriculum", "semester", "syllabus", "duration", "course"],
+    "Fees Inquiry":        [
+        "fee", "fees", "cost", "tuition", "afford", "price", "lakh", "rupee",
+        "payment", "scholarship", "loan", "how much", "expensive", "financial",
+        "fee structure", "total cost", "annual fee",
+    ],
+    "Admission Inquiry":   [
+        "admission", "apply", "apply online", "eligibility", "eligible",
+        "entrance", "cat", "mat", "xat", "cmat", "pgcet", "document",
+        "last date", "deadline", "when does admission", "how to join",
+        "registration", "application form",
+    ],
+    "Placement Interest":  [
+        "placement", "package", "lpa", "salary", "recruiter", "hiring",
+        "job", "career", "company", "deloitte", "accenture", "highest package",
+        "average salary", "placement record", "placement stats", "ctc",
+        "placement percentage", "companies visit",
+    ],
+    "Campus / Hostel":     [
+        "hostel", "campus", "facility", "lab", "library", "sports",
+        "canteen", "accommodation", "infrastructure", "wifi", "mess",
+        "room", "living",
+    ],
+    "Program Details":     [
+        "specialization", "subject", "curriculum", "semester", "syllabus",
+        "duration", "course", "program", "what courses",
+    ],
 }
 
 _SENTIMENT_SIGNALS = {
@@ -91,22 +112,31 @@ def _detect_sentiment(text: str) -> str:
     return "Exploring"  # default
 
 
-def _lead_score(intents: List[str]) -> Dict:
+def _lead_score(intents: List[str], message_count: int = 0) -> Dict:
     score = 0
     for intent in intents:
         score += _LEAD_WEIGHTS.get(intent, 0)
 
-    # Bonus for asking multiple distinct topics (signals breadth of interest)
+    # Breadth bonus: asking 3+ distinct topics signals serious exploration
     if len(intents) >= 3:
         score += 2
 
-    if score >= 7:
+    # Depth bonus: more messages = stronger engagement signal
+    # 4–5 msgs = +1, 6–8 msgs = +2, 9+ msgs = +3
+    if message_count >= 9:
+        score += 3
+    elif message_count >= 6:
+        score += 2
+    elif message_count >= 4:
+        score += 1
+
+    if score >= 8:
         probability = "Very High"
-        action = "📞 Contact immediately — high-intent student"
+        action = "📞 Contact immediately — high-intent student ready to enrol"
         priority = 1
     elif score >= 5:
         probability = "High"
-        action = "📧 Send admission brochure + fee details"
+        action = "📧 Send admission brochure + fee structure within 24 hrs"
         priority = 2
     elif score >= 3:
         probability = "Moderate"
@@ -114,7 +144,7 @@ def _lead_score(intents: List[str]) -> Dict:
         priority = 3
     else:
         probability = "Low"
-        action = "🔔 Monitor — student still exploring"
+        action = "🔔 Monitor — student is still in early exploration"
         priority = 4
 
     return {
@@ -131,16 +161,37 @@ def _build_summary_text(
     sentiment: str,
     prediction: Dict,
     message_count: int,
+    primary_intent: str,
 ) -> str:
-    courses_str = ", ".join(courses)
-    intents_str = ", ".join(intents)
-    return (
-        f"Student is interested in {courses_str}. "
-        f"Key inquiries: {intents_str}. "
-        f"Engagement level: {sentiment}. "
-        f"Conversion probability: {prediction['conversion_probability']} "
-        f"(score {prediction['score']}) across {message_count} messages."
-    )
+    """
+    Produces a structured 5–7 line intelligence summary.
+    Max 10 lines even for 50-message sessions.
+    """
+    courses_str  = ", ".join(courses) if courses else "General"
+    intents_str  = ", ".join(intents) if intents else "General Inquiry"
+    score        = prediction['score']
+    prob         = prediction['conversion_probability']
+    action       = prediction['recommended_action']
+
+    # Depth label
+    if message_count >= 9:
+        depth = "deep engagement"
+    elif message_count >= 5:
+        depth = "moderate engagement"
+    elif message_count >= 2:
+        depth = "initial engagement"
+    else:
+        depth = "single-message contact"
+
+    lines = [
+        f"Course Interest  : {courses_str}",
+        f"Primary Intent   : {primary_intent}",
+        f"Topics Covered   : {intents_str}",
+        f"Sentiment        : {sentiment} ({depth}, {message_count} messages)",
+        f"Lead Score       : {score}/10+  |  Conversion: {prob}",
+        f"Recommended Action: {action}",
+    ]
+    return "\n".join(lines)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -174,21 +225,22 @@ def generate_summary(chat_history: List[Dict]) -> Dict:
         }
 
     user_text = _user_text(chat_history)
+    message_count = len(chat_history)
 
-    courses = _detect_courses(user_text)
-    intents = _detect_intents(user_text)
+    courses  = _detect_courses(user_text)
+    intents  = _detect_intents(user_text)
     sentiment = _detect_sentiment(user_text)
-    prediction = _lead_score(intents)
-
-    summary_text = _build_summary_text(
-        courses, intents, sentiment, prediction, len(chat_history)
-    )
+    prediction = _lead_score(intents, message_count)  # pass depth
 
     # Determine primary (highest-weight) intent
     primary_intent = max(
         intents,
         key=lambda i: _LEAD_WEIGHTS.get(i, 0),
         default="General Inquiry"
+    )
+
+    summary_text = _build_summary_text(
+        courses, intents, sentiment, prediction, message_count, primary_intent
     )
 
     return {
