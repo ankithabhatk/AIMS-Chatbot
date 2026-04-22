@@ -28,11 +28,17 @@ _COURSE_KEYWORDS = {
     "PhD":   ["phd", "doctoral", "research programme"],
 }
 
+# Keywords that must NOT immediately precede a Fees keyword
+# e.g. "hostel fee" should NOT fire Fees Inquiry, only Campus/Hostel
+_FEES_EXCLUSION_CONTEXT = ["hostel fee", "hostel fees", "hostel cost"]
+
 _INTENT_KEYWORDS = {
     "Fees Inquiry": [
-        "fee", "fees", "cost", "tuition", "afford", "price", "lakh", "rupee",
-        "payment", "scholarship", "loan", "how much", "expensive", "financial",
-        "fee structure", "total cost", "annual fee",
+        "fee structure", "total cost", "annual fee", "how much does",
+        "tuition fee", "course fee", "mba fee", "bba fee", "bca fee",
+        "fees kya", "how much is", "cost of", "afford", "price",
+        "lakh", "rupee", "payment plan", "scholarship", "loan", "emi",
+        "financial aid", "fee after", "total fee",
     ],
     "Admission Inquiry": [
         "admission", "apply", "apply online", "eligibility", "eligible",
@@ -44,16 +50,18 @@ _INTENT_KEYWORDS = {
         "placement", "package", "lpa", "salary", "recruiter", "hiring",
         "job", "career", "company", "deloitte", "accenture", "highest package",
         "average salary", "placement record", "placement stats", "ctc",
-        "placement percentage", "companies visit",
+        "placement percentage", "companies visit", "companies come",
+        "who recruits", "average ctc", "international recruiter",
     ],
     "Campus / Hostel": [
         "hostel", "campus", "facility", "lab", "library", "sports",
         "canteen", "accommodation", "infrastructure", "wifi", "mess",
-        "room", "living",
+        "room", "living", "hostel fee", "hostel fees", "hostel cost",
     ],
     "Program Details": [
         "specialization", "subject", "curriculum", "semester", "syllabus",
-        "duration", "course", "program", "what courses",
+        "duration", "course", "program", "what courses", "difference between",
+        "which course", "pgdm vs mba",
     ],
 }
 
@@ -126,7 +134,24 @@ def _detect_courses(text: str) -> List[str]:
 
 
 def _detect_intents(text: str) -> List[str]:
-    return [label for label, kws in _INTENT_KEYWORDS.items() if any(kw in text for kw in kws)] or ["General Inquiry"]
+    """
+    Detect intents using phrase-priority matching.
+    Fees Inquiry excludes hostel-fee context to prevent false positives.
+    Returns each intent at most once (deduped — repetition doesn't inflate score).
+    """
+    found = set()
+
+    # Strip hostel-fee compound phrases before testing Fees Inquiry
+    fees_text = text
+    for excl in _FEES_EXCLUSION_CONTEXT:
+        fees_text = fees_text.replace(excl, "[hostel-cost]")
+
+    for intent_label, keywords in _INTENT_KEYWORDS.items():
+        search_text = fees_text if intent_label == "Fees Inquiry" else text
+        if any(kw in search_text for kw in keywords):
+            found.add(intent_label)
+
+    return list(found) or ["General Inquiry"]
 
 
 def _detect_sentiment(text: str) -> str:
@@ -140,30 +165,62 @@ def _detect_sentiment(text: str) -> str:
 # LEAD SCORING
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _lead_score(intents: List[str], message_count: int = 0) -> Dict:
-    score = sum(_LEAD_WEIGHTS.get(i, 0) for i in intents)
+def _lead_score(intents: List[str], message_count: int = 0, user_text: str = "") -> Dict:
+    """
+    Score is based on intent PRESENCE (each intent counted once),
+    plus bonuses for breadth and message depth.
+    Normalized to a 0–10 display scale.
+    """
+    # Base: each unique intent contributes its weight exactly once
+    raw = sum(_LEAD_WEIGHTS.get(i, 0) for i in intents)
 
-    # Breadth bonus: 3+ distinct topics = serious exploration
+    # Breadth bonus: 3+ distinct topics = serious exploration (+2)
     if len(intents) >= 3:
-        score += 2
+        raw += 2
 
-    # Depth bonus: more messages = stronger engagement
+    # Depth bonus: more messages = stronger commitment signal
     if message_count >= 9:
-        score += 3
+        raw += 3
     elif message_count >= 6:
-        score += 2
+        raw += 2
     elif message_count >= 4:
-        score += 1
+        raw += 1
 
-    if score >= 8:
+    # Normalize to 0–10 scale (max raw ≈ 14 for all intents + breadth + depth)
+    score = round(min(raw * 10 / 14, 10.0), 1)
+
+    # Intent-combination fast-path: Fees+Admission together = serious buyer
+    has_fees      = "Fees Inquiry"      in intents
+    has_admission = "Admission Inquiry" in intents
+    has_placement = "Placement Interest" in intents
+    combo_boost   = has_fees and has_admission
+
+    # Scholarship-only dampener:
+    # If Fees is driven purely by scholarship/loan keywords (no fee-amount terms),
+    # the student is researching financial aid, not ready to enrol → cap at High
+    _FEE_AMOUNT_TERMS = ["fee structure", "total fee", "annual fee", "tuition fee",
+                         "course fee", "how much does", "how much is", "cost of",
+                         "fees kya", "fee after", "total cost"]
+    has_fee_amount_term = any(t in user_text for t in _FEE_AMOUNT_TERMS)
+    scholarship_only = has_fees and not has_admission and not has_fee_amount_term
+
+
+    # Thresholds on normalized 0–10 scale (calibrated against 10-conversation audit)
+    if scholarship_only and score >= 6.5:
+        # Cap scholarship-only sessions — not yet decision-ready
+        probability = "High"
+        action      = "📧 Send scholarship + fee-waiver details"
+        priority    = 2
+    elif score >= 6.5 or (combo_boost and score >= 5.0):
         probability = "Very High"
         action      = "📞 Contact immediately — high-intent student ready to enrol"
         priority    = 1
-    elif score >= 5:
+    elif score >= 5.0:
         probability = "High"
         action      = "📧 Send admission brochure + fee structure within 24 hrs"
         priority    = 2
-    elif score >= 3:
+    elif score >= 1.5 or (has_placement and message_count >= 3):
+        # Placement-only boost: 3+ placement questions = active researcher → Moderate
         probability = "Moderate"
         action      = "📋 Add to nurture list — follow up in 3–5 days"
         priority    = 3
@@ -172,8 +229,13 @@ def _lead_score(intents: List[str], message_count: int = 0) -> Dict:
         action      = "🔔 Monitor — student is still in early exploration"
         priority    = 4
 
-    return {"score": score, "conversion_probability": probability,
-            "recommended_action": action, "priority": priority}
+    return {
+        "score":                  score,
+        "raw_score":              raw,
+        "conversion_probability": probability,
+        "recommended_action":     action,
+        "priority":               priority,
+    }
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -266,7 +328,7 @@ def _build_summary_text(
         f"Primary Intent     : {primary_intent}",
         f"Topics Covered     : {intents_str}",
         f"Sentiment          : {sentiment} ({depth}, {message_count} messages)",
-        f"Lead Score         : {score}/10+  |  Conversion: {prob}",
+        f"Lead Score         : {score:.1f}/10  |  Conversion: {prob}",
         f"Conversion Timeline: {conversion_timeline}",
         f"Next Expected Query: {next_q_str}",
         f"Recommended Action : {action}",
@@ -312,7 +374,7 @@ def generate_summary(chat_history: List[Dict]) -> Dict:
     courses       = _detect_courses(user_text)
     intents       = _detect_intents(user_text)
     sentiment     = _detect_sentiment(user_text)
-    prediction    = _lead_score(intents, message_count)
+    prediction    = _lead_score(intents, message_count, user_text)
 
     # Determine primary (highest-weight) intent
     primary_intent = max(
