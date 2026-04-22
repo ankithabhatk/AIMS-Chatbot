@@ -151,6 +151,14 @@ async def chat_endpoint(request: ChatRequest):
                 except Exception as e:
                     logger.error(f"[{session_id}] Failed to save lead: {e}")
             
+            # Log gated queries too — they reveal real intent for admin scoring
+            try:
+                from app.services.chat_logger import log_chat as _log_chat
+                _log_chat(session_id, query, capture_result.get("answer", "[Gated]"),
+                          confidence=1.0, intent="GATED", status="lock")
+            except Exception:
+                pass
+            
             return {
                 "answer": capture_result["answer"],
                 "status": capture_result.get("status", "lock"),
