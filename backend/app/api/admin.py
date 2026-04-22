@@ -7,9 +7,10 @@ Routes:
   GET  /api/v1/admin/summaries          → all session profiles (sorted by priority)
   GET  /api/v1/admin/summaries/{sid}    → single session detail
   GET  /api/v1/admin/stats              → aggregate stats (total users, intents, etc.)
+  GET  /api/v1/admin/db-health          → live Supabase connectivity check (no key needed)
 
 Security:
-  Protected by X-Admin-Key header.
+  Protected by X-Admin-Key header (except db-health).
   Set ADMIN_SECRET_KEY env var (or defaults to "aims-admin-2024" for demo).
 """
 
@@ -20,6 +21,7 @@ from fastapi import APIRouter, Header, HTTPException
 
 from app.services.chat_logger import get_all_sessions, get_chat, session_count, total_messages
 from app.services.summary_engine import generate_summary
+from app.services.database.db_logger import db_health_check
 
 logger = logging.getLogger(__name__)
 
@@ -138,3 +140,13 @@ def get_admin_stats(x_admin_key: Optional[str] = Header(default=None)):
             if generate_summary(ch)["priority"] <= 2
         ),
     }
+
+
+@router.get("/db-health")
+def database_health():
+    """
+    Live Supabase connectivity and write-latency check.
+    No API key required — safe for uptime monitors.
+    Returns {"status": "ok", "latency_ms": N} or {"status": "error", "detail": str}
+    """
+    return db_health_check()

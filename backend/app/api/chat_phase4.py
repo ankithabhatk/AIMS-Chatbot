@@ -108,18 +108,26 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
             "how much", "financial"
         ]
         if any(keyword in query.lower() for keyword in sensitive_keywords) and not session["has_lead"]:
-            # Set gate_active here manually for the next turn
             session["gate_active"] = True
             logger.info(f"[{session_id}] Sensitive query intercepted - Triggering immediate gate")
-            # Log to admin even though we're gating (captures real intent)
+            gate_answer = f"{FEES_DISCLAIMER}\n\n{get_gate_invitation()}"
+            # Log to in-memory admin system
             try:
                 from app.services.chat_logger import log_chat as _log_chat
                 _log_chat(session_id, query, "[Gated — fee/financial query]",
                           confidence=1.0, intent="Fees Inquiry", status="lock")
             except Exception:
                 pass
+            # Persist to Supabase
+            from app.services.database.db_logger import persist_chat_turn as _persist
+            background_tasks.add_task(
+                _persist,
+                session_id=session_id, query=query, response=gate_answer,
+                intent="Fees Inquiry", confidence_score=1.0,
+                processing_time_ms=0, status="lock", is_fallback=False,
+            )
             return {
-                "answer": f"{FEES_DISCLAIMER}\n\n{get_gate_invitation()}",
+                "answer": gate_answer,
                 "status": "lock",
                 "fallback": False,
                 "confidence": 1.0,
@@ -151,14 +159,22 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
                 except Exception as e:
                     logger.error(f"[{session_id}] Failed to save lead: {e}")
             
-            # Log gated queries too — they reveal real intent for admin scoring
+            # Log gated queries to in-memory admin system
             try:
                 from app.services.chat_logger import log_chat as _log_chat
                 _log_chat(session_id, query, capture_result.get("answer", "[Gated]"),
                           confidence=1.0, intent="GATED", status="lock")
             except Exception:
                 pass
-            
+            # Persist to Supabase
+            from app.services.database.db_logger import persist_chat_turn as _persist
+            background_tasks.add_task(
+                _persist,
+                session_id=session_id, query=query,
+                response=capture_result.get("answer", "[Gated]"),
+                intent="GATED", confidence_score=1.0,
+                processing_time_ms=0, status="lock", is_fallback=False,
+            )
             return {
                 "answer": capture_result["answer"],
                 "status": capture_result.get("status", "lock"),
@@ -577,30 +593,19 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         except Exception as _log_err:
             logger.debug(f"[{session_id}] In-memory log skipped: {_log_err}")
 
-        # Supabase persistent log — runs after response is sent, never blocks
-        def _write_to_supabase():
-            try:
-                import os
-                from supabase import create_client
-                _url = os.getenv("SUPABASE_URL", "")
-                _key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_ANON_KEY", "")
-                if not _url or not _key:
-                    return
-                _client = create_client(_url, _key)
-                _client.table("chat_logs").insert({
-                    "session_id":         session_id,
-                    "query":              query,
-                    "response":           answer[:2000],
-                    "intent":             intent,
-                    "confidence_score":   confidence,
-                    "processing_time_ms": response_time_ms,
-                    "status":             status,
-                    "is_fallback":        False,
-                }).execute()
-            except Exception as _e:
-                logger.warning(f"[{session_id}] Supabase write: {_e}")
-
-        background_tasks.add_task(_write_to_supabase)
+        # Supabase persistent log — retry-safe, visible errors, never blocks response
+        from app.services.database.db_logger import persist_chat_turn as _persist
+        background_tasks.add_task(
+            _persist,
+            session_id         = session_id,
+            query              = query,
+            response           = answer,
+            intent             = intent,
+            confidence_score   = confidence,
+            processing_time_ms = response_time_ms,
+            status             = status,
+            is_fallback        = False,
+        )
         # ─────────────────────────────────────────────────────────────────
 
         return {
