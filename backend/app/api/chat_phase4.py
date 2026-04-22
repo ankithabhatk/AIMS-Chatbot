@@ -140,9 +140,35 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         # 3. MANDATORY GATE INTERCEPT (Hard Block)
         # ================================================================
         if session["gate_active"] and not session["has_lead"]:
-            # If the gate is active, this input is treated as lead details
+            # ── Gate escape hatch ──────────────────────────────────────
+            # Only treat input as a form response if it looks like one
+            # (contains @, phone digits, or comma-separated name pattern).
+            # This prevents regular questions from looping in email-validation.
+            import re as _re
+            _looks_like_form = bool(
+                _re.search(r'@', query) or                          # email
+                _re.search(r'\d{7,}', query) or                     # phone
+                (_re.search(r',', query) and len(query) > 8)        # "Name, email, course"
+            )
+            if not _looks_like_form:
+                # Reminder — not an error loop
+                reminder = (
+                    "I'd love to help! Before I can share those details, "
+                    "could you please provide your **Name, Email, and Course of interest**?\n\n"
+                    "*(Example: John Doe, john@gmail.com, MBA)*"
+                )
+                return {
+                    "answer":      reminder,
+                    "status":      "lock",
+                    "fallback":    False,
+                    "confidence":  1.0,
+                    "sources":     [],
+                    "suggestions": ["Share my details", "What programs are offered?"],
+                    "meta": {"intent": "gate_reminder", "session_id": session_id},
+                }
+            # Looks like a real form submission — process it
             capture_result = handle_gated_capture(session_id, query)
-            
+
             if capture_result.get("lead_ready"):
                 try:
                     lead_data = capture_result["data"]
