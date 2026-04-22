@@ -617,8 +617,12 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         # 13. BUILD SUCCESS RESPONSE
         # ================================================================
         status = "unlock"
-        # Rule: Turn 1 is free, Turn 2 is gated (Status: lock)
-        if intent not in ["GREETING", "EXIT"] and session["query_count"] >= 2 and not session["has_lead"]:
+        # Turn counting (query_count increments before this check):
+        #   T1 = free answer + gate invite
+        #   T2 = free (first follow-up — natural conversation)
+        #   T3 = free (second follow-up / context expansion)
+        #   T4+ = gate fires (user has had 3 free exchanges)
+        if intent not in ["GREETING", "EXIT"] and session["query_count"] >= 4 and not session["has_lead"]:
             status = "lock"
             session["gate_active"] = True
             logger.info(f"[{session_id}] Turn {session['query_count']} - Activating lead gate")

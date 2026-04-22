@@ -30,7 +30,9 @@ class FAISSIndex:
             dimension: Embedding vector dimension
         """
         self.dimension = dimension
-        self.index = faiss.IndexFlatL2(dimension)  # L2 distance
+        # Inner-product index = cosine similarity on L2-normalized embeddings
+        # Sentence transformers output unit-norm vectors — IP == cosine here
+        self.index = faiss.IndexFlatIP(dimension)
         self.metadata: List[Dict[str, Any]] = []
         self.doc_count = 0
         
@@ -65,8 +67,9 @@ class FAISSIndex:
         if headings is None:
             headings = ["untitled"] * len(texts)
         
-        # Add to FAISS index
+        # Normalize embeddings to unit length (required for cosine via IP)
         embeddings_float32 = embeddings.astype(np.float32)
+        faiss.normalize_L2(embeddings_float32)
         self.index.add(embeddings_float32)
         
         # Store metadata
@@ -98,8 +101,9 @@ class FAISSIndex:
             logger.warning("Search on empty index")
             return []
         
-        # Ensure float32
+        # Normalize query for cosine similarity
         query_embedding = query_embedding.astype(np.float32).reshape(1, -1)
+        faiss.normalize_L2(query_embedding)
         
         # Search
         distances, indices = self.index.search(query_embedding, min(k, self.doc_count))
@@ -132,9 +136,9 @@ class FAISSIndex:
                 logger.warning(f"No text found in metadata for idx={idx}")
                 continue
             
-            # Convert L2 distance to similarity score (0-1)
-            # Lower distance = higher similarity
-            similarity = 1.0 / (1.0 + dist)
+            # IP score is in [-1, 1] for normalized vectors (cosine similarity)
+            # Map to [0, 1]: (score + 1) / 2
+            similarity = float((dist + 1.0) / 2.0)
             
             results.append((
                 full_text,
