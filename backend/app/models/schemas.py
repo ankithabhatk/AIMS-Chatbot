@@ -55,6 +55,7 @@ class ChatResponseSuccess(BaseModel):
     answer: str
     sources: List[SourceCitation]
     confidence: float  # 0.0-1.0
+    status: str = "unlock" # "lock" or "unlock"
     fallback: bool = False
     suggestions: List[str] = []
     meta: Dict[str, Any] = {}  # Contains response_time_ms, chunks_used, etc.
@@ -93,6 +94,7 @@ class ChatResponseFallback(BaseModel):
     """POST /api/v1/chat - Fallback response"""
     answer: Optional[str] = None
     fallback: bool = True
+    status: str = "unlock"
     confidence: float  # Will be low (< 0.45)
     message: str  # Friendly fallback message
     contact: ContactInfo

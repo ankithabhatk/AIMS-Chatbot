@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     
     # Supabase Configuration
     supabase_url: str = ""
-    supabase_publishable_key: str = ""
+    supabase_service_role_key: str = ""
     supabase_jwt_secret: str = ""
     
     # Redis

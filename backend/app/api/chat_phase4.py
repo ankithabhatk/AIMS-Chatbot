@@ -24,15 +24,18 @@ from app.services.response.filter import filter_results_by_relevance
 from app.services.response.confidence import calculate_confidence
 from app.services.logging.query_logger import get_query_logger
 from app.services.suggestions.engine import get_suggestion_engine
+from app.services.conversation_brain import preprocess_query, postprocess_response
 
 router = APIRouter(prefix="/api/v1", tags=["chat"])
 logger = logging.getLogger(__name__)
 
-# Configuration
-FALLBACK_THRESHOLD = 0.45  # Calibrated for ~38% answer rate + 75% wrong query rejection
+# Constants
+FAISS_K = 25
+MAX_ANSWER_LENGTH = 800
+CONFIDENCE_THRESHOLD = 0.55
+RERANK_MIN_SCORE = 0.65
 MIN_QUERY_LENGTH = 3
 MIN_SCORE_FILTER = 0.3
-FAISS_K = 5
 
 
 @router.post("/chat")
@@ -75,8 +78,147 @@ async def chat_endpoint(request: ChatRequest):
         # ================================================================
         # 1. VALIDATE INPUT
         # ================================================================
+        # ================================================================
+        # 1. VALIDATE INPUT & SESSION
+        # ================================================================
         query = request.query.strip()
         
+        # Extract context
+        session_id = None
+        if request.context and request.context.session_id:
+            session_id = request.context.session_id
+        else:
+            session_id = str(uuid.uuid4())  # Generate if not provided
+            
+        from app.services.lead_handler import (
+            get_or_create_session, update_session_on_query, 
+            handle_gated_capture, get_gate_invitation, FEES_DISCLAIMER
+        )
+        from app.services.database.supabase_client import get_lead_store
+        
+        # Base session context
+        session = get_or_create_session(session_id)
+        
+        # ================================================================
+        # 2. SENSITIVE DATA PROTECTION (Strict Gating)
+        # ================================================================
+        sensitive_keywords = [
+            "fee", "scholarship", "cost", "price", "expensive",
+            "financial", "tuition", "rupee", "lakh"
+        ]
+        if any(keyword in query.lower() for keyword in sensitive_keywords) and not session["has_lead"]:
+            # Set gate_active here manually for the next turn
+            session["gate_active"] = True
+            logger.info(f"[{session_id}] Sensitive query intercepted - Triggering immediate gate")
+            return {
+                "answer": f"{FEES_DISCLAIMER}\n\n{get_gate_invitation()}",
+                "status": "lock",
+                "fallback": False,
+                "confidence": 1.0,
+                "sources": [],
+                "suggestions": ["Programs offered", "Placement record", "Campus tour"],
+                "meta": {"intent": "sensitive_data_conversion", "session_id": session_id}
+            }
+
+        # ================================================================
+        # 3. MANDATORY GATE INTERCEPT (Hard Block)
+        # ================================================================
+        if session["gate_active"] and not session["has_lead"]:
+            # If the gate is active, this input is treated as lead details
+            capture_result = handle_gated_capture(session_id, query)
+            
+            if capture_result.get("lead_ready"):
+                try:
+                    lead_data = capture_result["data"]
+                    lead_store = get_lead_store()
+                    import asyncio
+                    await lead_store.create_lead(
+                        name=lead_data.get("name"),
+                        email=lead_data.get("email"),
+                        phone=lead_data.get("phone"),
+                        interest=lead_data.get("course"),
+                        source="chatbot_gated"
+                    )
+                    logger.info(f"[{session_id}] Lead saved to Supabase: {lead_data.get('email')}")
+                except Exception as e:
+                    logger.error(f"[{session_id}] Failed to save lead: {e}")
+            
+            return {
+                "answer": capture_result["answer"],
+                "status": capture_result.get("status", "lock"),
+                "fallback": False,
+                "confidence": 1.0,
+                "sources": [],
+                "suggestions": ["Tell me about placements", "Admission last date"],
+                "meta": {"intent": "lead_capture_intercept", "session_id": session_id}
+            }
+
+        # SURGICAL GATE FIX: Update session ONLY AFTER gate and fees checks pass.
+        # This ensures the first question flows to RAG, and Turn 2 is the one that gets gated.
+        update_session_on_query(session_id, query)
+
+        # ================================================================
+        # 2.5 CONVERSATION BRAIN (Context Intelligence - Safe Layer)
+        # ================================================================
+        # Pre-process query using conversation context
+        # This handles: follow-ups, corrections, query expansion
+        # Returns: (processed_query, brain_instruction)
+        original_query = query
+        query, brain_instruction = preprocess_query(query, session_id)
+        
+        if brain_instruction and brain_instruction.get("type") == "correction":
+            # User rejected last answer - retry with same query
+            logger.info(f"[{session_id}] Correction detected, retrying with last query")
+        
+        if brain_instruction and brain_instruction.get("type") == "affirmation":
+            # User was satisfied - provide follow-up options
+            return {
+                "answer": "Glad I could help! Is there anything else you'd like to know about AIMS?",
+                "status": "unlock",
+                "fallback": False,
+                "confidence": 1.0,
+                "sources": [],
+                "suggestions": ["Admission requirements", "Campus facilities", "Placement record"],
+                "meta": {"intent": "affirmation", "session_id": session_id}
+            }
+
+        # Use Input Intelligence to classify intent (GREETING/EXIT/NONSENSE/QUESTION)
+        from app.services.input_handler import classify_intent
+        intent = classify_intent(query)
+        
+        logger.info(f"[{session_id}] Detected Intent: {intent}")
+        
+        # Branch based on intent
+        if intent == "GREETING":
+            return {
+                "answer": "Hello! I'm the AIMS admissions assistant. How can I help you today?",
+                "status": "unlock",
+                "fallback": False,
+                "confidence": 1.0,
+                "sources": [],
+                "suggestions": ["What programs do you offer?", "Tell me about MBA", "Hostel facilities?"],
+                "meta": {"intent": "greeting", "session_id": session_id}
+            }
+        
+        elif intent == "EXIT":
+            return {
+                "answer": "You're welcome! Feel free to ask anytime. Have a great day!",
+                "fallback": False,
+                "confidence": 1.0,
+                "suggestions": [],
+                "meta": {"intent": "exit", "session_id": session_id}
+            }
+        
+        elif intent == "NONSENSE":
+            return {
+                "answer": "I didn't quite understand that. Could you please rephrase your question about AIMS college?",
+                "fallback": True,
+                "confidence": 0.0,
+                "suggestions": ["Admission process", "Placements", "Contact info"],
+                "meta": {"intent": "nonsense", "session_id": session_id}
+            }
+            
+        # Continue with QUESTION flow
         if len(query) < MIN_QUERY_LENGTH:
             logger.warning(f"Query too short: {len(query)} chars")
             return {
@@ -96,13 +238,24 @@ async def chat_endpoint(request: ChatRequest):
         if request.user and request.user.email:
             user_email = request.user.email
         
-        logger.info(f"[{session_id}] Query: {query[:60]}...")
+        logger.info(f"[{session_id}] Processing Question: {query[:60]}...")
         
         # ================================================================
-        # 2. EMBED QUERY
+        # 2. REWRITE QUERY (Only for Questions)
+        # ================================================================
+        from app.services.query_rewriter import rewrite_query
+        
+        original_query = query
+        rewritten_query = rewrite_query(query)
+        
+        logger.info(f"[{session_id}] Original:  '{original_query}'")
+        logger.info(f"[{session_id}] Rewritten: '{rewritten_query}'")
+        
+        # ================================================================
+        # 3. EMBED QUERY
         # ================================================================
         try:
-            query_embedding = embed_text(query)
+            query_embedding = embed_text(rewritten_query)
             logger.debug(f"[{session_id}] Embedded query (dim={len(query_embedding)})")
         except Exception as e:
             logger.error(f"[{session_id}] Embedding failed: {e}")
@@ -113,7 +266,7 @@ async def chat_endpoint(request: ChatRequest):
             }
         
         # ================================================================
-        # 3. CHECK FAISS INDEX HEALTH
+        # 4. CHECK FAISS INDEX HEALTH
         # ================================================================
         index = get_index()
         stats = index.get_stats()
@@ -175,49 +328,158 @@ async def chat_endpoint(request: ChatRequest):
             )
         
         # ================================================================
-        # 5. FILTER RESULTS BY RELEVANCE
+        # 5. RERANK RESULTS (Semantic + Keyword Precision)
         # ================================================================
-        filtered_chunks = filter_results_by_relevance(retrieved_chunks, min_score=MIN_SCORE_FILTER)
-        logger.info(f"[{session_id}] Filtered: {len(retrieved_chunks)} → {len(filtered_chunks)} chunks")
+        from app.services.reranker import simple_rerank
+        
+        # Convert FAISS tuples to dicts for reranker
+        # Format: (text, score, url, heading, doc_id)
+        candidate_dicts = [
+            {
+                "content": c[0],
+                "score": c[1],
+                "url": c[2],
+                "heading": c[3],
+                "id": c[4] if len(c) > 4 else None
+            } for c in retrieved_chunks
+        ]
+        
+        # Rerank and pick top 5 (increased for better synthesis)
+        reranked_dicts = simple_rerank(rewritten_query, candidate_dicts, min_score=MIN_SCORE_FILTER)
+        
+        # ================================================================
+        # 5.1 DOMAIN-SPECIFIC BOOSTING (Heuristic precision)
+        # ================================================================
+        query_lower = query.lower()
+        
+        # Boost placements
+        if any(kw in query_lower for kw in ["placement", "job", "career", "recruit"]):
+            reranked_dicts = sorted(
+                reranked_dicts, 
+                key=lambda x: any(kw in x["content"].lower() for kw in ["placement", "recruit", "company"]), 
+                reverse=True
+            )
+            
+        # Boost admissions
+        if any(kw in query_lower for kw in ["admission", "apply", "enrol", "eligibility"]):
+            reranked_dicts = sorted(
+                reranked_dicts, 
+                key=lambda x: any(kw in x["content"].lower() for kw in ["admission", "process", "apply", "requirement"]), 
+                reverse=True
+            )
+            
+        # Boost hostel/facilities
+        if any(kw in query_lower for kw in ["hostel", "room", "stay", "accommodation", "facility"]):
+            reranked_dicts = sorted(
+                reranked_dicts, 
+                key=lambda x: any(kw in x["content"].lower() for kw in ["hostel", "facility", "accommodation", "campus"]), 
+                reverse=True
+            )
+        
+        # Convert back to tuples for compatibility with downstream services
+        filtered_chunks = [
+            (r["content"], r["score"], r["url"], r["heading"], r["id"])
+            for r in reranked_dicts
+        ]
+        
+        logger.info(f"[{session_id}] Reranked: {len(retrieved_chunks)} → {len(filtered_chunks)} chunks")
+        
+        # ================================================================
+        # 5.5 BOOST FAQ RESULTS (If Present)
+        # ================================================================
+        # Prioritize FAQ chunks if any exist - they tend to directly answer common questions
+        faq_chunks = []
+        non_faq_chunks = []
+        
+        for chunk in filtered_chunks:
+            # chunk format: (content, score, url, heading, id)
+            # Try to detect if this is a FAQ (by content pattern or explicit metadata)
+            content = chunk[0].lower()
+            if "q:" in content and "a:" in content:
+                # Likely a FAQ based on content pattern
+                faq_chunks.append(chunk)
+            else:
+                non_faq_chunks.append(chunk)
+        
+        # Reorder: FAQs first (if any), then regular content
+        if faq_chunks:
+            logger.info(f"[{session_id}] Boosting {len(faq_chunks)} FAQ chunks to top")
+            filtered_chunks = faq_chunks + non_faq_chunks
         
         # ================================================================
         # 6. CALCULATE CONFIDENCE
         # ================================================================
-        confidence = calculate_confidence(filtered_chunks) if filtered_chunks else 0.0
+        confidence = calculate_confidence(rewritten_query, filtered_chunks) if filtered_chunks else 0.0
         logger.info(f"[{session_id}] Confidence: {confidence:.3f}")
         
         # ================================================================
-        # 7. CHECK FALLBACK THRESHOLD
+        # 7. BRANCHING LOGIC: FALLBACK vs. ANSWER
         # ================================================================
-        is_fallback = confidence < FALLBACK_THRESHOLD
-        logger.info(f"[{session_id}] Fallback={is_fallback} (threshold={FALLBACK_THRESHOLD})")
+        is_fallback = confidence < CONFIDENCE_THRESHOLD
         
         if is_fallback:
-            logger.warning(f"[{session_id}] Low confidence fallback ({confidence:.3f})")
+            logger.warning(f"[{session_id}] Low confidence ({confidence:.3f}) -> Smart Fallback")
+            
+            # Construct Smart Fallback Message
+            fallback_msg = (
+                "I want to make sure I give you the most accurate information. "
+                "For this query, I recommend connecting with the AIMS admissions team who can guide you in detail."
+            )
             
             # Log fallback
             query_logger = get_query_logger()
             query_logger.log_query(
                 query=query,
-                answer=None,
+                answer=fallback_msg,
                 confidence=confidence,
                 fallback=True,
                 response_time_ms=int((time.time() - start_time) * 1000),
-                chunks_used=0,
+                chunks_used=len(filtered_chunks),
                 user_email=user_email,
                 session_id=session_id
             )
             
-            return _build_fallback_response(
-                confidence=confidence,
-                response_time_ms=int((time.time() - start_time) * 1000)
-            )
-        
+            return {
+                "answer": fallback_msg,
+                "sources": [],
+                "confidence": round(confidence, 3),
+                "confidence_label": _get_confidence_label(confidence),
+                "fallback": True,
+                "suggestions": ["Admission requirements", "Available programs", "Campus facilities"],
+                "meta": {"response_time_ms": int((time.time() - start_time) * 1000), "session_id": session_id}
+            }
+
         # ================================================================
-        # 8. SYNTHESIZE ANSWER
+        # 8. SYNTHESIZE ANSWER (High/Medium Confidence)
         # ================================================================
         answer_gen = get_answer_generator()
         answer = answer_gen.synthesize(query, filtered_chunks)
+        
+        # ================================================================
+        # 8.5 POST-PROCESS ANSWER (Apply Brain Modifications)
+        # ================================================================
+        answer = postprocess_response(
+            original_query=original_query,
+            processed_query=query,
+            answer=answer,
+            confidence=confidence,
+            session_id=session_id,
+            brain_instruction=brain_instruction
+        )
+        
+        # Add disclaimer if confidence is in the medium range
+        if confidence < CONFIDENCE_THRESHOLD:
+            logger.info(f"[{session_id}] Medium confidence disclaimer added")
+            answer += "\n\nFor more specific details or verification, please contact the AIMS admissions office."
+        
+        # ================================================================
+        # 9. GATE INVITATION (On first 'free' turn)
+        # ================================================================
+        from app.services.lead_handler import get_gate_invitation
+        
+        if session["query_count"] == 1 and not session["has_lead"]:
+            logger.info(f"[{session_id}] Appending gate invitation to first answer")
+            answer = f"{answer}\n\n{get_gate_invitation()}"
         
         if not answer or answer.strip() == "":
             logger.warning(f"[{session_id}] Empty answer after synthesis")
@@ -276,13 +538,22 @@ async def chat_endpoint(request: ChatRequest):
         logger.info(f"[{session_id}] ✅ Response sent in {response_time_ms}ms")
         
         # ================================================================
-        # 12. BUILD SUCCESS RESPONSE
+        # 13. BUILD SUCCESS RESPONSE
         # ================================================================
+        status = "unlock"
+        # Rule: Turn 1 is free, Turn 2 is gated (Status: lock)
+        if intent not in ["GREETING", "EXIT"] and session["query_count"] >= 2 and not session["has_lead"]:
+            status = "lock"
+            session["gate_active"] = True
+            logger.info(f"[{session_id}] Turn {session['query_count']} - Activating lead gate")
+
         return {
             "answer": answer,
-            "sources": sources,
-            "confidence": round(confidence, 3),
+            "status": status,
             "fallback": False,
+            "confidence": round(confidence, 3),
+            "confidence_label": _get_confidence_label(confidence),
+            "sources": sources,
             "suggestions": suggestions,
             "meta": {
                 "response_time_ms": response_time_ms,
@@ -296,8 +567,19 @@ async def chat_endpoint(request: ChatRequest):
         return {
             "error": True,
             "message": "Internal server error",
-            "code": 500
+            "code": 500,
+            "status": "unlock"
         }
+
+
+def _get_confidence_label(confidence: float) -> str:
+    """Generate human-readable confidence label"""
+    if confidence >= 0.65:
+        return "✔ Verified Information"
+    elif confidence >= 0.55:
+        return "⚠️ General Guidance"
+    else:
+        return "📩 Connect for Details"
 
 
 def _build_fallback_response(message: str = None,
@@ -305,12 +587,14 @@ def _build_fallback_response(message: str = None,
                              response_time_ms: int = 0) -> dict:
     """Build standardized fallback response"""
     if message is None:
-        message = "I couldn't find reliable information about that in my knowledge base. Please contact admissions for help."
+        message = "I want to make sure I give you the most accurate information. For this query, I recommend connecting with the AIMS admissions team who can guide you in detail."
     
     return {
         "answer": None,
+        "status": "unlock",
         "fallback": True,
         "confidence": round(confidence, 3),
+        "confidence_label": _get_confidence_label(confidence),
         "message": message,
         "contact": {
             "email": "admissions@theaims.ac.in",

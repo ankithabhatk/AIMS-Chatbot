@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 class AnswerGenerator:
     """Generate coherent answers from multiple retrieved chunks"""
     
-    def __init__(self, max_answer_length: int = 300, min_sentence_length: int = 30):
+    def __init__(self, max_answer_length: int = 800, min_sentence_length: int = 20):
         """
         Initialize answer generator
         
         Args:
-            max_answer_length: Maximum answer length in characters
-            min_sentence_length: Minimum sentence length to consider (was 15, now 30 for stricter filtering)
+            max_answer_length: Maximum answer length in characters (increased to 800)
+            min_sentence_length: Minimum sentence length (reduced to 20 to capture stats)
         """
         self.max_answer_length = max_answer_length
         self.min_sentence_length = min_sentence_length
@@ -131,11 +131,17 @@ class AnswerGenerator:
         Factors:
         - Original chunk similarity (from FAISS)
         - Query term overlap
-        - Position in answer
+        - Factual priority (LPA, recruiters, brands)
         """
         query_terms = set(query.lower().split())
+        query_lower = query.lower()
         ranked = []
         
+        factual_keywords = ["lpa", "package", "recruiter", "company", "placement", "salary", "admission", "apply", "brands", "corporates", "amazon", "deloitte", "infosys", "ey", "accenture", "kpmg", "hostel", "residential", "accommodation", "mess"]
+        
+        # Determine if query is asking for admission/eligibility
+        is_admission_query = any(k in query_lower for k in ["admission", "eligibility", "criteria", "process", "apply"])
+
         for sent, score, heading in sentences:
             # Base score from FAISS
             relevance = float(score)
@@ -143,7 +149,15 @@ class AnswerGenerator:
             # Boost if sentence contains query terms
             sent_lower = sent.lower()
             term_matches = sum(1 for term in query_terms if term in sent_lower)
-            relevance += (term_matches * 0.05)  # Boost per matching term
+            relevance += (term_matches * 0.05)
+            
+            # FACTUAL PRIORITY BOOST (Strongly prioritize real metrics/brands)
+            if any(k in sent_lower for k in factual_keywords):
+                relevance += 0.8  # Aggressive boost to ensure facts are selected
+            
+            # ELIGIBILITY FILTER: Skip eligibility text for non-admission queries
+            if "applicant must satisfy" in sent_lower and not is_admission_query:
+                relevance -= 0.6  # Penalize mismatched boilerplate
             
             # Prefer well-formed sentences
             if sent.endswith(('.', '!', '?')):
@@ -158,49 +172,34 @@ class AnswerGenerator:
     
     def _build_answer(self, ranked_sentences: List[Tuple[str, float, str]]) -> str:
         """
-        Build final answer by selecting sentences within length limit
-        
-        Maintains logical flow by selecting top-ranked sentences
-        and joining coherently
+        Build final answer with structured bullet points
         """
         if not ranked_sentences:
-            logger.warning("No ranked sentences to build answer")
             return ""
         
         answer_parts = []
         current_length = 0
         
-        logger.debug(f"Building answer from {len(ranked_sentences)} ranked sentences")
+        logger.debug(f"Building structured answer from {len(ranked_sentences)} sentences")
         
         for i, (sent, score, heading) in enumerate(ranked_sentences):
-            sent_length = len(sent) + 1  # +1 for space
+            # Format as bullet point
+            bullet_sent = f"• {sent}"
+            sent_length = len(bullet_sent) + 1  # +1 for newline
             
             # Stop if answer would exceed max length
             if current_length + sent_length > self.max_answer_length:
-                logger.debug(f"Reached length limit at sentence {i}")
                 break
             
-            answer_parts.append(sent)
+            answer_parts.append(bullet_sent)
             current_length += sent_length
-            logger.debug(f"Added sentence {i}: {sent[:50]}...")
         
         if not answer_parts:
-            # Fallback: return first sentence of best chunk
-            logger.warning("No sentences fit in length limit, using fallback")
-            best_sent = ranked_sentences[0][0] if ranked_sentences else ""
-            if len(best_sent) > self.max_answer_length:
-                best_sent = best_sent[:self.max_answer_length].rsplit(' ', 1)[0] + "..."
-            return best_sent
+            # Fallback: simple text without bullets
+            return self._fallback_to_first_chunk(ranked_sentences[0][0])
         
-        # Join with spaces
-        answer = " ".join(answer_parts)
-        
-        # Ensure proper ending
-        if answer and not answer.endswith(('.', '!', '?')):
-            answer += "."
-        
-        logger.debug(f"Final answer: {len(answer)} characters")
-        return answer
+        # Join with newlines — no artificial header
+        return "\n".join(answer_parts)
     
     def _is_boilerplate(self, sentence: str) -> bool:
         """Skip common boilerplate and navigation text"""

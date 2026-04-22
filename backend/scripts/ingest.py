@@ -22,6 +22,7 @@ from app.services.data_cleaning import TextCleaner, SmartChunker, chunk_document
 from app.services.embeddings.embed_pipeline import EmbeddingPipeline
 from app.services.retrieval.faiss_builder import build_faiss_index_from_embeddings
 from app.services.improved_content_filter import ImprovedContentFilter
+from app.services.database.supabase_vector_store import SupabaseVectorStore
 
 # Configure logging
 logging.basicConfig(
@@ -32,20 +33,32 @@ logger = logging.getLogger(__name__)
 
 
 class DataIngestionPipeline:
-    """Minimal, testable data ingestion pipeline"""
+    """Minimal, testable data ingestion pipeline with dual storage (FAISS + Supabase)"""
     
     def __init__(self):
-        self.scraper = WebScraper(max_depth=2, delay=0.5)
+        self.scraper = WebScraper(max_depth=3, delay=0.5)  # Increased from max_depth=2 to 3 for deeper crawl
         self.cleaner = TextCleaner()
         self.chunker = SmartChunker()
         self.embeddings = EmbeddingPipeline()
+        
+        # Initialize Supabase vector store (parallel, optional)
+        try:
+            self.supabase_store = SupabaseVectorStore()
+            self.use_supabase = True
+            logger.info("ℹ️  Supabase vector store initialized (dual storage enabled)")
+        except Exception as e:
+            self.supabase_store = None
+            self.use_supabase = False
+            logger.warning(f"⚠️  Supabase not available, using FAISS only: {e}")
         
         self.stats = {
             'scraped_pages': 0,
             'cleaned_documents': 0,
             'chunks_created': 0,
             'embeddings_generated': 0,
-            'faiss_saved': False
+            'faiss_saved': False,
+            'supabase_stored': 0,
+            'supabase_failed': 0
         }
     
     def run(self, url: str = "https://www.theaims.ac.in") -> Dict:
@@ -59,7 +72,7 @@ class DataIngestionPipeline:
             # STEP 1: Scrape
             logger.info("STEP 1: Web Scraping")
             logger.info("-" * 40)
-            scraped = self._scrape_website(url)
+            scraped = self._scrape_website()
             
             # STEP 1.5: Filter low-quality content (IMPROVED version)
             logger.info("\nSTEP 1.5: Content Quality Filtering (Improved)")
@@ -81,10 +94,10 @@ class DataIngestionPipeline:
             logger.info("-" * 40)
             embeddings, metadata, chunk_ids = self._embed_chunks(chunks)
             
-            # STEP 5: Build FAISS Index
-            logger.info("\nSTEP 5: Build FAISS Index")
+            # STEP 5: Store in FAISS + Supabase (parallel)
+            logger.info("\nSTEP 5: Build FAISS Index & Store in Supabase")
             logger.info("-" * 40)
-            index_path = self._build_faiss_index(chunk_ids, embeddings, metadata)
+            index_path = self._build_faiss_and_store_embeddings(chunks, chunk_ids, embeddings, metadata)
             
             # STEP 6: Save Checkpoints
             logger.info("\nSTEP 6: Save Local Checkpoints")
@@ -113,20 +126,36 @@ class DataIngestionPipeline:
                 'timestamp': datetime.now().isoformat()
             }
     
-    def _scrape_website(self, url: str) -> List[Dict]:
-        """Scrape website and return raw documents"""
-        logger.info(f"Scraping: {url}")
+    def _scrape_website(self) -> List[Dict]:
+        """Scrape website and supplement with browser-extracted data"""
+        logger.info("Scraping website...")
         
-        documents = self.scraper.scrape_website(url)
+        # 1. Live Recrusive Crawl (Depth 3)
+        documents = self.scraper.scrape_website()
+        
+        # 2. Supplemental Deep Data (from browser subagent)
+        supplemental_path = os.path.join(os.path.dirname(__file__), 'aims_browser_data.json')
+        if os.path.exists(supplemental_path):
+            try:
+                import json
+                with open(supplemental_path, 'r') as f:
+                    supplemental_data = json.load(f)
+                
+                # Check for duplicates by URL
+                existing_urls = {doc.get('url') for doc in documents}
+                new_docs = []
+                for s_doc in supplemental_data:
+                    if s_doc.get('url') not in existing_urls:
+                        new_docs.append(s_doc)
+                
+                if new_docs:
+                    logger.info(f"➕  Added {len(new_docs)} supplemental documents from JSON")
+                    documents.extend(new_docs)
+            except Exception as e:
+                logger.warning(f"⚠️  Failed to load supplemental data: {e}")
+
         self.stats['scraped_pages'] = len(documents)
-        
-        logger.info(f"✓ Scraped {len(documents)} pages")
-        for doc in documents[:3]:
-            title = doc.get('title', '')[:60]
-            content_len = len(doc.get('content', ''))
-            logger.info(f"  • {title}... ({content_len} chars)")
-        if len(documents) > 3:
-            logger.info(f"  ... and {len(documents)-3} more")
+        logger.info(f"✓ Total pages for ingestion: {len(documents)}")
         
         return documents
     
@@ -139,7 +168,8 @@ class DataIngestionPipeline:
             cleaned_doc = {
                 'title': doc.get('title', ''),
                 'content': self.cleaner.clean(doc.get('content', '')),
-                'url': doc.get('url', '')
+                'url': doc.get('url', ''),
+                'type': doc.get('type', 'page')  # Preserve FAQ type if present
             }
             cleaned.append(cleaned_doc)
         
@@ -183,7 +213,8 @@ class DataIngestionPipeline:
                 'url': chunk['url'],
                 'heading': chunk.get('heading', ''),
                 'chunk_index': chunk.get('chunk_index', 0),
-                'tokens': chunk.get('tokens', 0)
+                'tokens': chunk.get('tokens', 0),
+                'type': chunk.get('type', 'page')  # Preserve FAQ type
             }
             for chunk in chunks
         ]
@@ -200,26 +231,46 @@ class DataIngestionPipeline:
         
         return embeddings.tolist(), metadata, chunk_ids
     
-    def _build_faiss_index(
+    def _build_faiss_and_store_embeddings(
         self,
+        chunks: List[Dict],
         doc_ids: List[str],
         embeddings: List[List[float]],
         metadata: List[Dict]
     ) -> str:
-        """Build FAISS index from embeddings"""
-        logger.info(f"Building FAISS index for {len(doc_ids)} documents")
+        """Build FAISS index AND store embeddings in Supabase (parallel)"""
         
+        # PRIMARY: Build FAISS Index (always)
+        logger.info(f"Building FAISS index for {len(doc_ids)} documents")
         index = build_faiss_index_from_embeddings(
             embeddings=embeddings,
             documents=metadata,
             doc_ids=doc_ids
         )
-        
         logger.info(f"✓ FAISS index built")
         logger.info(f"  • Vectors: {index.index.ntotal}")
         logger.info(f"  • Path: {index.index_path}")
-        
         self.stats['faiss_saved'] = True
+        
+        # SECONDARY: Store in Supabase (optional, parallel)
+        if self.use_supabase:
+            logger.info(f"\nStoring embeddings in Supabase...")
+            for i, (embedding, chunk) in enumerate(zip(embeddings, chunks)):
+                try:
+                    self.supabase_store.insert_embedding(
+                        content=chunk['content'],
+                        embedding=embedding,
+                        metadata=metadata[i]
+                    )
+                    self.stats['supabase_stored'] += 1
+                except Exception as e:
+                    logger.warning(f"  ⚠️  Failed to store chunk {i}: {e}")
+                    self.stats['supabase_failed'] += 1
+            
+            logger.info(f"✓ Supabase: {self.stats['supabase_stored']} stored, {self.stats['supabase_failed']} failed")
+        else:
+            logger.info("ℹ️  Supabase not available (FAISS-only mode)")
+        
         return index.index_path
     
     def _save_checkpoints(
@@ -265,7 +316,7 @@ class DataIngestionPipeline:
 def main():
     """Main entry point"""
     pipeline = DataIngestionPipeline()
-    result = pipeline.run(url="https://www.theaims.ac.in")
+    result = pipeline.run()
     
     # Exit with status
     return 0 if result['success'] else 1

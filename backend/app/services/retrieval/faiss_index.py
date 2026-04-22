@@ -13,8 +13,8 @@ import faiss
 
 logger = logging.getLogger(__name__)
 
-# Default paths
-INDEX_DIR = "/tmp/chatbot_faiss"
+# Persistent index directory
+INDEX_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "faiss_index")
 INDEX_FILE = os.path.join(INDEX_DIR, "index.faiss")
 METADATA_FILE = os.path.join(INDEX_DIR, "metadata.json")
 
@@ -35,9 +35,15 @@ class FAISSIndex:
         self.doc_count = 0
         
         # Create index directory if needed
-        os.makedirs(INDEX_DIR, exist_ok=True)
+        persist_dir = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index"
+        os.makedirs(persist_dir, exist_ok=True)
         
-        # Try to load existing index
+        # Default paths
+        self.index_dir = persist_dir
+        self.index_file = os.path.join(persist_dir, "index.faiss")
+        self.metadata_file = os.path.join(persist_dir, "metadata.json")
+        
+        # Load existing index if available
         self.load()
     
     def add_documents(self, texts: List[str], embeddings: np.ndarray, 
@@ -144,8 +150,8 @@ class FAISSIndex:
     def save(self) -> None:
         """Persist index to disk"""
         try:
-            faiss.write_index(self.index, INDEX_FILE)
-            with open(METADATA_FILE, "w") as f:
+            faiss.write_index(self.index, self.index_file)
+            with open(self.metadata_file, "w") as f:
                 json.dump(self.metadata, f)
             logger.info(f"✅ Index saved ({self.doc_count} documents)")
         except Exception as e:
@@ -154,11 +160,11 @@ class FAISSIndex:
     def load(self) -> None:
         """Load index from disk if exists"""
         try:
-            if os.path.exists(INDEX_FILE):
-                self.index = faiss.read_index(INDEX_FILE)
+            if os.path.exists(self.index_file):
+                self.index = faiss.read_index(self.index_file)
                 
                 # Load metadata with format detection
-                with open(METADATA_FILE, "r") as f:
+                with open(self.metadata_file, "r") as f:
                     data = json.load(f)
                 
                 # Handle two formats:

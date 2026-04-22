@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIMS Chatbot — Admissions AI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ── GLOBAL RESET & VARIABLES ── */
+        :root {
+            --primary:  #800000;
+            --accent:   #D4AF37;
+            --bg:       #0a0a0a;
+            --card-bg:  #141414;
+            --border:   #2a2a2a;
+            --text:     #e8e8e8;
+            --text-dim: #666;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 280px;
+            background: #0a0a0a;
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .brand h1 {
+            color: var(--accent);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .brand p {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.62rem;
+            margin-top: 4px;
+        }
+
+        .stat-card {
+            background: rgba(30,30,30,0.5);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .stat-card h3 {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ── MAIN CHAT AREA ── */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #111;
+        }
+
+        .chat-header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #000;
+        }
+
+        .chat-header strong { letter-spacing: 0.5px; }
+        .chat-header .subtitle { font-size: 0.6rem; color: #4CAF50; margin-top: 2px; }
+
+        .status-pill {
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            background: #222;
+            color: var(--text-dim);
+            border: 1px solid #444;
+        }
+
+        #chat-messages {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            max-width: 78%;
+            padding: 1.1rem 1.6rem;
+            border-radius: 12px;
+            line-height: 1.7;
+            animation: fadeIn 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            background: var(--card-bg);
+            align-self: flex-start;
+            border-left: 3px solid var(--accent);
+        }
+        .message.user {
+            background: #2a2a2a;
+            align-self: flex-end;
+            border: 1px solid #444;
+            color: var(--accent);
+        }
+
+        /* Tags & Sources */
+        .confidence-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            margin-top: 0.8rem;
+            padding: 3px 10px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.04);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .sources-link {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 0.72rem;
+            color: var(--accent);
+            cursor: pointer;
+            opacity: 0.7;
+            border-bottom: 1px dashed var(--accent);
+        }
+        .sources-link:hover { opacity: 1; }
+        .sources-content {
+            display: none;
+            margin-top: 10px;
+            padding: 12px;
+            background: #000;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            border: 1px solid #222;
+        }
+
+        /* Suggestions */
+        .suggestions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .suggestion-btn {
+            background: rgba(212,175,55,0.05);
+            border: 1px solid rgba(212,175,55,0.25);
+            color: var(--accent);
+            padding: 6px 13px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .suggestion-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Typing indicator */
+        #typing {
+            font-style: normal;
+            color: var(--accent);
+            font-size: 0.73rem;
+            display: none;
+            padding-left: 2.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* ── INPUT AREA ── */
+        .input-area {
+            padding: 1rem 2.5rem 2rem;
+            background: #111;
+        }
+        .input-wrapper {
+            display: flex;
+            gap: 0.8rem;
+            background: #000;
+            padding: 0.3rem;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        input[type="text"], input[type="email"] {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.75rem 1rem;
+            outline: none;
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+        button#send-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.4rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: 0.2s;
+        }
+        button#send-btn:hover { filter: brightness(1.2); }
+
+        /* ── LEAD GATE OVERLAY ── */
+        #lead-gate {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(6px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.4s ease;
+        }
+        .gate-card {
+            background: #1a1a1a;
+            padding: 3rem;
+            border-radius: 16px;
+            width: 460px;
+            border: 1px solid #333;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+        }
+        .gate-card .icon { font-size: 2.8rem; margin-bottom: 1.2rem; }
+        .gate-card h2 { color: white; margin-bottom: 0.8rem; font-weight: 600; }
+        .gate-card > p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .gate-card .highlight { color: var(--accent); font-weight: 600; }
+        .gate-form input {
+            width: 100%;
+            background: #000;
+            border: 1px solid #333;
+            margin-bottom: 0.8rem;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        .gate-btn {
+            background: var(--accent);
+            color: black;
+            width: 100%;
+            padding: 13px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: inherit;
+        }
+        .gate-btn:hover { filter: brightness(1.1); }
+        .gate-note { font-size: 0.68rem; margin-top: 1rem; color: #555; }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="brand">
+            <h1>AIMS Institute</h1>
+            <p>Official AI Counselor</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Placement Stats</h3>
+            <canvas id="placementChart" height="140"></canvas>
+            <p style="font-size:0.62rem;color:var(--text-dim);margin-top:6px">* Avg & Peak Package (LPA)</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>System Status</h3>
+            <div style="font-size:0.95rem;font-weight:bold;color:white">V1.2 Production</div>
+            <p style="font-size:0.7rem;color:#4CAF50;margin-top:4px">● Live Knowledge Base</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Quick Links</h3>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+                <button class="suggestion-btn" style="text-align:left" onclick="sendSuggestion('What programs do you offer?')">Programs</button>
+                <button class="suggestion-btn" style="text-align:left" onclick="sendSuggestion('Tell me about hostel facilities')">Hostel</button>
+                <button class="suggestion-btn" style="text-align:left" onclick="sendSuggestion('MBA admission process')">Admissions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Chat -->
+    <div class="chat-container">
+        <div class="chat-header">
+            <div>
+                <strong>Admissions Assistant</strong>
+                <div class="subtitle">● Secure Channel Active</div>
+            </div>
+            <div class="status-pill">PHASE 4 STABLE</div>
+        </div>
+
+        <div id="chat-messages">
+            <div class="message bot">
+                Welcome to AIMS Institutes. I am your AI Admissions Counselor.<br><br>
+                I can help with program details, placement records, campus facilities, and admission guidance.
+                <div class="suggestions">
+                    <button class="suggestion-btn" onclick="sendSuggestion('What are the placement highlights?')">Placement Record</button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('Tell me about MBA')">MBA Info</button>
+                    <button class="suggestion-btn" onclick="sendSuggestion('Tell me about campus facilities')">Facilities</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="typing">[ Analyzing your query... ]</div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="user-input" placeholder="Ask me anything about AIMS..." onkeypress="handleKey(event)">
+                <button id="send-btn" onclick="sendMessage()">SEND</button>
+            </div>
+        </div>
+
+        <!-- Lead Gate Overlay -->
+        <div id="lead-gate">
+            <div class="gate-card">
+                <div class="icon">💼</div>
+                <h2>Admissions Protocol</h2>
+                <p>
+                    Fee structures and scholarship details are shared
+                    <span class="highlight">directly by our admissions team</span>
+                    to ensure you receive the most accurate, up-to-date information.
+                    <br><br>
+                    Please share your details to continue:
+                </p>
+                <div class="gate-form">
+                    <input type="text"  id="gate-name"   placeholder="Your Full Name">
+                    <input type="email" id="gate-email"  placeholder="Your Email Address">
+                    <input type="text"  id="gate-course" placeholder="Interested Program (e.g. MBA, BBA)">
+                    <button class="gate-btn" onclick="submitGate()">Unlock Full Access</button>
+                </div>
+                <p class="gate-note">Your data is protected and used only for official communication.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL   = "http://localhost:8000/api/v1/chat";
+        const sessionId = "demo_" + Math.random().toString(36).substr(2, 9);
+        let isGated = false;
+
+        // ── Chart ──
+        const ctx = document.getElementById('placementChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Average', 'Highest'],
+                datasets: [{
+                    data: [8.5, 23],
+                    backgroundColor: ['#800000', '#D4AF37'],
+                    borderColor: '#444',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#1a1a1a' }, ticks: { color: '#666', font: { size: 9 } } },
+                    x: { ticks: { color: '#666', font: { size: 9 } } }
+                }
+            }
+        });
+
+        // ── Send Message ──
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const text  = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+            showTyping(true);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // ✅ CORRECT payload matching backend ChatRequest schema
+                    body: JSON.stringify({
+                        query: text,
+                        context: { session_id: sessionId }
+                    })
+                });
+
+                const data = await response.json();
+                showTyping(false);
+
+                if (data.status === 'lock') {
+                    setTimeout(() => showGate(true), 700);
+                }
+
+                addMessage(data.answer || data.message || "Sorry, I couldn't process that.", 'bot', data);
+            } catch (error) {
+                showTyping(false);
+                addMessage("⚠️ Connection issue — please ensure the AIMS backend is running at localhost:8000.", 'bot');
+            }
+        }
+
+        // ── Gate Submission ──
+        async function submitGate() {
+            const name   = document.getElementById('gate-name').value.trim();
+            const email  = document.getElementById('gate-email').value.trim();
+            const course = document.getElementById('gate-course').value.trim();
+
+            if (!name || !email || !course) {
+                alert("Please fill all fields to continue.");
+                return;
+            }
+
+            const formattedInput = `${name}, ${email}, ${course}`;
+            showTyping(true);
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: formattedInput,
+                        context: { session_id: sessionId }
+                    })
+                });
+
+                const data = await response.json();
+                showTyping(false);
+
+                if (data.status === 'unlock' || data.answer) {
+                    showGate(false);
+                    addMessage(data.answer || "Thank you! You now have full access.", 'bot', data);
+                } else {
+                    alert(data.answer || data.message || "Submission error — please try again.");
+                }
+            } catch (err) {
+                showTyping(false);
+                alert("Connection error — please try again.");
+            }
+        }
+
+        // ── Render Message ──
+        function addMessage(text, side, data = null) {
+            const container = document.getElementById('chat-messages');
+            const div       = document.createElement('div');
+            div.className   = `message ${side}`;
+
+            let html = (text || '').replace(/\n/g, '<br>');
+
+            if (side === 'bot' && data) {
+                const conf = data.confidence || 0;
+                let label  = "Verified Information";
+                let color  = "#4CAF50";
+                if (conf < 0.8) { label = "General Assistance"; color = "#FF9800"; }
+                if (data.fallback) { label = "Inquiry Forwarded"; color = "#2196F3"; }
+
+                html += `<div class="confidence-tag" style="color:${color}">● ${label}</div>`;
+
+                if (data.sources && data.sources.length > 0) {
+                    const sid2 = 'src-' + Math.random().toString(36).substr(2, 5);
+                    html += `
+                        <div class="sources-link" onclick="toggleSources('${sid2}')">
+                            Reference Sources (${data.sources.length})
+                        </div>
+                        <div id="${sid2}" class="sources-content">
+                            <strong>Sources:</strong><br>
+                            ${data.sources.map(s => `• ${s}`).join('<br>')}
+                        </div>`;
+                }
+
+                if (data.suggestions && data.suggestions.length > 0) {
+                    html += `<div class="suggestions">`;
+                    data.suggestions.forEach(s => {
+                        html += `<button class="suggestion-btn" onclick="sendSuggestion('${s}')">${s}</button>`;
+                    });
+                    html += `</div>`;
+                }
+            }
+
+            div.innerHTML = html;
+            container.appendChild(div);
+            container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+        }
+
+        function showGate(show) {
+            const gate = document.getElementById('lead-gate');
+            gate.style.display = show ? 'flex' : 'none';
+            isGated = show;
+        }
+
+        function toggleSources(id) {
+            const el = document.getElementById(id);
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('user-input').value = text;
+            sendMessage();
+        }
+
+        function handleKey(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function showTyping(show) {
+            document.getElementById('typing').style.display = show ? 'block' : 'none';
+        }
+    </script>
+</body>
+</html>

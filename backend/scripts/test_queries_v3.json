@@ -1,0 +1,214 @@
+[
+  {
+    "category": "Admissions",
+    "query": "mba admission process",
+    "expect_status": "unlock",
+    "must_contain": ["apply", "admission", "process"]
+  },
+  {
+    "category": "Admissions",
+    "query": "admission deadline for 2024",
+    "expect_status": "unlock",
+    "must_contain": ["deadline", "visit"]
+  },
+  {
+    "category": "Admissions",
+    "query": "how to apply for bba",
+    "expect_status": "unlock",
+    "must_contain": ["application", "bba"]
+  },
+  {
+    "category": "Placements",
+    "query": "placement package aims",
+    "expect_status": "unlock",
+    "must_contain": ["LPA", "highest", "package"]
+  },
+  {
+    "category": "Placements",
+    "query": "highest package offered last year",
+    "expect_status": "unlock",
+    "must_contain": ["23", "LPA"]
+  },
+  {
+    "category": "Placements",
+    "query": "placement companies visiting aims",
+    "expect_status": "unlock",
+    "must_contain": ["Deloitte", "Amazon", "EY", "KPMG"]
+  },
+  {
+    "category": "Placements",
+    "query": "who are the top recruiters",
+    "expect_status": "unlock",
+    "must_contain": ["Amazon", "KPMG", "EY", "Deloitte"]
+  },
+  {
+    "category": "Fees (GATED)",
+    "query": "mba fees",
+    "expect_status": "lock",
+    "must_contain": ["admissions team", "accuracy"]
+  },
+  {
+    "category": "Fees (GATED)",
+    "query": "bba course fees",
+    "expect_status": "lock",
+    "must_contain": ["admissions team", "updates"]
+  },
+  {
+    "category": "Fees (GATED)",
+    "query": "what is the hostel fee",
+    "expect_status": "lock",
+    "must_contain": ["admissions team"]
+  },
+  {
+    "category": "Hostel",
+    "query": "hostel facilities for girls",
+    "expect_status": "unlock",
+    "must_contain": ["hostel", "girls", "security"]
+  },
+  {
+    "category": "Hostel",
+    "query": "hostel food quality",
+    "expect_status": "unlock",
+    "must_contain": ["food", "mess", "canteen"]
+  },
+  {
+    "category": "Hostel",
+    "query": "is accommodation available inside campus",
+    "expect_status": "unlock",
+    "must_contain": ["hostel", "campus"]
+  },
+  {
+    "category": "Course Details",
+    "query": "bba course details",
+    "expect_status": "unlock",
+    "must_contain": ["bba", "curriculum"]
+  },
+  {
+    "category": "Course Details",
+    "query": "mba specialization available",
+    "expect_status": "unlock",
+    "must_contain": ["finance", "marketing", "hr"]
+  },
+  {
+    "category": "Course Details",
+    "query": "pgdm vs mba aims",
+    "expect_status": "unlock",
+    "must_contain": ["pgdm", "mba"]
+  },
+  {
+    "category": "Mixed Intent",
+    "query": "hi mba fees hostel",
+    "expect_status": "lock",
+    "must_contain": ["admissions team"]
+  },
+  {
+    "category": "Mixed Intent",
+    "query": "tell me about mba placements and fees",
+    "expect_status": "lock",
+    "must_contain": ["admissions team", "placement"]
+  },
+  {
+    "category": "Greetings",
+    "query": "hi",
+    "expect_status": "unlock",
+    "must_contain": ["Welcome", "assist"]
+  },
+  {
+    "category": "Greetings",
+    "query": "hello how are you",
+    "expect_status": "unlock",
+    "must_contain": ["assistant", "help"]
+  },
+  {
+    "category": "Spam/Unknown",
+    "query": "asdfgh",
+    "expect_status": "unlock",
+    "must_contain": ["understand", "rephrase"]
+  },
+  {
+    "category": "Spam/Unknown",
+    "query": "who won the world cup",
+    "expect_status": "unlock",
+    "must_contain": ["sorry", "aims"]
+  },
+  {
+    "category": "Facilities",
+    "query": "library facilities",
+    "expect_status": "unlock",
+    "must_contain": ["books", "library"]
+  },
+  {
+    "category": "Facilities",
+    "query": "sports facilities and ground",
+    "expect_status": "unlock",
+    "must_contain": ["sports", "ground"]
+  },
+  {
+    "category": "Facilities",
+    "query": "auditorium and seminar halls",
+    "expect_status": "unlock",
+    "must_contain": ["auditorium", "seminar"]
+  },
+  {
+    "category": "Scholarships",
+    "query": "scholarships for carnataka students",
+    "expect_status": "lock",
+    "must_contain": ["admissions team"]
+  },
+  {
+    "category": "Campus Life",
+    "query": "events at aims campus",
+    "expect_status": "unlock",
+    "must_contain": ["events", "culture"]
+  },
+  {
+    "category": "Campus Life",
+    "query": "anti ragging policy",
+    "expect_status": "unlock",
+    "must_contain": ["policy", "ragging"]
+  },
+  {
+    "category": "Location/Contact",
+    "query": "aims address and map",
+    "expect_status": "unlock",
+    "must_contain": ["peenya", "bangalore"]
+  },
+  {
+    "category": "Location/Contact",
+    "query": "phone number for admissions office",
+    "expect_status": "unlock",
+    "must_contain": ["contact", "080"]
+  },
+  {
+    "category": "Flow Sequence 1",
+    "query": "What programs do you offer?",
+    "expect_status": "unlock",
+    "must_contain": ["MBA", "BBA", "B.Com"],
+    "sequence_id": "flow1",
+    "turn": 1
+  },
+  {
+    "category": "Flow Sequence 1",
+    "query": "Tell me about MBA",
+    "expect_status": "lock",
+    "must_contain": ["admissions team"],
+    "sequence_id": "flow1",
+    "turn": 2
+  },
+  {
+    "category": "Flow Sequence 1",
+    "query": "MOCK_SUBMIT",
+    "expect_status": "unlock",
+    "must_contain": ["Thank you", "shared"],
+    "sequence_id": "flow1",
+    "turn": 3
+  },
+  {
+    "category": "Flow Sequence 1",
+    "query": "What are the placements?",
+    "expect_status": "unlock",
+    "must_contain": ["LPA", "highest", "recruiters"],
+    "sequence_id": "flow1",
+    "turn": 4
+  }
+]

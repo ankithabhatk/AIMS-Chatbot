@@ -208,11 +208,26 @@
             display: inline-block;
             background: #e8f5e9;
             color: #2e7d32;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
             font-weight: 600;
-            margin-top: 6px;
+            margin-top: 8px;
+        }
+
+        .confidence-badge.verified {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .confidence-badge.guidance {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .confidence-badge.connect {
+            background: #f3e5f5;
+            color: #6a1b9a;
         }
 
         .sources {
@@ -504,9 +519,24 @@
 
                 // Add confidence & sources
                 if (metadata && !metadata.error && !metadata.loading) {
-                    if (metadata.confidence !== undefined) {
+                    if (metadata.confidence_label) {
                         const badge = document.createElement('div');
                         badge.className = 'confidence-badge';
+                        
+                        // Apply color based on label
+                        if (metadata.confidence_label.includes('Verified')) {
+                            badge.classList.add('verified');
+                        } else if (metadata.confidence_label.includes('General')) {
+                            badge.classList.add('guidance');
+                        } else if (metadata.confidence_label.includes('Connect')) {
+                            badge.classList.add('connect');
+                        }
+                        
+                        badge.textContent = metadata.confidence_label;
+                        messageDiv.appendChild(badge);
+                    } else if (metadata.confidence !== undefined) {
+                        const badge = document.createElement('div');
+                        badge.className = 'confidence-badge verified';
                         badge.textContent = `✓ Confidence: ${(metadata.confidence * 100).toFixed(0)}%`;
                         messageDiv.appendChild(badge);
                     }
@@ -592,6 +622,7 @@
                 const answer = data.answer || data.message || 'No answer found';
                 const metadata = {
                     confidence: data.confidence || 0,
+                    confidence_label: data.confidence_label || null,
                     sources: data.sources || [],
                     suggestions: data.suggestions || [],
                     error: data.fallback === true

@@ -31,10 +31,10 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def main():
     # Change to frontend directory
-    frontend_dir = Path(__file__).parent.parent / "frontend"
+    frontend_dir = Path(__file__).parent / "frontend"
     os.chdir(frontend_dir)
 
-    PORT = 5000
+    PORT = 5001
     Handler = MyHTTPRequestHandler
 
     print("\n" + "=" * 80)
@@ -42,7 +42,7 @@ def main():
     print("=" * 80)
     print(f"\n📁 Serving from: {frontend_dir}")
     print(f"🌐 Local URL:    http://localhost:{PORT}")
-    print(f"🌐 Open in browser: http://localhost:{PORT}/index.html")
+    print(f"🌐 Open in browser: http://localhost:{PORT}/demo.html")
     print(f"\n✅ Backend API:  http://localhost:8000")
     print("\n" + "=" * 80)
     print("Press Ctrl+C to stop the server\n")

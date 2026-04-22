@@ -17,77 +17,66 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def calculate_confidence(results, max_sources: int = 5) -> float:
+def calculate_confidence(query: str, results: list, max_sources: int = 5) -> float:
     """
     Calculate confidence score based on:
-    - Average relevance of matched chunks
-    - Coverage (how many sources support the answer)
+    - Average relevance of matched chunks (60%)
+    - Keyword overlap ratio (30%)
+    - Context volume / coverage (10%)
     
     Args:
-        results: FAISS tuples (text, score, url, heading) or dicts with similarity_score
-        max_sources: Expected maximum sources (for coverage calculation)
+        query: The user's rewritten query
+        results: FAISS tuples or dicts
+        max_sources: Reference for coverage calculation
     
     Returns:
         Confidence score 0-1
     """
-    if not results:
+    if not results or not query:
         return 0.0
     
-    # Extract relevance scores
+    # 1. Extract relevance scores (Average Similarity)
     scores = []
+    texts = []
     for r in results:
         if isinstance(r, tuple):
-            # FAISS format: (text, score, url, heading, ...)
             if len(r) > 1:
                 scores.append(float(r[1]))
+                texts.append(r[0])
         elif isinstance(r, dict):
-            # Dict format with similarity_score
-            scores.append(float(r.get('similarity_score', 0)))
+            # Try 'similarity_score' then 'score'
+            s = r.get('similarity_score') or r.get('score', 0)
+            scores.append(float(s))
+            texts.append(r.get('content', ''))
     
     if not scores:
         return 0.0
     
-    # === STRICT CALIBRATION ===
-    # Based on empirical testing:
-    # - Bad queries return FAISS scores of 0.35-0.51
-    # - Good queries return FAISS scores of 0.50-0.68
-    # - Need to penalize scores < 0.55
+    avg_similarity = sum(scores) / len(scores)
     
-    max_score = max(scores)
-    avg_score = sum(scores) / len(scores)
-    
-    # Confidence thresholds based on max relevance score
-    if max_score < 0.40:
-        # Very poor match - almost certainly wrong
-        confidence = 0.0
-    elif max_score < 0.48:
-        # Poor match - likely wrong
-        confidence = 0.15
-    elif max_score < 0.55:
-        # Weak match - uncertain
-        confidence = 0.35
-    elif max_score < 0.65:
-        # Reasonable match - probably good
-        confidence = 0.60
+    # 2. Keyword Overlap Ratio
+    query_words = set(query.lower().split())
+    if not query_words:
+        keyword_overlap_ratio = 0.0
     else:
-        # Strong match - likely correct
-        confidence = 0.75
+        # Check overlap across ALL retrieved text
+        all_text = " ".join(texts).lower()
+        all_words = set(all_text.split())
+        overlap = len(query_words & all_words)
+        keyword_overlap_ratio = overlap / len(query_words)
+        
+    # 3. Context Volume Factor (bounded at 1.0)
+    context_factor = min(len(results) / 3, 1.0)
     
-    # Boost for coverage (20% weight max)
-    coverage_ratio = min(len(results) / max_sources, 1.0)
-    confidence = confidence * 0.8 + (coverage_ratio * 0.2)
-    
-    # Penalty for inconsistent scores (wide variance = uncertain)
-    if max_score > 0:
-        score_range = max(scores) - min(scores)
-        if score_range > 0.15:
-            confidence *= 0.9
+    # 4. FINAL WEIGHTED FORMULA
+    # similarity (60%) + keyword (30%) + context (10%)
+    confidence = (avg_similarity * 0.6) + (keyword_overlap_ratio * 0.3) + (context_factor * 0.1)
     
     # Ensure 0-1 range
     confidence = max(0, min(1, confidence))
     
-    logger.debug(f"Confidence: max={max_score:.3f}, avg={avg_score:.3f}, "
-                f"sources={len(results)} → {confidence:.2f}")
+    logger.debug(f"Confidence: sim={avg_similarity:.3f}, kw={keyword_overlap_ratio:.3f}, "
+                f"context={context_factor:.1f} → {confidence:.2f}")
     
     return round(confidence, 2)
 
@@ -116,13 +105,9 @@ def get_confidence_label(confidence: float) -> str:
     Returns:
         Label: "very_low", "low", "medium", "high", "very_high"
     """
-    if confidence < 0.2:
-        return "very_low"
-    elif confidence < 0.4:
-        return "low"
-    elif confidence < 0.6:
-        return "medium"
-    elif confidence < 0.8:
-        return "high"
+    if confidence < 0.45:
+        return "Not Verified"
+    elif confidence < 0.65:
+        return "General Assistance"
     else:
-        return "very_high"
+        return "Verified Information"

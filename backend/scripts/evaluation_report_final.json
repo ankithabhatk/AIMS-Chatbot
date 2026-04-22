@@ -1,0 +1,446 @@
+{
+  "summary": {
+    "status_accuracy": "97.1%",
+    "entity_accuracy": "11.8%",
+    "ready": "NO"
+  },
+  "results": [
+    {
+      "query": "What programs do you offer?",
+      "category": "Flow Sequence 1",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "MBA",
+        "BBA",
+        "B.Com"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "Tell me about MBA",
+      "category": "Flow Sequence 1",
+      "expected_status": "lock",
+      "actual_status": "unlock",
+      "status_correct": false,
+      "entity_correct": false,
+      "missing": [
+        "admissions team"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "John Doe, john@test.com, MBA, 9876543210",
+      "category": "Flow Sequence 1",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "Thank you",
+        "shared"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "What are the placements?",
+      "category": "Flow Sequence 1",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "LPA",
+        "highest",
+        "recruiters"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "mba admission process",
+      "category": "Admissions",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "apply",
+        "admission",
+        "process"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "admission deadline for 2024",
+      "category": "Admissions",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "deadline",
+        "visit"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "how to apply for bba",
+      "category": "Admissions",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "application",
+        "bba"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "placement package aims",
+      "category": "Placements",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "LPA",
+        "highest",
+        "package"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "highest package offered last year",
+      "category": "Placements",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "23",
+        "LPA"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "placement companies visiting aims",
+      "category": "Placements",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "Deloitte",
+        "Amazon",
+        "EY",
+        "KPMG"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "who are the top recruiters",
+      "category": "Placements",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "Amazon",
+        "KPMG",
+        "EY",
+        "Deloitte"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "mba fees",
+      "category": "Fees (GATED)",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": true,
+      "missing": [],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "bba course fees",
+      "category": "Fees (GATED)",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "updates"
+      ],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "what is the hostel fee",
+      "category": "Fees (GATED)",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": true,
+      "missing": [],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "hostel facilities for girls",
+      "category": "Hostel",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "hostel",
+        "girls",
+        "security"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "hostel food quality",
+      "category": "Hostel",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "food",
+        "mess",
+        "canteen"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "is accommodation available inside campus",
+      "category": "Hostel",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "hostel",
+        "campus"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "bba course details",
+      "category": "Course Details",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "bba",
+        "curriculum"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "mba specialization available",
+      "category": "Course Details",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "finance",
+        "marketing",
+        "hr"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "pgdm vs mba aims",
+      "category": "Course Details",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "pgdm",
+        "mba"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "hi mba fees hostel",
+      "category": "Mixed Intent",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": true,
+      "missing": [],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "tell me about mba placements and fees",
+      "category": "Mixed Intent",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "placement"
+      ],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "hi",
+      "category": "Greetings",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "Welcome"
+      ],
+      "answer": "Hello! I'm the AIMS admissions assistant. How can I help you today?"
+    },
+    {
+      "query": "hello how are you",
+      "category": "Greetings",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "assistant",
+        "help"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "asdfgh",
+      "category": "Spam/Unknown",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "understand",
+        "rephrase"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "who won the world cup",
+      "category": "Spam/Unknown",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "sorry",
+        "aims"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "library facilities",
+      "category": "Facilities",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "books",
+        "library"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "sports facilities and ground",
+      "category": "Facilities",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "sports",
+        "ground"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "auditorium and seminar halls",
+      "category": "Facilities",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "auditorium",
+        "seminar"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "scholarships for carnataka students",
+      "category": "Scholarships",
+      "expected_status": "lock",
+      "actual_status": "lock",
+      "status_correct": true,
+      "entity_correct": true,
+      "missing": [],
+      "answer": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)"
+    },
+    {
+      "query": "events at aims campus",
+      "category": "Campus Life",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "events",
+        "culture"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "anti ragging policy",
+      "category": "Campus Life",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "policy",
+        "ragging"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "aims address and map",
+      "category": "Location/Contact",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "peenya",
+        "bangalore"
+      ],
+      "answer": ""
+    },
+    {
+      "query": "phone number for admissions office",
+      "category": "Location/Contact",
+      "expected_status": "unlock",
+      "actual_status": "unlock",
+      "status_correct": true,
+      "entity_correct": false,
+      "missing": [
+        "contact",
+        "080"
+      ],
+      "answer": ""
+    }
+  ]
+}

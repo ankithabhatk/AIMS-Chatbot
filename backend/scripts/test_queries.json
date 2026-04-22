@@ -1,0 +1,27 @@
+[
+  {
+    "query": "Who are the top recruiters at AIMS?",
+    "expect": ["Deloitte", "Amazon", "EY", "KPMG"],
+    "type": "knowledge"
+  },
+  {
+    "query": "What is the highest package?",
+    "expect": ["23", "LPA"],
+    "type": "knowledge"
+  },
+  {
+    "query": "What is the MBA admission process?",
+    "expect": ["apply", "process", "admission"],
+    "type": "knowledge"
+  },
+  {
+    "query": "What hostel facilities are available?",
+    "expect": ["hostel", "facility"],
+    "type": "knowledge"
+  },
+  {
+    "query": "MBA fees",
+    "expect": ["Fee structures vary"],
+    "type": "business_rule"
+  }
+]

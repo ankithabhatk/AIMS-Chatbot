@@ -1,0 +1,113 @@
+Subject: Data Request - AIMS Student Information Chatbot Enhancement Project
+
+---
+
+Dear [AIMS Admissions Team / Director / Registrar Name],
+
+I hope this email finds you well.
+
+We are developing an AI-powered student information chatbot specifically designed for AIMS Institute that will help prospective and current students get accurate, instant answers to their questions about programs, admissions, fees, placements, campus facilities, and more.
+
+The chatbot is already operational and deployed with a professional interface. However, to ensure it provides the most accurate and helpful information, we need to integrate verified data directly from AIMS's official institutional sources.
+
+**Current Status:**
+- Chatbot successfully deployed and tested
+- Answering basic queries from web-scraped data
+- Ready for integration with authoritative institutional data
+- No student data or privacy concerns involved (only public information)
+
+**Why This Matters:**
+Every year, students spend significant time searching for basic information like:
+- "What is the fee structure?"
+- "What is the placement rate?"
+- "How do I apply?"
+- "Do you have hostel facilities?"
+
+Our chatbot can answer all these questions instantly and accurately, reducing inquiry burden on your admission team while improving student experience.
+
+**What We Need:**
+
+We've prepared a detailed Data Requirements Document that outlines exactly what information we need, organized by priority:
+
+**TIER 1 (Critical - Most Impact):**
+These 4 documents will address 80% of student queries:
+1. Complete fee structure (by program and year)
+2. Placement statistics (3-year verified data with companies and salaries)
+3. Admissions process and eligibility criteria (step-by-step guide)
+4. Hostel and campus facilities information (with capacity and costs)
+
+**TIER 2 (Important):**
+5. Scholarship programs and criteria
+6. Program curriculum details
+7. Faculty profiles and qualifications
+
+**TIER 3 (Enhancements):**
+8. Academic policies
+9. Student activities and clubs
+10. Research and publications
+
+All materials are already documented and structured. We simply need AIMS to provide the official, authoritative data in any convenient format (PDF, documents, spreadsheets, or web links).
+
+**Format Flexibility:**
+We can work with data in any format:
+- PDF documents (scanned or digital)
+- Word documents
+- Spreadsheets/Excel files
+- Web links to published information
+- Any existing institutional documents
+
+**Privacy & Confidentiality:**
+- All data is public-facing (suitable for student website publication)
+- No sensitive information required
+- No student records or private data involved
+- Can include anonymized statistics (salary ranges instead of individual data)
+
+**Timeline:**
+- Tier 1 data: Within 2 weeks → Significant improvement to chatbot
+- Tier 2 data: Within 4 weeks → Comprehensive coverage
+- Tier 3 data: Within 6 weeks → Complete enhancement
+
+**Next Steps:**
+1. We've prepared a comprehensive Data Requirements Document (attached) outlining exactly what we need
+2. Please review and identify which information is available
+3. Share available documents through your preferred method (email, shared drive, or links)
+4. We handle all data processing and integration
+
+The entire process is designed to be low-effort on your end—simply share the documents you already maintain, and we handle the technical integration.
+
+**Benefits to AIMS:**
+✓ Professional student information service
+✓ Reduced inquiry volume on admission team
+✓ Better student experience and satisfaction
+✓ Automated FAQ support 24/7
+✓ Improved digital presence
+✓ Competitive advantage in student recruitment
+
+**Contact Information:**
+Please reach out if you have any questions or need clarification:
+- Email: [Your Email]
+- Phone: [Your Phone]
+- Available for a call at your convenience
+
+I've attached the detailed Data Requirements Document for your reference. It's structured and itemized, so you can easily identify what you have available and what might require compilation.
+
+Would you be available for a brief 15-minute call this week to discuss? I'm happy to work around your schedule.
+
+Thank you for your time and consideration. We're excited about this opportunity to improve the student experience at AIMS.
+
+Best regards,
+
+[Your Name]
+[Your Title/Organization]
+[Your Email]
+[Your Phone]
+[Organization Website - if applicable]
+
+---
+
+**P.S.** The attached Data Requirements document is comprehensive, but if you prefer, we can start with just the Tier 1 items (fees, placements, admissions, facilities). These four documents alone would significantly improve the chatbot's usefulness and address the most common student questions.
+
+---
+
+ATTACHMENTS:
+- DATA_REQUIREMENTS_PROFESSIONAL.md (Complete data request list with prioritization)
