@@ -15,59 +15,9 @@ Complete, working Retrieval Augmented Generation (RAG) chatbot for college inqui
 
 ---
 
-## 📋 Quick Start
-
-### 1. Install Dependencies
-
-```bash
-cd backend
-pip install -r requirements.txt
-```
-
-### 2. Test RAG Pipeline (No Server)
-
-```bash
-python test_rag.py
-```
-
-### 3. Run Server
-
-```bash
-uvicorn app.main:app --reload
-```
-
-Go to: http://localhost:8000/docs
-
-### 4. Test Chat Endpoint
-
-```bash
-curl -X POST http://localhost:8000/api/v1/chat \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What programs does AIMS offer?", "session_id": "test-1"}'
-```
-
-**Response** (example):
-```json
-{
-  "response": "Based on information about 'About AIMS': AIMS College offers undergraduate and postgraduate programs in engineering, management, and sciences.",
-  "confidence_score": 0.892,
-  "sources": [
-    {
-      "url": "https://www.theaims.ac.in",
-      "heading": "About AIMS",
-      "snippet": "AIMS College offers undergraduate and postgraduate programs..."
-    }
-  ],
-  "is_fallback": false,
-  "processing_time_ms": 245
-}
-```
-
----
-
 ## 🏗️ Architecture
 
-### RAG Pipeline
+### RAG Pipeline (Backend)
 
 ```
 User Query
@@ -85,54 +35,49 @@ User Query
 JSON Response + Sources + Time
 ```
 
-### API Routes (Now Working)
+### Frontend (Next.js)
 
-| Endpoint | Method | Status | Purpose |
-|----------|--------|--------|---------|
-| `/api/v1/chat` | POST | ✅✨ | **RAG query** |
-| `/health` | GET | ✅ | Health check |
-| `/docs` | GET | ✅ | Interactive docs |
-
-**✨ = Fully implemented with real RAG logic**
+The frontend is built with [Next.js](https://nextjs.org).
 
 ---
 
-## 📊 Tech Stack (MVP)
+## 📋 Quick Start
+
+### 1. Backend Setup
+
+```bash
+cd backend
+pip install -r requirements.txt
+python test_rag.py  # Test RAG Pipeline
+uvicorn app.main:app --reload
+```
+
+Backend API: http://localhost:8000/docs
+
+### 2. Frontend Setup
+
+```bash
+npm install
+npm run dev
+```
+
+Frontend UI: http://localhost:3000
+
+---
+
+## 📊 Tech Stack
 
 | Component | Technology |
 |-----------|------------|
+| Frontend | Next.js (App Router) |
 | Embeddings | Sentence-Transformers (local) |
 | Vector DB | FAISS |
-| Response Gen | Template-based (local) |
-| Optional LLM | OpenAI GPT-3.5 (if API key) |
 | Framework | FastAPI |
 | Server | Uvicorn |
 
 ---
 
-## 🧪 Testing
-
-```bash
-cd backend
-python test_rag.py
-```
-
----
-
 ## 📚 Full Documentation
 
-See [RAG_SETUP_GUIDE.md](RAG_SETUP_GUIDE.md) for:
-- Complete setup instructions
-- Configuration options
-- Performance benchmarks
-- Development guide
-- Scaling strategies
-
----
-
-## ✨ What Changed
-
-**Before**: Placeholder chat returning "under construction"  
-**Now**: Fully functional RAG with local embeddings, semantic search, and confidence scoring
-
-🎉 **Ready to use!**
+See [RAG_SETUP_GUIDE.md](RAG_SETUP_GUIDE.md) for detailed backend setup.
+-application/deploying) for more details.
