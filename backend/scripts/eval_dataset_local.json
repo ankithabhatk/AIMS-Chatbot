@@ -1,0 +1,1572 @@
+[
+  {
+    "id": "eval-001",
+    "query": "mba fees",
+    "expected_course": "mba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-002",
+    "query": "mba fee structure",
+    "expected_course": "mba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-003",
+    "query": "mba feees",
+    "expected_course": "mba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-004",
+    "query": "cost of mba",
+    "expected_course": "mba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-005",
+    "query": "mba placements",
+    "expected_course": "mba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-006",
+    "query": "plcements mba",
+    "expected_course": "mba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-007",
+    "query": "mba job opportunities",
+    "expected_course": "mba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-008",
+    "query": "mba package details",
+    "expected_course": "mba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-009",
+    "query": "mba hostel",
+    "expected_course": "mba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-010",
+    "query": "hostl mba",
+    "expected_course": "mba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-011",
+    "query": "stay for mba",
+    "expected_course": "mba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-012",
+    "query": "mba hostel facility",
+    "expected_course": "mba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-013",
+    "query": "mba admission process",
+    "expected_course": "mba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-014",
+    "query": "mba eligibility",
+    "expected_course": "mba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-015",
+    "query": "mba addmission",
+    "expected_course": "mba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-016",
+    "query": "how to apply for mba",
+    "expected_course": "mba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-017",
+    "query": "mba course details",
+    "expected_course": "mba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-018",
+    "query": "mba duration",
+    "expected_course": "mba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-019",
+    "query": "mba specializations",
+    "expected_course": "mba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-020",
+    "query": "mba curriculm",
+    "expected_course": "mba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-021",
+    "query": "bba fees",
+    "expected_course": "bba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-022",
+    "query": "bba fee structure",
+    "expected_course": "bba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-023",
+    "query": "bba feees",
+    "expected_course": "bba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-024",
+    "query": "cost of bba",
+    "expected_course": "bba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-025",
+    "query": "bba placements",
+    "expected_course": "bba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-026",
+    "query": "plcements bba",
+    "expected_course": "bba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-027",
+    "query": "bba job opportunities",
+    "expected_course": "bba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-028",
+    "query": "bba package details",
+    "expected_course": "bba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-029",
+    "query": "bba hostel",
+    "expected_course": "bba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-030",
+    "query": "hostl bba",
+    "expected_course": "bba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-031",
+    "query": "stay for bba",
+    "expected_course": "bba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-032",
+    "query": "bba hostel facility",
+    "expected_course": "bba",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-033",
+    "query": "bba admission process",
+    "expected_course": "bba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-034",
+    "query": "bba eligibility",
+    "expected_course": "bba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-035",
+    "query": "bba addmission",
+    "expected_course": "bba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-036",
+    "query": "how to apply for bba",
+    "expected_course": "bba",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-037",
+    "query": "bba course details",
+    "expected_course": "bba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-038",
+    "query": "bba duration",
+    "expected_course": "bba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-039",
+    "query": "bba specializations",
+    "expected_course": "bba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-040",
+    "query": "bba curriculm",
+    "expected_course": "bba",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-041",
+    "query": "mca fees",
+    "expected_course": "mca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-042",
+    "query": "mca fee structure",
+    "expected_course": "mca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-043",
+    "query": "mca feees",
+    "expected_course": "mca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-044",
+    "query": "cost of mca",
+    "expected_course": "mca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-045",
+    "query": "mca placements",
+    "expected_course": "mca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-046",
+    "query": "plcements mca",
+    "expected_course": "mca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-047",
+    "query": "mca job opportunities",
+    "expected_course": "mca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-048",
+    "query": "mca package details",
+    "expected_course": "mca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-049",
+    "query": "mca hostel",
+    "expected_course": "mca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-050",
+    "query": "hostl mca",
+    "expected_course": "mca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-051",
+    "query": "stay for mca",
+    "expected_course": "mca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-052",
+    "query": "mca hostel facility",
+    "expected_course": "mca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-053",
+    "query": "mca admission process",
+    "expected_course": "mca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-054",
+    "query": "mca eligibility",
+    "expected_course": "mca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-055",
+    "query": "mca addmission",
+    "expected_course": "mca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-056",
+    "query": "how to apply for mca",
+    "expected_course": "mca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-057",
+    "query": "mca course details",
+    "expected_course": "mca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-058",
+    "query": "mca duration",
+    "expected_course": "mca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-059",
+    "query": "mca specializations",
+    "expected_course": "mca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-060",
+    "query": "mca curriculm",
+    "expected_course": "mca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-061",
+    "query": "bca fees",
+    "expected_course": "bca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-062",
+    "query": "bca fee structure",
+    "expected_course": "bca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-063",
+    "query": "bca feees",
+    "expected_course": "bca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-064",
+    "query": "cost of bca",
+    "expected_course": "bca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-065",
+    "query": "bca placements",
+    "expected_course": "bca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-066",
+    "query": "plcements bca",
+    "expected_course": "bca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-067",
+    "query": "bca job opportunities",
+    "expected_course": "bca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-068",
+    "query": "bca package details",
+    "expected_course": "bca",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-069",
+    "query": "bca hostel",
+    "expected_course": "bca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-070",
+    "query": "hostl bca",
+    "expected_course": "bca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-071",
+    "query": "stay for bca",
+    "expected_course": "bca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-072",
+    "query": "bca hostel facility",
+    "expected_course": "bca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-073",
+    "query": "bca admission process",
+    "expected_course": "bca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-074",
+    "query": "bca eligibility",
+    "expected_course": "bca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-075",
+    "query": "bca addmission",
+    "expected_course": "bca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-076",
+    "query": "how to apply for bca",
+    "expected_course": "bca",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-077",
+    "query": "bca course details",
+    "expected_course": "bca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-078",
+    "query": "bca duration",
+    "expected_course": "bca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-079",
+    "query": "bca specializations",
+    "expected_course": "bca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-080",
+    "query": "bca curriculm",
+    "expected_course": "bca",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-081",
+    "query": "phd fees",
+    "expected_course": "phd",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-082",
+    "query": "phd fee structure",
+    "expected_course": "phd",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-083",
+    "query": "phd feees",
+    "expected_course": "phd",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-084",
+    "query": "cost of phd",
+    "expected_course": "phd",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-085",
+    "query": "phd placements",
+    "expected_course": "phd",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-086",
+    "query": "plcements phd",
+    "expected_course": "phd",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-087",
+    "query": "phd job opportunities",
+    "expected_course": "phd",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-088",
+    "query": "phd package details",
+    "expected_course": "phd",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-089",
+    "query": "phd hostel",
+    "expected_course": "phd",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-090",
+    "query": "hostl phd",
+    "expected_course": "phd",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-091",
+    "query": "stay for phd",
+    "expected_course": "phd",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-092",
+    "query": "phd hostel facility",
+    "expected_course": "phd",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-093",
+    "query": "phd admission process",
+    "expected_course": "phd",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-094",
+    "query": "phd eligibility",
+    "expected_course": "phd",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-095",
+    "query": "phd addmission",
+    "expected_course": "phd",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-096",
+    "query": "how to apply for phd",
+    "expected_course": "phd",
+    "expected_topic": "admission",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "admission",
+      "eligibility",
+      "apply",
+      "documents"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-097",
+    "query": "phd course details",
+    "expected_course": "phd",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-098",
+    "query": "phd duration",
+    "expected_course": "phd",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-099",
+    "query": "phd specializations",
+    "expected_course": "phd",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-100",
+    "query": "phd curriculm",
+    "expected_course": "phd",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": []
+  },
+  {
+    "id": "eval-101",
+    "query": "what about fees",
+    "expected_course": "mba",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": [
+      "MBA course details"
+    ]
+  },
+  {
+    "id": "eval-102",
+    "query": "what about placements",
+    "expected_course": "bba",
+    "expected_topic": "placements",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "placement",
+      "package",
+      "recruiter",
+      "company"
+    ],
+    "context_queries": [
+      "BBA admission process"
+    ]
+  },
+  {
+    "id": "eval-103",
+    "query": "fees too",
+    "expected_course": "mca",
+    "expected_topic": "fees",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "fee",
+      "fees",
+      "admissions",
+      "contact"
+    ],
+    "context_queries": [
+      "MCA hostel"
+    ]
+  },
+  {
+    "id": "eval-104",
+    "query": "hostel also",
+    "expected_course": "bca",
+    "expected_topic": "hostel",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "hostel",
+      "facility",
+      "stay",
+      "campus"
+    ],
+    "context_queries": [
+      "BCA placements"
+    ]
+  },
+  {
+    "id": "eval-105",
+    "query": "course details",
+    "expected_course": "phd",
+    "expected_topic": "course",
+    "expected_behavior": "answer",
+    "expected_keywords": [
+      "semester",
+      "duration",
+      "specialization",
+      "program"
+    ],
+    "context_queries": [
+      "PhD admission process"
+    ]
+  },
+  {
+    "id": "eval-106",
+    "query": "what about fees",
+    "expected_course": null,
+    "expected_topic": "fees",
+    "expected_behavior": "clarification",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-107",
+    "query": "hostl faclity",
+    "expected_course": null,
+    "expected_topic": "hostel",
+    "expected_behavior": "clarification",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-108",
+    "query": "placement info",
+    "expected_course": null,
+    "expected_topic": "placements",
+    "expected_behavior": "clarification",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-109",
+    "query": "admission?",
+    "expected_course": null,
+    "expected_topic": "admission",
+    "expected_behavior": "clarification",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-110",
+    "query": "course details",
+    "expected_course": null,
+    "expected_topic": "course",
+    "expected_behavior": "clarification",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-111",
+    "query": "hi",
+    "expected_course": null,
+    "expected_topic": null,
+    "expected_behavior": "greeting",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-112",
+    "query": "hello there",
+    "expected_course": null,
+    "expected_topic": null,
+    "expected_behavior": "greeting",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-113",
+    "query": "hey aims",
+    "expected_course": null,
+    "expected_topic": null,
+    "expected_behavior": "greeting",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-114",
+    "query": "thank you",
+    "expected_course": null,
+    "expected_topic": null,
+    "expected_behavior": "greeting",
+    "expected_keywords": [],
+    "context_queries": []
+  },
+  {
+    "id": "eval-115",
+    "query": "goodbye",
+    "expected_course": null,
+    "expected_topic": null,
+    "expected_behavior": "greeting",
+    "expected_keywords": [],
+    "context_queries": []
+  }
+]

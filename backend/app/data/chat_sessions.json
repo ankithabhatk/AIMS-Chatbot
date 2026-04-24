@@ -1,0 +1,2394 @@
+{
+  "sessions": {
+    "perf-session-003": {
+      "id": "perf-session-003",
+      "title": "mba hostel",
+      "user_email": "test.user@example.com",
+      "user_name": "Test User",
+      "created_at": "2026-04-23T19:02:46.004943+00:00",
+      "updated_at": "2026-04-23T19:02:48.484159+00:00",
+      "messages": [
+        {
+          "id": "perf-session-003-u-1",
+          "role": "user",
+          "content": "mba hostel",
+          "timestamp": "2026-04-23T19:02:46.004943+00:00",
+          "token_count": 2,
+          "original_query": "mba hostel",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "perf-session-003-a-2",
+          "role": "assistant",
+          "content": "- Contact for current figures: Email: admissions@theaims.ac.in | Phone: +91-80-40789999 General Fee Guidance (approximate \u2014 verify with admissions): - MBA: Regulated by Bangalore City University fee committee Structured as annual installments over 2 years Merit scholarship holders receive waiver on a portion of tuition - BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms More affordable than PG programs; installment options available - MCA: Postgraduate technical program; fees aligned with MBA bracket What is included in fees: - Tuition and university exam fees - Library and digital database access - Wi-Fi and computer lab usage - Sports and cultural activity access - Placement cell support and pre-placement training Additional charges (optional / separate): - Hostel: Annual charges for accommodation + mess (separate from tuition) - Transport: Available on select routes; charges apply - Study materials: Recommended books purchased separately Payment Options: - Installment plan available (semester-wise payments) - Education loans: Bank tie-ups with SBI, Canara Bank, HDFC Bank, Axis Bank - Government scholarships deductible from fee if sanctioned - Online payment via the college portal For exact current fee structure contact: admissions@theaims.ac.in.",
+          "timestamp": "2026-04-23T19:02:46.004943+00:00",
+          "token_count": 320,
+          "confidence": 0.601,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 77084,
+          "sources": [
+            {
+              "title": "Top MBA Colleges in Bangalore: Industry Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning"
+            },
+            {
+              "title": "Inauguration MBA Class of 2024-26",
+              "url": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning#Top MBA Colleges in Bangalore: Industry Learning#3",
+              "heading": "Top MBA Colleges in Bangalore: Industry Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning",
+              "score": 0.5254,
+              "course": "mba",
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/#Inauguration MBA Class of 2024-26#3",
+              "heading": "Inauguration MBA Class of 2024-26",
+              "url": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/",
+              "score": 0.5232,
+              "course": "mba",
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#0",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.4842,
+              "course": null,
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school#Top B Schools in Bangalore | AIMS School of Business#1",
+              "heading": "Top B Schools in Bangalore | AIMS School of Business",
+              "url": "https://www.theaims.ac.in/business-school",
+              "score": 0.3786,
+              "course": null,
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs#Top B School in India | Best Business School in Bangalore#0",
+              "heading": "Top B School in India | Best Business School in Bangalore",
+              "url": "https://www.theaims.ac.in/blogs",
+              "score": 0.3749,
+              "course": null,
+              "topic": "hostel"
+            }
+          ]
+        },
+        {
+          "id": "perf-session-003-u-3",
+          "role": "user",
+          "content": "mba hostel",
+          "timestamp": "2026-04-23T19:02:48.484159+00:00",
+          "token_count": 2,
+          "original_query": "mba hostel",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "perf-session-003-a-4",
+          "role": "assistant",
+          "content": "- Contact for current figures: Email: admissions@theaims.ac.in | Phone: +91-80-40789999 General Fee Guidance (approximate \u2014 verify with admissions): - MBA: Regulated by Bangalore City University fee committee Structured as annual installments over 2 years Merit scholarship holders receive waiver on a portion of tuition - BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms More affordable than PG programs; installment options available - MCA: Postgraduate technical program; fees aligned with MBA bracket What is included in fees: - Tuition and university exam fees - Library and digital database access - Wi-Fi and computer lab usage - Sports and cultural activity access - Placement cell support and pre-placement training Additional charges (optional / separate): - Hostel: Annual charges for accommodation + mess (separate from tuition) - Transport: Available on select routes; charges apply - Study materials: Recommended books purchased separately Payment Options: - Installment plan available (semester-wise payments) - Education loans: Bank tie-ups with SBI, Canara Bank, HDFC Bank, Axis Bank - Government scholarships deductible from fee if sanctioned - Online payment via the college portal For exact current fee structure contact: admissions@theaims.ac.in.",
+          "timestamp": "2026-04-23T19:02:48.484159+00:00",
+          "token_count": 320,
+          "confidence": 0.601,
+          "status": "lock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 17,
+          "sources": [
+            {
+              "title": "Top MBA Colleges in Bangalore: Industry Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning"
+            },
+            {
+              "title": "Inauguration MBA Class of 2024-26",
+              "url": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 4,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "smoke-greet-1": {
+      "id": "smoke-greet-1",
+      "title": "hi",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-23T19:32:34.121654+00:00",
+      "updated_at": "2026-04-23T19:32:34.121654+00:00",
+      "messages": [
+        {
+          "id": "smoke-greet-1-u-1",
+          "role": "user",
+          "content": "hi",
+          "timestamp": "2026-04-23T19:32:34.121654+00:00",
+          "token_count": 1,
+          "original_query": "hi",
+          "corrected_query": "hit"
+        },
+        {
+          "id": "smoke-greet-1-a-2",
+          "role": "assistant",
+          "content": "Could you share a little more detail so I can look up the right information?",
+          "timestamp": "2026-04-23T19:32:34.121654+00:00",
+          "token_count": 19,
+          "confidence": 0.0,
+          "status": "unlock",
+          "intent": "clarification",
+          "fallback": true,
+          "response_time_ms": 150,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA hostel"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "<LOW_CONFIDENCE>"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": null,
+      "last_intent": "factual"
+    },
+    "smoke-typo-1": {
+      "id": "smoke-typo-1",
+      "title": "mba hostl",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-23T19:32:36.138846+00:00",
+      "updated_at": "2026-04-23T19:32:36.138846+00:00",
+      "messages": [
+        {
+          "id": "smoke-typo-1-u-1",
+          "role": "user",
+          "content": "mba hostl",
+          "timestamp": "2026-04-23T19:32:36.138846+00:00",
+          "token_count": 2,
+          "original_query": "mba hostl",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "smoke-typo-1-a-2",
+          "role": "assistant",
+          "content": "- Contact for current figures: Email: admissions@theaims.ac.in | Phone: +91-80-40789999 General Fee Guidance (approximate \u2014 verify with admissions): - MBA: Regulated by Bangalore City University fee committee Structured as annual installments over 2 years Merit scholarship holders receive waiver on a portion of tuition - BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms More affordable than PG programs; installment options available - MCA: Postgraduate technical program; fees aligned with MBA bracket What is included in fees: - Tuition and university exam fees - Library and digital database access - Wi-Fi and computer lab usage - Sports and cultural activity access - Placement cell support and pre-placement training Additional charges (optional / separate): - Hostel: Annual charges for accommodation + mess (separate from tuition) - Transport: Available on select routes; charges apply - Study materials: Recommended books purchased separately Payment Options: - Installment plan available (semester-wise payments) - Education loans: Bank tie-ups with SBI, Canara Bank, HDFC Bank, Axis Bank - Government scholarships deductible from fee if sanctioned - Online payment via the college portal For exact current fee structure contact: admissions@theaims.ac.in.",
+          "timestamp": "2026-04-23T19:32:36.138846+00:00",
+          "token_count": 320,
+          "confidence": 0.591,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 2316,
+          "sources": [
+            {
+              "title": "Top MBA Colleges in Bangalore: Industry Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning"
+            },
+            {
+              "title": "Inauguration MBA Class of 2024-26",
+              "url": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning#Top MBA Colleges in Bangalore: Industry Learning#3",
+              "heading": "Top MBA Colleges in Bangalore: Industry Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-top-mba-colleges-in-bangalore-prioritise-industry-integrated-learning",
+              "score": 0.467,
+              "course": "mba",
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/#Inauguration MBA Class of 2024-26#3",
+              "heading": "Inauguration MBA Class of 2024-26",
+              "url": "https://www.theaims.ac.in/events/inauguration-mba-class-of-2024-26/",
+              "score": 0.4648,
+              "course": "mba",
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#0",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.4258,
+              "course": null,
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school#Top B Schools in Bangalore | AIMS School of Business#1",
+              "heading": "Top B Schools in Bangalore | AIMS School of Business",
+              "url": "https://www.theaims.ac.in/business-school",
+              "score": 0.3286,
+              "course": null,
+              "topic": "hostel"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs#Top B School in India | Best Business School in Bangalore#0",
+              "heading": "Top B School in India | Best Business School in Bangalore",
+              "url": "https://www.theaims.ac.in/blogs",
+              "score": 0.3249,
+              "course": null,
+              "topic": "hostel"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "smoke-typo-2": {
+      "id": "smoke-typo-2",
+      "title": "what about fees",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:01:06.220949+00:00",
+      "updated_at": "2026-04-24T01:01:10.580592+00:00",
+      "messages": [
+        {
+          "id": "smoke-typo-2-u-1",
+          "role": "user",
+          "content": "what about fees",
+          "timestamp": "2026-04-24T01:01:06.220949+00:00",
+          "token_count": 3,
+          "original_query": "what about fees",
+          "corrected_query": "what about fees"
+        },
+        {
+          "id": "smoke-typo-2-a-2",
+          "role": "assistant",
+          "content": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)",
+          "timestamp": "2026-04-24T01:01:06.220949+00:00",
+          "token_count": 98,
+          "confidence": 1.0,
+          "status": "lock",
+          "intent": "Lead Capture",
+          "fallback": false,
+          "response_time_ms": 0,
+          "sources": [],
+          "suggestions": [
+            "Programs offered",
+            "Campus life",
+            "Admission process"
+          ],
+          "control_tokens": [
+            "INTENT:FOLLOW_UP",
+            "TOPIC:FEES"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "smoke-typo-2-u-3",
+          "role": "user",
+          "content": "mba hostl",
+          "timestamp": "2026-04-24T01:01:10.580592+00:00",
+          "token_count": 2,
+          "original_query": "mba hostl",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "smoke-typo-2-a-4",
+          "role": "assistant",
+          "content": "- BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms More affordable than PG programs; installment options available - MCA: Postgraduate technical program; fees aligned with MBA bracket What is included in fees: - Tuition and university exam fees - Library and digital database access - Wi-Fi and computer lab usage - Sports and cultural activity access - Placement cell support and pre-placement training Additional charges (optional / separate): - Hostel: Annual charges for accommodation + mess (separate from tuition) - Transport: Available on select routes; charges apply\n- They match your ambitions.\n- We'd love to hear from you.\n- Contact us at: facilities@theaims.ac.in.",
+          "timestamp": "2026-04-24T01:01:10.580592+00:00",
+          "token_count": 172,
+          "confidence": 0.723,
+          "status": "lock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 6113,
+          "sources": [
+            {
+              "title": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            },
+            {
+              "title": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#0",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.693,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#2",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.6926,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#1",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.6915,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#7",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.6051,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Curriculum and Academic Structure#0",
+              "heading": "MBA Curriculum and Academic Structure",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.5599,
+              "course": "mba",
+              "topic": "course"
+            }
+          ]
+        }
+      ],
+      "message_count": 4,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "smoke-greet-2": {
+      "id": "smoke-greet-2",
+      "title": "hi",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:01:06.290336+00:00",
+      "updated_at": "2026-04-24T01:01:06.290336+00:00",
+      "messages": [
+        {
+          "id": "smoke-greet-2-u-1",
+          "role": "user",
+          "content": "hi",
+          "timestamp": "2026-04-24T01:01:06.290336+00:00",
+          "token_count": 1,
+          "original_query": "hi",
+          "corrected_query": "hi"
+        },
+        {
+          "id": "smoke-greet-2-a-2",
+          "role": "assistant",
+          "content": "Hi! I can help with AIMS courses, admissions, placements, hostel, and fees. What would you like to know?",
+          "timestamp": "2026-04-24T01:01:06.290336+00:00",
+          "token_count": 26,
+          "confidence": 1.0,
+          "status": "unlock",
+          "intent": "greeting",
+          "fallback": false,
+          "response_time_ms": 37,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA admission process"
+          ],
+          "control_tokens": [
+            "INTENT:GREETING"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": null,
+      "last_intent": "greeting"
+    },
+    "smoke-unknown-1": {
+      "id": "smoke-unknown-1",
+      "title": "space engineering admission",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:01:11.316314+00:00",
+      "updated_at": "2026-04-24T01:01:11.316314+00:00",
+      "messages": [
+        {
+          "id": "smoke-unknown-1-u-1",
+          "role": "user",
+          "content": "space engineering admission",
+          "timestamp": "2026-04-24T01:01:11.316314+00:00",
+          "token_count": 6,
+          "original_query": "space engineering admission",
+          "corrected_query": "space engineering admission"
+        },
+        {
+          "id": "smoke-unknown-1-a-2",
+          "role": "assistant",
+          "content": "- Eligibility: - 10+2 (PUC / Class 12) from any recognized board - Any stream: Science, Commerce, or Arts - Minimum 45% aggregate marks (40% for reserved categories) - No entrance exam mandatory; admission based on merit and PI Admission Process: 1.\n- Aviation Management (specialized BBA track) BBA in Aviation Management: A dedicated 3-year BBA program for students pursuing careers in aviation, airport operations, airline management, and travel & tourism.\n- BBA (Bachelor of Business Administration) at AIMS Institutes Duration: 3 years (6 semesters) Affiliation: Bangalore City University Approval: AICTE Approved Specializations: 1.\n- Eligibility Criteria: Pass in Pre-University Course (PUC)/12th or any other equivalent examination.",
+          "timestamp": "2026-04-24T01:01:11.316314+00:00",
+          "token_count": 185,
+          "confidence": 0.578,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 5324,
+          "sources": [
+            {
+              "title": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration"
+            },
+            {
+              "title": "Untitled",
+              "url": "https://www.theaims.ac.in/bba-course-admissions"
+            }
+          ],
+          "suggestions": [
+            "What documents are required?",
+            "What is the eligibility criteria?",
+            "When is the application deadline?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#2",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.7826,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#3",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6873,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#0",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6731,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/bba-course-admissions#Untitled#34",
+              "heading": "Untitled",
+              "url": "https://www.theaims.ac.in/bba-course-admissions",
+              "score": 0.5945,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration-aviation-management#Best BBA Aviation Colleges in Bangalore - AIMS#6",
+              "heading": "Best BBA Aviation Colleges in Bangalore - AIMS",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration-aviation-management",
+              "score": 0.5812,
+              "course": "aviation",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "fast-hostel-1": {
+      "id": "fast-hostel-1",
+      "title": "mba hostl",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:10:13.700704+00:00",
+      "updated_at": "2026-04-24T01:10:13.700704+00:00",
+      "messages": [
+        {
+          "id": "fast-hostel-1-u-1",
+          "role": "user",
+          "content": "mba hostl",
+          "timestamp": "2026-04-24T01:10:13.700704+00:00",
+          "token_count": 2,
+          "original_query": "mba hostl",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "fast-hostel-1-a-2",
+          "role": "assistant",
+          "content": "- BBA / BCA / B.Com: Undergraduate programs follow BCU fee norms More affordable than PG programs; installment options available - MCA: Postgraduate technical program; fees aligned with MBA bracket What is included in fees: - Tuition and university exam fees - Library and digital database access - Wi-Fi and computer lab usage - Sports and cultural activity access - Placement cell support and pre-placement training Additional charges (optional / separate): - Hostel: Annual charges for accommodation + mess (separate from tuition) - Transport: Available on select routes; charges apply\n- They match your ambitions.\n- We'd love to hear from you.\n- Contact us at: facilities@theaims.ac.in.",
+          "timestamp": "2026-04-24T01:10:13.700704+00:00",
+          "token_count": 172,
+          "confidence": 0.723,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 4112,
+          "sources": [
+            {
+              "title": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            },
+            {
+              "title": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#0",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.693,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#2",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.6926,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#1",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.6915,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#7",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.6051,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Curriculum and Academic Structure#0",
+              "heading": "MBA Curriculum and Academic Structure",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.5599,
+              "course": "mba",
+              "topic": "course"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "fast-unknown-1": {
+      "id": "fast-unknown-1",
+      "title": "space engineering admission",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:10:13.736047+00:00",
+      "updated_at": "2026-04-24T01:10:13.736047+00:00",
+      "messages": [
+        {
+          "id": "fast-unknown-1-u-1",
+          "role": "user",
+          "content": "space engineering admission",
+          "timestamp": "2026-04-24T01:10:13.736047+00:00",
+          "token_count": 6,
+          "original_query": "space engineering admission",
+          "corrected_query": "space engineering admission"
+        },
+        {
+          "id": "fast-unknown-1-a-2",
+          "role": "assistant",
+          "content": "I found a nearby match, but I am not confident enough to present it as verified information.\n\n- Aviation Management (specialized BBA track) BBA in Aviation Management: A dedicated 3-year BBA program for students pursuing careers in aviation, airport operations, airline management, and travel & tourism.\n- Eligibility: - 10+2 (PUC / Class 12) from any recognized board - Any stream: Science, Commerce, or Arts - Minimum 45% aggregate marks (40% for reserved categories) - No entrance exam mandatory; admission based on merit and PI Admission Process: 1.\n- Apply online or visit the campus 2.",
+          "timestamp": "2026-04-24T01:10:13.736047+00:00",
+          "token_count": 147,
+          "confidence": 0.26,
+          "status": "unlock",
+          "intent": "fallback",
+          "fallback": true,
+          "response_time_ms": 4333,
+          "sources": [
+            {
+              "title": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration"
+            },
+            {
+              "title": "Untitled",
+              "url": "https://www.theaims.ac.in/bba-course-admissions"
+            }
+          ],
+          "suggestions": [
+            "Mention the course name",
+            "Ask for a detailed answer",
+            "Try another topic"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION",
+            "<FALLBACK>"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#2",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.7826,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#3",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6873,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#0",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6731,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/bba-course-admissions#Untitled#34",
+              "heading": "Untitled",
+              "url": "https://www.theaims.ac.in/bba-course-admissions",
+              "score": 0.5945,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration-aviation-management#Best BBA Aviation Colleges in Bangalore - AIMS#6",
+              "heading": "Best BBA Aviation Colleges in Bangalore - AIMS",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration-aviation-management",
+              "score": 0.5812,
+              "course": "aviation",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "fast-greet-2": {
+      "id": "fast-greet-2",
+      "title": "hi",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:15:24.644670+00:00",
+      "updated_at": "2026-04-24T01:15:24.644670+00:00",
+      "messages": [
+        {
+          "id": "fast-greet-2-u-1",
+          "role": "user",
+          "content": "hi",
+          "timestamp": "2026-04-24T01:15:24.644670+00:00",
+          "token_count": 1,
+          "original_query": "hi",
+          "corrected_query": "hi"
+        },
+        {
+          "id": "fast-greet-2-a-2",
+          "role": "assistant",
+          "content": "Hi! I can help with AIMS courses, admissions, placements, hostel, and fees. What would you like to know?",
+          "timestamp": "2026-04-24T01:15:24.644670+00:00",
+          "token_count": 26,
+          "confidence": 1.0,
+          "status": "unlock",
+          "intent": "greeting",
+          "fallback": false,
+          "response_time_ms": 9,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA admission process"
+          ],
+          "control_tokens": [
+            "INTENT:GREETING"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": null,
+      "last_intent": "greeting"
+    },
+    "fast-hostel-2": {
+      "id": "fast-hostel-2",
+      "title": "mba hostl",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:15:26.722631+00:00",
+      "updated_at": "2026-04-24T01:15:26.722631+00:00",
+      "messages": [
+        {
+          "id": "fast-hostel-2-u-1",
+          "role": "user",
+          "content": "mba hostl",
+          "timestamp": "2026-04-24T01:15:26.722631+00:00",
+          "token_count": 2,
+          "original_query": "mba hostl",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "fast-hostel-2-a-2",
+          "role": "assistant",
+          "content": "- digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events Hostel Facilities (Separate for Boys and Girls): - Fully furnished rooms (single, double, triple occupancy) - 24/7 security with CCTV surveillance and biometric entry - Wi-Fi in all hostel rooms - Mess serving vegetarian and non-vegetarian meals (breakfast, lunch, dinner) - Laundry facility - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom\n- Frequently Asked Questions about AIMS Institutes: Q: Is hostel compulsory at AIMS?\n- A: No, hostel is not compulsory.\n- AIMS provides separate hostel facilities for boys and girls.",
+          "timestamp": "2026-04-24T01:15:26.722631+00:00",
+          "token_count": 195,
+          "confidence": 0.653,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 2003,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#0",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.4492,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#1",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.4455,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#0",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.1459,
+              "course": null,
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#0",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.693,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#2",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.6926,
+              "course": "mba",
+              "topic": "fees"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "fast-unknown-2": {
+      "id": "fast-unknown-2",
+      "title": "space engineering admission",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T01:15:26.745032+00:00",
+      "updated_at": "2026-04-24T01:15:26.745032+00:00",
+      "messages": [
+        {
+          "id": "fast-unknown-2-u-1",
+          "role": "user",
+          "content": "space engineering admission",
+          "timestamp": "2026-04-24T01:15:26.745032+00:00",
+          "token_count": 6,
+          "original_query": "space engineering admission",
+          "corrected_query": "space engineering admission"
+        },
+        {
+          "id": "fast-unknown-2-a-2",
+          "role": "assistant",
+          "content": "I found a nearby match, but I am not confident enough to present it as verified information.\n\n- Aviation Management (specialized BBA track) BBA in Aviation Management: A dedicated 3-year BBA program for students pursuing careers in aviation, airport operations, airline management, and travel & tourism.\n- Eligibility: - 10+2 (PUC / Class 12) from any recognized board - Any stream: Science, Commerce, or Arts - Minimum 45% aggregate marks (40% for reserved categories) - No entrance exam mandatory; admission based on merit and PI Admission Process: 1.\n- Apply online or visit the campus 2.",
+          "timestamp": "2026-04-24T01:15:26.745032+00:00",
+          "token_count": 147,
+          "confidence": 0.271,
+          "status": "unlock",
+          "intent": "fallback",
+          "fallback": true,
+          "response_time_ms": 2299,
+          "sources": [
+            {
+              "title": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration"
+            },
+            {
+              "title": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "Mention the course name",
+            "Ask for a detailed answer",
+            "Try another topic"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION",
+            "<FALLBACK>"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#2",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.7826,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#3",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6873,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#0",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6731,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#2",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.3782,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#0",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.3776,
+              "course": "mba",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "sess-normal-2": {
+      "id": "sess-normal-2",
+      "title": "mba hostel",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:01.026418+00:00",
+      "updated_at": "2026-04-24T06:38:01.026418+00:00",
+      "messages": [
+        {
+          "id": "sess-normal-2-u-1",
+          "role": "user",
+          "content": "mba hostel",
+          "timestamp": "2026-04-24T06:38:01.026418+00:00",
+          "token_count": 2,
+          "original_query": "mba hostel",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "sess-normal-2-a-2",
+          "role": "assistant",
+          "content": "- digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events Hostel Facilities (Separate for Boys and Girls): - Fully furnished rooms (single, double, triple occupancy) - 24/7 security with CCTV surveillance and biometric entry - Wi-Fi in all hostel rooms - Mess serving vegetarian and non-vegetarian meals (breakfast, lunch, dinner) - Laundry facility - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom\n- Frequently Asked Questions about AIMS Institutes: Q: Is hostel compulsory at AIMS?\n- A: No, hostel is not compulsory.\n- AIMS provides separate hostel facilities for boys and girls.",
+          "timestamp": "2026-04-24T06:38:01.026418+00:00",
+          "token_count": 195,
+          "confidence": 0.694,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 718,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#0",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.4492,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#1",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.4455,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#0",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.2042,
+              "course": null,
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#0",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.7513,
+              "course": "mba",
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs#2",
+              "heading": "AIMS Fee Structure \u2014 MBA, BBA, MCA, BCA Programs",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.7509,
+              "course": "mba",
+              "topic": "fees"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "sess-typo-2": {
+      "id": "sess-typo-2",
+      "title": "mba admssion proces",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:01.689707+00:00",
+      "updated_at": "2026-04-24T06:38:01.689707+00:00",
+      "messages": [
+        {
+          "id": "sess-typo-2-u-1",
+          "role": "user",
+          "content": "mba admssion proces",
+          "timestamp": "2026-04-24T06:38:01.689707+00:00",
+          "token_count": 4,
+          "original_query": "mba admssion proces",
+          "corrected_query": "mba admission process"
+        },
+        {
+          "id": "sess-typo-2-a-2",
+          "role": "assistant",
+          "content": "- No mandatory entrance exam; admission by merit and PI Application Steps: Step 1: Visit apply.theaims.ac.in and fill online form Step 2: Upload documents \u2014 mark sheets (10th, 12th, UG), entrance scorecard, ID proof (Aadhar), community certificate if applicable Step 3: Shortlisting notification (within 5\u20137 working days) Step 4: Personal Interview at AIMS campus (Bangalore) Step 5: Merit list and offer letter Step 6: Fee payment and enrollment confirmation Important Dates (Approximate, verify with admissions office): - Application opens: January\u2013February each year - MBA admission closes: June\u2013July - UG programs: May\u2013July\n- 10+2 (PUC / Class 12) from any recognized board - Any stream: Science, Commerce, or Arts - Minimum 45% aggregate marks (40% for reserved categories) - No entrance exam mandatory; admission based on merit and PI Admission Process: 1.\n- Documents verification and fee payment Career Outcomes: BBA graduates placed at Deloitte, EY, Accenture, Infosys, Amazon, HDFC Bank, ICICI Bank, Axis Bank, and leading MNCs in Bangalore.\n- Many BBA graduates pursue MBA at AIMS or top B-schools.",
+          "timestamp": "2026-04-24T06:38:01.689707+00:00",
+          "token_count": 277,
+          "confidence": 0.897,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 653,
+          "sources": [
+            {
+              "title": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            },
+            {
+              "title": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration"
+            }
+          ],
+          "suggestions": [
+            "What documents are required?",
+            "What is the eligibility criteria?",
+            "When is the application deadline?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:ADMISSION"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#1",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 1.0,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#0",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.9985,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#2",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.9961,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#1",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6012,
+              "course": "bba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#6",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.6012,
+              "course": "bba",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "sess-follow-2": {
+      "id": "sess-follow-2",
+      "title": "tell me about mba",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:02.379866+00:00",
+      "updated_at": "2026-04-24T06:38:03.102838+00:00",
+      "messages": [
+        {
+          "id": "sess-follow-2-u-1",
+          "role": "user",
+          "content": "tell me about mba",
+          "timestamp": "2026-04-24T06:38:02.379866+00:00",
+          "token_count": 4,
+          "original_query": "tell me about mba",
+          "corrected_query": "tell me about mba"
+        },
+        {
+          "id": "sess-follow-2-a-2",
+          "role": "assistant",
+          "content": "- It\u2019s about applying them in live business situations.\n- Recruiters prefer graduates who: Have worked on live projects Understand industry tools & analytics Can solve real business problems Adapt quickly to workplace environments This is why management colleges in Bangalore embed practical learning into the curriculum rather than offering it as an optional extension.\n- MBA (Master of Business Administration) at AIMS Institutes Duration: 2 years (4 semesters) Affiliation: Bangalore City University (formerly Bangalore University) Approval: AICTE Approved Accreditation: IACBE (International), NAAC 'A' Grade Specializations Available: 1.\n- MBA Academic Structure at AIMS Institutes: Semester 1 \u2014 Foundation: Management Concepts & Organisational Behaviour, Managerial Economics, Financial Accounting & Analysis, Marketing Management, Business Statistics & Research Methods, Business Communication Semester 2 \u2014 Core: Strategic Management, Financial Management, Human Resource Management, Operations Management, Business Law & Corporate Governance, Entrepreneurship & Innovation Semester 3 \u2014 Specialization Major + Minor: Domain electives based on chosen specialization (Marketing / Finance / HR /",
+          "timestamp": "2026-04-24T06:38:02.379866+00:00",
+          "token_count": 299,
+          "confidence": 0.765,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 677,
+          "sources": [
+            {
+              "title": "MBA Curriculum and Academic Structure",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration"
+            },
+            {
+              "title": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration"
+            }
+          ],
+          "suggestions": [
+            "Tell me about AIMS programs",
+            "What is the admission process?",
+            "Are scholarships available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Curriculum and Academic Structure#0",
+              "heading": "MBA Curriculum and Academic Structure",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.7328,
+              "course": "mba",
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Curriculum and Academic Structure#1",
+              "heading": "MBA Curriculum and Academic Structure",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.7283,
+              "course": "mba",
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Program \u2014 Specializations, Eligibility, and Entrance Exams#0",
+              "heading": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.7279,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs#Top B School in India | Best Business School in Bangalore#6",
+              "heading": "Top B School in India | Best Business School in Bangalore",
+              "url": "https://www.theaims.ac.in/blogs",
+              "score": 0.658,
+              "course": "mba",
+              "topic": null
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/blogs/why-the-best-mba-colleges-in-bangalore-emphasize-practical-learning#Why the Best MBA Colleges in Bangalore Emphasize Practical Learning#26",
+              "heading": "Why the Best MBA Colleges in Bangalore Emphasize Practical Learning",
+              "url": "https://www.theaims.ac.in/blogs/why-the-best-mba-colleges-in-bangalore-emphasize-practical-learning",
+              "score": 0.6517,
+              "course": "mba",
+              "topic": null
+            }
+          ]
+        },
+        {
+          "id": "sess-follow-2-u-3",
+          "role": "user",
+          "content": "what about hostel?",
+          "timestamp": "2026-04-24T06:38:03.102838+00:00",
+          "token_count": 4,
+          "original_query": "what about hostel?",
+          "corrected_query": "what about hostel"
+        },
+        {
+          "id": "sess-follow-2-a-4",
+          "role": "assistant",
+          "content": "Here is the closest verified snippet I found. If you want, I can help narrow it down further.\n\n- digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events Hostel Facilities (Separate for Boys and Girls): - Fully furnished rooms (single, double, triple occupancy) - 24/7 security with CCTV surveillance and biometric entry - Wi-Fi in all hostel rooms - Mess serving vegetarian and non-vegetarian meals (breakfast, lunch, dinner) - Laundry facility - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom - Outdoor: Cricket ground, volleyball court, basketball court - Annual sports meet and inter-college tournaments Other: - ATM on campus - Cafeteria/canteen - Medical room with nurse on duty - Stationary and photocopy shop - Wheelchair-accessible infrastructure (ramps, lifts)",
+          "timestamp": "2026-04-24T06:38:03.102838+00:00",
+          "token_count": 280,
+          "confidence": 0.365,
+          "status": "unlock",
+          "intent": "fallback",
+          "fallback": true,
+          "response_time_ms": 712,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "Mention the course name",
+            "Ask for a detailed answer",
+            "Try another topic"
+          ],
+          "control_tokens": [
+            "INTENT:FOLLOW_UP",
+            "TOPIC:HOSTEL",
+            "COURSE:MBA",
+            "<FALLBACK>"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#2",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.2337,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#1",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.2337,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#0",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.2331,
+              "course": null,
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#5",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.2327,
+              "course": null,
+              "topic": "fees"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry#6",
+              "heading": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.2326,
+              "course": null,
+              "topic": "fees"
+            }
+          ]
+        }
+      ],
+      "message_count": 4,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "follow_up"
+    },
+    "sess-unknown-2": {
+      "id": "sess-unknown-2",
+      "title": "tell me about mars campus",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:05.012152+00:00",
+      "updated_at": "2026-04-24T06:38:05.012152+00:00",
+      "messages": [
+        {
+          "id": "sess-unknown-2-u-1",
+          "role": "user",
+          "content": "tell me about mars campus",
+          "timestamp": "2026-04-24T06:38:05.012152+00:00",
+          "token_count": 6,
+          "original_query": "tell me about mars campus",
+          "corrected_query": "tell me about mars campus"
+        },
+        {
+          "id": "sess-unknown-2-a-2",
+          "role": "assistant",
+          "content": "- A Campus That Supports Every AIMer We\u2019re a space where: MCA students learn with AI and ML-ready labs MBA candidates attend corporate workshops with top recruiters BBA Aviation students get global exposure through partnerships Hospitality students practise in real-world kitchens and banquet setups Here, facilities don\u2019t just meet your needs.\n- Want to explore the campus or check hostel availability?\n- Whether you're pursuing a top MBA with international accreditation, studying hospitality and tourism, or preparing for a career in data science or entrepreneurship, our campus gives you the resources to AIM higher.\n- What Makes Our Campus Stand Out?",
+          "timestamp": "2026-04-24T06:38:05.012152+00:00",
+          "token_count": 163,
+          "confidence": 0.635,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 1888,
+          "sources": [
+            {
+              "title": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            }
+          ],
+          "suggestions": [
+            "What facilities are available on campus?",
+            "How far is the campus from the city?",
+            "What is the transportation facility?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:CAMPUS"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#1",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.7053,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#0",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.7043,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#3",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.703,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#2",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.699,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#1",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.6521,
+              "course": null,
+              "topic": "campus"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": "campus",
+      "last_intent": "factual"
+    },
+    "sess-unknown-3": {
+      "id": "sess-unknown-3",
+      "title": "do you offer space engineering",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:06.373751+00:00",
+      "updated_at": "2026-04-24T06:38:06.373751+00:00",
+      "messages": [
+        {
+          "id": "sess-unknown-3-u-1",
+          "role": "user",
+          "content": "do you offer space engineering",
+          "timestamp": "2026-04-24T06:38:06.373751+00:00",
+          "token_count": 7,
+          "original_query": "do you offer space engineering",
+          "corrected_query": "do you offer space engineering"
+        },
+        {
+          "id": "sess-unknown-3-a-2",
+          "role": "assistant",
+          "content": "I found a nearby match, but I am not confident enough to present it as verified information.\n\n- AIMS Placement Cell \u2014 Career Development Services: The AIMS Placement Cell bridges students with the corporate world through: Pre-Placement Training: - Aptitude and logical reasoning workshops - Group discussion (GD) preparation - Personal interview (PI) coaching - Resume and LinkedIn profile building - Business communication and email etiquette Industry Exposure: - Live projects with partner companies - Industry visits and plant tours - Guest lectures by senior industry professionals - Case study competitions and hackathons - Leadership summits and management conclaves Internship Programme:",
+          "timestamp": "2026-04-24T06:38:06.373751+00:00",
+          "token_count": 173,
+          "confidence": 0.189,
+          "status": "unlock",
+          "intent": "fallback",
+          "fallback": true,
+          "response_time_ms": 1353,
+          "sources": [
+            {
+              "title": "AIMS Placement Cell and Career Support",
+              "url": "https://www.theaims.ac.in/placement"
+            },
+            {
+              "title": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            }
+          ],
+          "suggestions": [
+            "Mention the course name",
+            "Ask for a detailed answer",
+            "Try another topic"
+          ],
+          "control_tokens": [
+            "INTENT:YES_NO",
+            "<FALLBACK>"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/placement#AIMS Placement Cell and Career Support#0",
+              "heading": "AIMS Placement Cell and Career Support",
+              "url": "https://www.theaims.ac.in/placement",
+              "score": 0.5487,
+              "course": null,
+              "topic": "placements"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#5",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.5356,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#4",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.5312,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#6",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.5295,
+              "course": "mba",
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#3",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.4728,
+              "course": null,
+              "topic": "campus"
+            }
+          ]
+        }
+      ],
+      "message_count": 2,
+      "active_course": "General",
+      "active_topic": null,
+      "last_intent": "yes_no"
+    },
+    "sess-fees-2": {
+      "id": "sess-fees-2",
+      "title": "mba fees",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:38:06.392577+00:00",
+      "updated_at": "2026-04-24T06:38:07.264458+00:00",
+      "messages": [
+        {
+          "id": "sess-fees-2-u-1",
+          "role": "user",
+          "content": "mba fees",
+          "timestamp": "2026-04-24T06:38:06.392577+00:00",
+          "token_count": 2,
+          "original_query": "mba fees",
+          "corrected_query": "mba fees"
+        },
+        {
+          "id": "sess-fees-2-a-2",
+          "role": "assistant",
+          "content": "Fee structures vary depending on the program and admission cycle. Fee details are shared by our admissions team to ensure accuracy and provide you with the most up-to-date information.\n\nI'd love to help you with that! Before we continue, could you please share a few details so I can guide you better?\n\nPlease provide your: **Name, Email, and Course**\n(Example: John Doe, john@example.com, MBA)",
+          "timestamp": "2026-04-24T06:38:06.392577+00:00",
+          "token_count": 98,
+          "confidence": 1.0,
+          "status": "lock",
+          "intent": "Lead Capture",
+          "fallback": false,
+          "response_time_ms": 0,
+          "sources": [],
+          "suggestions": [
+            "Programs offered",
+            "Campus life",
+            "Admission process"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:FEES"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "sess-fees-2-u-3",
+          "role": "user",
+          "content": "Jane Doe, jane@example.com, MBA",
+          "timestamp": "2026-04-24T06:38:07.264458+00:00",
+          "token_count": 7,
+          "original_query": "Jane Doe, jane@example.com, MBA",
+          "corrected_query": "jane doe jane example com mba"
+        },
+        {
+          "id": "sess-fees-2-a-4",
+          "role": "assistant",
+          "content": "Thank you, Jane Doe! I've shared your interest in MBA with our admissions team. How else can I help you today?",
+          "timestamp": "2026-04-24T06:38:07.264458+00:00",
+          "token_count": 27,
+          "confidence": 1.0,
+          "status": "unlock",
+          "intent": "Lead Capture",
+          "fallback": false,
+          "response_time_ms": 0,
+          "sources": [],
+          "suggestions": [
+            "Tell me about placements",
+            "Admission dates"
+          ],
+          "control_tokens": [],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 4,
+      "active_course": "mba",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "conv_1777012742764": {
+      "id": "conv_1777012742764",
+      "title": "mba hostel",
+      "user_email": null,
+      "user_name": null,
+      "created_at": "2026-04-24T06:39:02.802974+00:00",
+      "updated_at": "2026-04-24T06:39:02.802974+00:00",
+      "messages": [
+        {
+          "id": "conv_1777012742764-u-1",
+          "role": "user",
+          "content": "mba hostel",
+          "timestamp": "2026-04-24T06:39:02.802974+00:00",
+          "token_count": 2,
+          "original_query": "mba hostel",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "conv_1777012742764-a-2",
+          "role": "assistant",
+          "content": "- digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events Hostel Facilities (Separate for Boys and Girls): - Fully furnished rooms (single, double, triple occupancy) - 24/7 security with CCTV surveillance and biometric entry - Wi-Fi in all hostel rooms - Mess serving vegetarian and non-vegetarian meals (breakfast, lunch, dinner) - Laundry facility - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom\n- Frequently Asked Questions about AIMS Institutes: Q: Is hostel compulsory at AIMS?\n- A: No, hostel is not compulsory.\n- AIMS provides separate hostel facilities for boys and girls.",
+          "timestamp": "2026-04-24T06:39:02.802974+00:00",
+          "token_count": 195,
+          "confidence": 0.694,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 4,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "conv_1777012787090": {
+      "id": "conv_1777012787090",
+      "title": "mba hostel",
+      "user_email": "smoke.ui@example.com",
+      "user_name": "Smoke Test",
+      "created_at": "2026-04-24T06:39:48.744807+00:00",
+      "updated_at": "2026-04-24T06:39:48.744807+00:00",
+      "messages": [
+        {
+          "id": "conv_1777012787090-u-1",
+          "role": "user",
+          "content": "mba hostel",
+          "timestamp": "2026-04-24T06:39:48.744807+00:00",
+          "token_count": 2,
+          "original_query": "mba hostel",
+          "corrected_query": "mba hostel"
+        },
+        {
+          "id": "conv_1777012787090-a-2",
+          "role": "assistant",
+          "content": "- digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events Hostel Facilities (Separate for Boys and Girls): - Fully furnished rooms (single, double, triple occupancy) - 24/7 security with CCTV surveillance and biometric entry - Wi-Fi in all hostel rooms - Mess serving vegetarian and non-vegetarian meals (breakfast, lunch, dinner) - Laundry facility - Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom\n- Frequently Asked Questions about AIMS Institutes: Q: Is hostel compulsory at AIMS?\n- A: No, hostel is not compulsory.\n- AIMS provides separate hostel facilities for boys and girls.",
+          "timestamp": "2026-04-24T06:39:48.744807+00:00",
+          "token_count": 195,
+          "confidence": 0.694,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 2,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "AIMS FAQs \u2014 Hostel, Entrance Exam, Loan, Scholarship, Lateral Entry",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            }
+          ],
+          "suggestions": [
+            "What is the hostel fee?",
+            "Is hostel compulsory?",
+            "What amenities are available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "COURSE:MBA",
+            "TOPIC:HOSTEL"
+          ],
+          "retrieved_chunks": []
+        }
+      ],
+      "message_count": 2,
+      "active_course": "mba",
+      "active_topic": "hostel",
+      "last_intent": "factual"
+    },
+    "conv_1777014886461": {
+      "id": "conv_1777014886461",
+      "title": "Courses offered?",
+      "user_email": "ankitha1771@gmail.com",
+      "user_name": "Ankitha.K",
+      "created_at": "2026-04-24T07:14:50.725246+00:00",
+      "updated_at": "2026-04-24T07:47:08.383441+00:00",
+      "messages": [
+        {
+          "id": "conv_1777014886461-u-1",
+          "role": "user",
+          "content": "Courses offered?",
+          "timestamp": "2026-04-24T07:14:50.725246+00:00",
+          "token_count": 4,
+          "original_query": "Courses offered?",
+          "corrected_query": "courses offered"
+        },
+        {
+          "id": "conv_1777014886461-a-2",
+          "role": "assistant",
+          "content": "I found a nearby match, but I am not confident enough to present it as verified information.\n\n- At AIMS Institutes, The suggested course structure for PhD Programs in Management, Commerce and English of UoM generally consists of: Review of Literature and Seminars Submission of Annual progress reports Two research paper publications Thesis submission - After 30 months (minimum) The syllabus for research methodology for each course is separate.\n- For details regarding the course structure, kindly refer to the details here: Other Backward Classes Scheduled Castes / Tribes * 1 OBC seat plus either 1 GM or 1 FN seat.",
+          "timestamp": "2026-04-24T07:14:50.725246+00:00",
+          "token_count": 154,
+          "confidence": 0.248,
+          "status": "unlock",
+          "intent": "fallback",
+          "fallback": true,
+          "response_time_ms": 938,
+          "sources": [
+            {
+              "title": "Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore",
+              "url": "https://www.theaims.ac.in/phd-doctoral-programs"
+            },
+            {
+              "title": "Untitled",
+              "url": "https://www.theaims.ac.in/bhm-course-admissions"
+            }
+          ],
+          "suggestions": [
+            "Mention the course name",
+            "Ask for a detailed answer",
+            "Try another topic"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:COURSE",
+            "<FALLBACK>"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/phd-doctoral-programs#Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore#11",
+              "heading": "Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore",
+              "url": "https://www.theaims.ac.in/phd-doctoral-programs",
+              "score": 0.6138,
+              "course": "phd",
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/phd-doctoral-programs#Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore#9",
+              "heading": "Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore",
+              "url": "https://www.theaims.ac.in/phd-doctoral-programs",
+              "score": 0.6078,
+              "course": "phd",
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/bhm-course-admissions#Untitled#22",
+              "heading": "Untitled",
+              "url": "https://www.theaims.ac.in/bhm-course-admissions",
+              "score": 0.6063,
+              "course": null,
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/phd-doctoral-programs#Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore#10",
+              "heading": "Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore",
+              "url": "https://www.theaims.ac.in/phd-doctoral-programs",
+              "score": 0.6045,
+              "course": "phd",
+              "topic": "course"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/bca-course-admissions#Untitled#16",
+              "heading": "Untitled",
+              "url": "https://www.theaims.ac.in/bca-course-admissions",
+              "score": 0.6039,
+              "course": "bca",
+              "topic": "course"
+            }
+          ]
+        },
+        {
+          "id": "conv_1777014886461-u-3",
+          "role": "user",
+          "content": "Campus facilities",
+          "timestamp": "2026-04-24T07:15:10.776926+00:00",
+          "token_count": 4,
+          "original_query": "Campus facilities",
+          "corrected_query": "campus facilities"
+        },
+        {
+          "id": "conv_1777014886461-a-4",
+          "role": "assistant",
+          "content": "- 45 min from MG Road) Academic Facilities: - Air-conditioned smart classrooms with projectors and audio systems - Computer labs with 200+ systems, high-speed internet - Wi-Fi enabled campus (100 Mbps broadband) - Central Library: 40,000+ books, 100+ national/international journals, digital library, DELNET access, e-books and online databases - Seminar and conference halls (capacity 100\u2013500) - Open-air amphitheater for cultural events\n- AIMS Institutes Campus \u2014 Bangalore: Location: #1, Pipeline Road, Hesaraghatta Main Road, Bangalore \u2013 560090 (Well connected by public transport; approx.\n- Common room with TV and recreation - Medical room and emergency support Sports & Recreation: - Indoor sports: Table tennis, badminton, chess, carrom - Outdoor: Cricket ground, volleyball court, basketball court - Annual sports meet and inter-college tournaments Other: - ATM on campus - Cafeteria/canteen - Medical room with nurse on duty - Stationary and photocopy shop - Wheelchair-accessible infrastructure (ramps, lifts)\n- What Makes Our Campus Stand Out?",
+          "timestamp": "2026-04-24T07:15:10.776926+00:00",
+          "token_count": 263,
+          "confidence": 0.882,
+          "status": "lock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 1548,
+          "sources": [
+            {
+              "title": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            },
+            {
+              "title": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities"
+            }
+          ],
+          "suggestions": [
+            "What facilities are available on campus?",
+            "How far is the campus from the city?",
+            "What is the transportation facility?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:CAMPUS"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#0",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.9426,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#2",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.9349,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports#1",
+              "heading": "AIMS Campus Facilities \u2014 Hostel, Library, Labs, Sports",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.9306,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#2",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.8766,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/campus-facilities#Consulting Center Business School & Campus Facilities#0",
+              "heading": "Consulting Center Business School & Campus Facilities",
+              "url": "https://www.theaims.ac.in/campus-facilities",
+              "score": 0.862,
+              "course": null,
+              "topic": "campus"
+            }
+          ]
+        },
+        {
+          "id": "conv_1777014886461-u-5",
+          "role": "user",
+          "content": "Admission process",
+          "timestamp": "2026-04-24T07:46:38.297936+00:00",
+          "token_count": 4,
+          "original_query": "Admission process",
+          "corrected_query": "admission process"
+        },
+        {
+          "id": "conv_1777014886461-a-6",
+          "role": "assistant",
+          "content": "- CAT: 65 percentile or above - MAT / XAT / CMAT / ATMA: 70 percentile or above - PGCET (Karnataka): Valid state-level score accepted - Management Quota: Direct admission based on academic merit (limited seats) Application Process: 1.\n- No mandatory entrance exam; admission by merit and PI Application Steps: Step 1: Visit apply.theaims.ac.in and fill online form Step 2: Upload documents \u2014 mark sheets (10th, 12th, UG), entrance scorecard, ID proof (Aadhar), community certificate if applicable Step 3: Shortlisting notification (within 5\u20137 working days) Step 4: Personal Interview at AIMS campus (Bangalore) Step 5: Merit list and offer letter Step 6: Fee payment and enrollment confirmation Important Dates (Approximate, verify with admissions office): - Application opens: January\u2013February each year - MBA admission closes: June\u2013July - UG programs: May\u2013July\n- Submit entrance test scorecard and academic documents 3.\n- Shortlisting based on percentile/score 4.",
+          "timestamp": "2026-04-24T07:46:38.297936+00:00",
+          "token_count": 241,
+          "confidence": 0.884,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 1303,
+          "sources": [
+            {
+              "title": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            },
+            {
+              "title": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration"
+            }
+          ],
+          "suggestions": [
+            "What documents are required?",
+            "What is the eligibility criteria?",
+            "When is the application deadline?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#1",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.935,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#2",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.9236,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Program \u2014 Specializations, Eligibility, and Entrance Exams#2",
+              "heading": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.895,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Program \u2014 Specializations, Eligibility, and Entrance Exams#9",
+              "heading": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.8947,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#3",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.7139,
+              "course": "bba",
+              "topic": "admission"
+            }
+          ]
+        },
+        {
+          "id": "conv_1777014886461-u-7",
+          "role": "user",
+          "content": "Scholarship info",
+          "timestamp": "2026-04-24T07:46:43.989648+00:00",
+          "token_count": 4,
+          "original_query": "Scholarship info",
+          "corrected_query": "scholarship information"
+        },
+        {
+          "id": "conv_1777014886461-a-8",
+          "role": "assistant",
+          "content": "Which course would you like fees information for?",
+          "timestamp": "2026-04-24T07:46:43.989648+00:00",
+          "token_count": 12,
+          "confidence": 0.0,
+          "status": "unlock",
+          "intent": "clarification",
+          "fallback": true,
+          "response_time_ms": 13,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA hostel"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:FEES",
+            "<LOW_CONFIDENCE>"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "conv_1777014886461-u-9",
+          "role": "user",
+          "content": "Scholarship info",
+          "timestamp": "2026-04-24T07:46:48.668808+00:00",
+          "token_count": 4,
+          "original_query": "Scholarship info",
+          "corrected_query": "scholarship information"
+        },
+        {
+          "id": "conv_1777014886461-a-10",
+          "role": "assistant",
+          "content": "Which course would you like fees information for?",
+          "timestamp": "2026-04-24T07:46:48.668808+00:00",
+          "token_count": 12,
+          "confidence": 0.0,
+          "status": "unlock",
+          "intent": "clarification",
+          "fallback": true,
+          "response_time_ms": 8,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA hostel"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:FEES",
+            "<LOW_CONFIDENCE>"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "conv_1777014886461-u-11",
+          "role": "user",
+          "content": "Scholarship info",
+          "timestamp": "2026-04-24T07:46:49.017214+00:00",
+          "token_count": 4,
+          "original_query": "Scholarship info",
+          "corrected_query": "scholarship information"
+        },
+        {
+          "id": "conv_1777014886461-a-12",
+          "role": "assistant",
+          "content": "Which course would you like fees information for?",
+          "timestamp": "2026-04-24T07:46:49.017214+00:00",
+          "token_count": 12,
+          "confidence": 0.0,
+          "status": "unlock",
+          "intent": "clarification",
+          "fallback": true,
+          "response_time_ms": 16,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA hostel"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:FEES",
+            "<LOW_CONFIDENCE>"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "conv_1777014886461-u-13",
+          "role": "user",
+          "content": "Important dates",
+          "timestamp": "2026-04-24T07:46:51.585838+00:00",
+          "token_count": 3,
+          "original_query": "Important dates",
+          "corrected_query": "important dates"
+        },
+        {
+          "id": "conv_1777014886461-a-14",
+          "role": "assistant",
+          "content": "Could you share a little more detail so I can look up the right information?",
+          "timestamp": "2026-04-24T07:46:51.585838+00:00",
+          "token_count": 19,
+          "confidence": 0.0,
+          "status": "unlock",
+          "intent": "clarification",
+          "fallback": true,
+          "response_time_ms": 27,
+          "sources": [],
+          "suggestions": [
+            "MBA fees",
+            "BBA placements",
+            "MBA hostel"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION",
+            "<LOW_CONFIDENCE>"
+          ],
+          "retrieved_chunks": []
+        },
+        {
+          "id": "conv_1777014886461-u-15",
+          "role": "user",
+          "content": "tell me about aims institutes",
+          "timestamp": "2026-04-24T07:47:08.383441+00:00",
+          "token_count": 7,
+          "original_query": "tell me about aims institutes",
+          "corrected_query": "tell me about aims institutes"
+        },
+        {
+          "id": "conv_1777014886461-a-16",
+          "role": "assistant",
+          "content": "- At AIMS Institutes, Eligibility & Selection Graduate degree (10+2+3 or 10+2+4 pattern) with minimum 50% aggregate marks Valid scores in CAT, MAT, XAT or other recognised national-level entrance examinations Selection includes a detailed online application, AI-based behavioral interview, SWOC presentation, and final panel interview Eligibility & Selection Graduate degree (10+2+3 or 10+2+4 pattern) with minimum 50% aggregate marks Valid scores in CAT, MAT, XAT or other recognised national-level entrance examinations Selection includes a detailed online application, AI-based behavioral interview, SWOC presentation, and final panel interview AIMS MBA Placement Highlights About AIMS School of Business Established in 1998, the AIMS School of Business is part of AIMS Institutes, one of India's premier higher education institutions.\n- These terms apply to the entire website and any email or other type of communication between you and AIMS Institutes.\n- Updated in January 2023 By accessing and applying to AIMS Institutes, you confirm that you are in agreement with and bound by the terms of service contained in the Terms & Conditions outlined below.",
+          "timestamp": "2026-04-24T07:47:08.383441+00:00",
+          "token_count": 289,
+          "confidence": 0.731,
+          "status": "lock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 3467,
+          "sources": [
+            {
+              "title": "Untitled",
+              "url": "https://www.theaims.ac.in/mba-course-admissions"
+            },
+            {
+              "title": "Source",
+              "url": "https://www.theaims.ac.in/mba-course-admissions"
+            }
+          ],
+          "suggestions": [
+            "What documents are required?",
+            "What is the eligibility criteria?",
+            "When is the application deadline?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/mba-course-admissions#Untitled#22",
+              "heading": "Untitled",
+              "url": "https://www.theaims.ac.in/mba-course-admissions",
+              "score": 0.6792,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": 1987,
+              "heading": "",
+              "url": "https://www.theaims.ac.in/mba-course-admissions",
+              "score": 0.674,
+              "course": null,
+              "topic": "admission"
+            },
+            {
+              "doc_id": 1461,
+              "heading": "Terms & Conditions | Top B School in India",
+              "url": "https://www.theaims.ac.in/terms-conditions",
+              "score": 0.6677,
+              "course": null,
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school#All Programs Offered at AIMS Institutes#0",
+              "heading": "All Programs Offered at AIMS Institutes",
+              "url": "https://www.theaims.ac.in/business-school",
+              "score": 0.5238,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school#All Programs Offered at AIMS Institutes#1",
+              "heading": "All Programs Offered at AIMS Institutes",
+              "url": "https://www.theaims.ac.in/business-school",
+              "score": 0.5238,
+              "course": "mba",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 16,
+      "active_course": "General",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    },
+    "conv_1777016899869": {
+      "id": "conv_1777016899869",
+      "title": "tell me about aims institutes",
+      "user_email": "ankitha1771@gmail.com",
+      "user_name": "Ankitha.K",
+      "created_at": "2026-04-24T07:48:37.227145+00:00",
+      "updated_at": "2026-04-24T07:49:07.573721+00:00",
+      "messages": [
+        {
+          "id": "conv_1777016899869-u-1",
+          "role": "user",
+          "content": "tell me about aims institutes",
+          "timestamp": "2026-04-24T07:48:37.227145+00:00",
+          "token_count": 7,
+          "original_query": "tell me about aims institutes",
+          "corrected_query": "tell me about aims institutes"
+        },
+        {
+          "id": "conv_1777016899869-a-2",
+          "role": "assistant",
+          "content": "- About AIMS Institutes (Acharya Institute of Management Sciences): AIMS Institutes is a premier business and technology institution in Bangalore, Karnataka, India.\n- AIMS Institutes has an active and engaging MOU with Shimane University, Japan for student and faculty exchanges, and the agreement with Navis will provide further impetus to the ongoing efforts at AIMS institutes to provided international placement opportunities to students in addition to domestic.\n- Established in 1994, AIMS has 30+ years of academic excellence.\n- AIMS Institutes, represented by Dr.",
+          "timestamp": "2026-04-24T07:48:37.227145+00:00",
+          "token_count": 142,
+          "confidence": 0.665,
+          "status": "unlock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 3695,
+          "sources": [
+            {
+              "title": "AIMS Institutes \u2014 About, Contact, and Location",
+              "url": "https://www.theaims.ac.in/contact-us"
+            },
+            {
+              "title": "MoU Singed between AIMS Institutes and NAVIS in the presence of Consul General of Japan &#8211; Mr. Katsumasa Maruo.",
+              "url": "https://www.theaims.ac.in/news/mou-singed-between-aims-institutes-and-navis-in-the-presence-of-consul-general-of-japan-mr-katsumasa-maruo/"
+            }
+          ],
+          "suggestions": [
+            "Tell me about AIMS programs",
+            "What is the admission process?",
+            "Are scholarships available?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/contact-us#AIMS Institutes \u2014 About, Contact, and Location#0",
+              "heading": "AIMS Institutes \u2014 About, Contact, and Location",
+              "url": "https://www.theaims.ac.in/contact-us",
+              "score": 0.6673,
+              "course": null,
+              "topic": "campus"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/news/mou-singed-between-aims-institutes-and-navis-in-the-presence-of-consul-general-of-japan-mr-katsumasa-maruo/#MoU Singed between AIMS Institutes and NAVIS in the presence of Consul General of Japan &#8211; Mr. Katsumasa Maruo.#5",
+              "heading": "MoU Singed between AIMS Institutes and NAVIS in the presence of Consul General of Japan &#8211; Mr. Katsumasa Maruo.",
+              "url": "https://www.theaims.ac.in/news/mou-singed-between-aims-institutes-and-navis-in-the-presence-of-consul-general-of-japan-mr-katsumasa-maruo/",
+              "score": 0.5834,
+              "course": null,
+              "topic": null
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/events/2-day-global-immersion-conclave-gic-for-students-on-leadership-sustainability-internationalization-in-higher-education/#2-day Global Immersion Conclave (GIC) for Students on Leadership, Sustainability &#038; Internationalization in Higher Education#3",
+              "heading": "2-day Global Immersion Conclave (GIC) for Students on Leadership, Sustainability &#038; Internationalization in Higher Education",
+              "url": "https://www.theaims.ac.in/events/2-day-global-immersion-conclave-gic-for-students-on-leadership-sustainability-internationalization-in-higher-education/",
+              "score": 0.5791,
+              "course": null,
+              "topic": null
+            },
+            {
+              "doc_id": 1530,
+              "heading": "Top B School in India | Best Business School in Bangalore",
+              "url": "https://www.theaims.ac.in/aims-newsletters",
+              "score": 0.5738,
+              "course": null,
+              "topic": null
+            },
+            {
+              "doc_id": 1311,
+              "heading": "Colleges for Ph.D in Management, Commerce | Best Ph.D Bangalore",
+              "url": "https://www.theaims.ac.in/phd-doctoral-programs",
+              "score": 0.573,
+              "course": "phd",
+              "topic": null
+            }
+          ]
+        },
+        {
+          "id": "conv_1777016899869-u-3",
+          "role": "user",
+          "content": "i want to know about admission process",
+          "timestamp": "2026-04-24T07:49:07.573721+00:00",
+          "token_count": 9,
+          "original_query": "i want to know about admission process",
+          "corrected_query": "i want to know about admission process"
+        },
+        {
+          "id": "conv_1777016899869-a-4",
+          "role": "assistant",
+          "content": "- No mandatory entrance exam; admission by merit and PI Application Steps: Step 1: Visit apply.theaims.ac.in and fill online form Step 2: Upload documents \u2014 mark sheets (10th, 12th, UG), entrance scorecard, ID proof (Aadhar), community certificate if applicable Step 3: Shortlisting notification (within 5\u20137 working days) Step 4: Personal Interview at AIMS campus (Bangalore) Step 5: Merit list and offer letter Step 6: Fee payment and enrollment confirmation Important Dates (Approximate, verify with admissions office): - Application opens: January\u2013February each year - MBA admission closes: June\u2013July - UG programs: May\u2013July\n- CAT: 65 percentile or above - MAT / XAT / CMAT / ATMA: 70 percentile or above - PGCET (Karnataka): Valid state-level score accepted - Management Quota: Direct admission based on academic merit (limited seats) Application Process: 1.\n- Eligibility: - 10+2 (PUC / Class 12) from any recognized board - Any stream: Science, Commerce, or Arts - Minimum 45% aggregate marks (40% for reserved categories) - No entrance exam mandatory; admission based on merit and PI Admission Process: 1.\n- Submit entrance test scorecard and academic documents 3.",
+          "timestamp": "2026-04-24T07:49:07.573721+00:00",
+          "token_count": 292,
+          "confidence": 0.695,
+          "status": "lock",
+          "intent": "factual",
+          "fallback": false,
+          "response_time_ms": 2208,
+          "sources": [
+            {
+              "title": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone"
+            },
+            {
+              "title": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration"
+            }
+          ],
+          "suggestions": [
+            "What documents are required?",
+            "What is the eligibility criteria?",
+            "When is the application deadline?"
+          ],
+          "control_tokens": [
+            "INTENT:FACTUAL",
+            "TOPIC:ADMISSION"
+          ],
+          "retrieved_chunks": [
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#1",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.8395,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/student-information-zone#AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process#0",
+              "heading": "AIMS Admissions \u2014 Eligibility, Entrance Exams, and Process",
+              "url": "https://www.theaims.ac.in/student-information-zone",
+              "score": 0.83,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Program \u2014 Specializations, Eligibility, and Entrance Exams#2",
+              "heading": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.8085,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/master-business-administration#MBA Program \u2014 Specializations, Eligibility, and Entrance Exams#9",
+              "heading": "MBA Program \u2014 Specializations, Eligibility, and Entrance Exams",
+              "url": "https://www.theaims.ac.in/business-school/master-business-administration",
+              "score": 0.8085,
+              "course": "mba",
+              "topic": "admission"
+            },
+            {
+              "doc_id": "https://www.theaims.ac.in/business-school/bachelor-business-administration#BBA Program \u2014 Specializations and Eligibility#3",
+              "heading": "BBA Program \u2014 Specializations and Eligibility",
+              "url": "https://www.theaims.ac.in/business-school/bachelor-business-administration",
+              "score": 0.7121,
+              "course": "bba",
+              "topic": "admission"
+            }
+          ]
+        }
+      ],
+      "message_count": 4,
+      "active_course": "General",
+      "active_topic": "admission",
+      "last_intent": "factual"
+    }
+  }
+}

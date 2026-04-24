@@ -96,12 +96,12 @@ yarn-error.log*
 *.bak
 
 # FAISS Index & Vector Database
-/tmp/chatbot_faiss/
-*.faiss
-*.pkl
-faiss_index/
-index.faiss
-metadata.json
+# /tmp/chatbot_faiss/
+# *.faiss
+# *.pkl
+# faiss_index/
+# index.faiss
+# metadata.json
 
 # API Keys & Secrets
 OPENAI_API_KEY
@@ -114,13 +114,19 @@ DATABASE_PASSWORD
 secrets/
 credentials/
 
-# Next.js
+# Next.js Build Artifacts
 .next/
 /.next/
+.next-runtime/
+.next-web/
 out/
 /out/
 next-env.d.ts
 *.tsbuildinfo
+
+# Local Runtime & Scripts
+/runtime/
+/scripts/
 
 # Vercel
 .vercel

@@ -1,258 +1,209 @@
 """
-FAISS Vector Store for RAG Retrieval
-
-Manages vector index and document metadata for semantic search.
+FAISS vector store used by the production chat endpoint.
 """
 
-import logging
+from __future__ import annotations
+
 import json
+import logging
 import os
-from typing import List, Tuple, Dict, Any
-import numpy as np
+from typing import Any, Dict, List, Tuple
+
 import faiss
+import numpy as np
+
+from app.services.taxonomy import canonicalize_course, canonicalize_topic
 
 logger = logging.getLogger(__name__)
 
-# Persistent index directory
-INDEX_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "faiss_index")
+INDEX_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "data",
+    "faiss_index",
+)
 INDEX_FILE = os.path.join(INDEX_DIR, "index.faiss")
 METADATA_FILE = os.path.join(INDEX_DIR, "metadata.json")
 
 
 class FAISSIndex:
-    """FAISS vector index with metadata storage"""
-    
+    """FAISS index with metadata-aware retrieval helpers."""
+
     def __init__(self, dimension: int = 384):
-        """
-        Initialize FAISS index
-        
-        Args:
-            dimension: Embedding vector dimension
-        """
         self.dimension = dimension
-        # Inner-product index = cosine similarity on L2-normalized embeddings
-        # Sentence transformers output unit-norm vectors — IP == cosine here
         self.index = faiss.IndexFlatIP(dimension)
         self.metadata: List[Dict[str, Any]] = []
         self.doc_count = 0
-        
-        # Create index directory if needed
-        persist_dir = INDEX_DIR
-        os.makedirs(persist_dir, exist_ok=True)
-        
-        # Default paths
-        self.index_dir = persist_dir
-        self.index_file = os.path.join(persist_dir, "index.faiss")
-        self.metadata_file = os.path.join(persist_dir, "metadata.json")
-        
-        # Load existing index if available
+        os.makedirs(INDEX_DIR, exist_ok=True)
+        self.index_dir = INDEX_DIR
+        self.index_file = INDEX_FILE
+        self.metadata_file = METADATA_FILE
         self.load()
-    
-    def add_documents(self, texts: List[str], embeddings: np.ndarray, 
-                     urls: List[str] = None, headings: List[str] = None) -> None:
-        """
-        Add documents to index
-        
-        Args:
-            texts: Document text chunks
-            embeddings: Precomputed embeddings (n, 384)
-            urls: Source URLs
-            headings: Document headings/titles
-        """
+
+    def add_documents(
+        self,
+        texts: List[str],
+        embeddings: np.ndarray,
+        urls: List[str] | None = None,
+        headings: List[str] | None = None,
+    ) -> None:
         if len(texts) != len(embeddings):
-            raise ValueError("texts and embeddings must have same length")
-        
-        if urls is None:
-            urls = ["unknown"] * len(texts)
-        if headings is None:
-            headings = ["untitled"] * len(texts)
-        
-        # Normalize embeddings to unit length (required for cosine via IP)
-        embeddings_float32 = embeddings.astype(np.float32)
+            raise ValueError("texts and embeddings must have the same length")
+
+        urls = urls or ["unknown"] * len(texts)
+        headings = headings or ["untitled"] * len(texts)
+
+        embeddings_float32 = np.asarray(embeddings, dtype=np.float32)
         faiss.normalize_L2(embeddings_float32)
         self.index.add(embeddings_float32)
-        
-        # Store metadata
-        for i, (text, url, heading) in enumerate(zip(texts, urls, headings)):
-            self.metadata.append({
-                "id": self.doc_count + i,
-                "text": text[:500],  # Store first 500 chars for display
-                "url": url,
-                "heading": heading,
-                "full_text": text  # Store full for return
-            })
-        
+
+        for offset, (text, url, heading) in enumerate(zip(texts, urls, headings)):
+            self.metadata.append(
+                {
+                    "id": self.doc_count + offset,
+                    "text": text[:500],
+                    "full_text": text,
+                    "url": url,
+                    "heading": heading,
+                    "source": "web",
+                    "priority": 1.0,
+                    "importance": 1.0,
+                }
+            )
+
         self.doc_count += len(texts)
-        logger.info(f"Added {len(texts)} documents. Total: {self.doc_count}")
-    
-    def search(self, query_embedding: np.ndarray, k: int = 5) -> List[Tuple[str, float, str, str]]:
-        """
-        Search for similar documents
-        
-        Args:
-            query_embedding: Query embedding (384,)
-            k: Number of results to return
-            
-        Returns:
-            List of (text, score, url, heading)
-            Score is similarity (0-1, higher = more similar)
-        """
-        if self.doc_count == 0:
-            logger.warning("Search on empty index")
+        logger.info("Added %s documents to FAISS index", len(texts))
+
+    def search(self, query_embedding: np.ndarray, k: int = 5) -> List[Tuple]:
+        if self.doc_count == 0 and self.index.ntotal == 0:
+            logger.warning("Search requested on an empty FAISS index")
             return []
-        
-        # Normalize query for cosine similarity
-        query_embedding = query_embedding.astype(np.float32).reshape(1, -1)
-        faiss.normalize_L2(query_embedding)
-        
-        # Search
-        distances, indices = self.index.search(query_embedding, min(k, self.doc_count))
-        
-        logger.debug(f"FAISS returned {len(indices[0])} results. Metadata has {len(self.metadata)} entries.")
-        
-        results = []
+
+        query_embedding = np.asarray(query_embedding, dtype=np.float32).reshape(1, -1)
+        metric_type = getattr(self.index, "metric_type", faiss.METRIC_INNER_PRODUCT)
+        if metric_type == faiss.METRIC_INNER_PRODUCT:
+            faiss.normalize_L2(query_embedding)
+
+        distances, indices = self.index.search(query_embedding, min(k, self.index.ntotal))
+        results: List[Tuple] = []
+
         for dist, idx in zip(distances[0], indices[0]):
-            if idx < 0:  # Invalid result
+            if idx < 0 or idx >= len(self.metadata):
                 continue
-            
-            # CRITICAL: Check bounds to prevent KeyError
-            if idx >= len(self.metadata):
-                logger.error(
-                    f"Index mismatch: FAISS returned idx={idx} "
-                    f"but metadata only has {len(self.metadata)} entries. "
-                    f"FAISS index has {self.index.ntotal} vectors. "
-                    f"This indicates index corruption - skipping this result."
-                )
-                continue
-            
+
             meta = self.metadata[idx]
-            
-            # Handle both metadata formats
-            # FAISSIndex format: {full_text, url, heading, id}
-            # FAISSIndexBuilder format: {text, url, heading, chunk_index, tokens}
             full_text = meta.get("full_text") or meta.get("text", "")
-            
-            if not full_text:
-                logger.warning(f"No text found in metadata for idx={idx}")
-                continue
-            
-            # IP score is in [-1, 1] for normalized vectors (cosine similarity)
-            # Map to [0, 1]: (score + 1) / 2
-            similarity = float((dist + 1.0) / 2.0)
-            
-            results.append((
-                full_text,
-                float(similarity),
-                meta.get("url", ""),
-                meta.get("heading", ""),
-                meta.get("id") or meta.get("index_position") or idx,  # Document ID
-                meta.get("source", "web"),      # ← official vs web
-                meta.get("priority", 1),         # ← 2 = official, 1 = scraped
-            ))
-        
-        logger.debug(f"Search returned {len(results)} valid results")
+            heading = meta.get("heading", "")
+            url = meta.get("url", "")
+
+            if metric_type == faiss.METRIC_INNER_PRODUCT:
+                similarity = max(0.0, min((float(dist) + 1.0) / 2.0, 1.0))
+            else:
+                similarity = 1.0 / (1.0 + max(float(dist), 0.0))
+
+            course = (
+                canonicalize_course(str(meta.get("course", "")))
+                or canonicalize_course(heading)
+                or canonicalize_course(full_text[:160])
+            )
+            topic = (
+                canonicalize_topic(str(meta.get("category", "")))
+                or canonicalize_topic(heading)
+                or canonicalize_topic(full_text[:160])
+            )
+
+            results.append(
+                (
+                    full_text,
+                    round(similarity, 4),
+                    url,
+                    heading,
+                    meta.get("doc_id") or meta.get("id") or meta.get("index_position") or idx,
+                    meta.get("source", "web"),
+                    float(meta.get("priority", 1.0)),
+                    course,
+                    topic,
+                    float(meta.get("importance", meta.get("priority", 1.0))),
+                )
+            )
+
         return results
-    
+
     def save(self) -> None:
-        """Persist index to disk"""
         try:
             faiss.write_index(self.index, self.index_file)
-            with open(self.metadata_file, "w") as f:
-                json.dump(self.metadata, f)
-            logger.info(f"✅ Index saved ({self.doc_count} documents)")
-        except Exception as e:
-            logger.error(f"Failed to save index: {e}")
-    
+            with open(self.metadata_file, "w", encoding="utf-8") as handle:
+                json.dump(self.metadata, handle, indent=2)
+            logger.info("Saved FAISS index with %s documents", self.doc_count)
+        except Exception as exc:
+            logger.error("Failed to save FAISS index: %s", exc)
+
     def load(self) -> None:
-        """Load index from disk if exists"""
         try:
-            if os.path.exists(self.index_file):
-                self.index = faiss.read_index(self.index_file)
-                
-                # Load metadata with format detection
-                with open(self.metadata_file, "r") as f:
-                    data = json.load(f)
-                
-                # Handle two formats:
-                # 1. List format from FAISSIndex: [{id, text, url, heading, full_text}, ...]
-                # 2. Dict format from FAISSIndexBuilder: {metadata: [...], doc_id_map: {...}, ...}
-                if isinstance(data, list):
-                    # Direct list format
-                    self.metadata = data
-                elif isinstance(data, dict) and 'metadata' in data:
-                    # FAISSIndexBuilder format
-                    self.metadata = data['metadata']
-                    logger.info(f"Converted from FAISSIndexBuilder format")
-                else:
-                    logger.error(f"Unknown metadata format: {type(data)}")
-                    self.metadata = []
-                
-                self.doc_count = len(self.metadata)
-                faiss_size = self.index.ntotal
-                
-                if faiss_size != self.doc_count:
-                    logger.error(
-                        f"⚠️ Index/Metadata mismatch on load:\n"
-                        f"  FAISS vectors: {faiss_size}\n"
-                        f"  Metadata entries: {self.doc_count}\n"
-                        f"  This might cause search errors"
-                    )
-                
-                logger.info(f"✅ Loaded existing index ({self.doc_count} documents)")
+            if not os.path.exists(self.index_file):
+                logger.info("No existing FAISS index found, starting fresh")
+                return
+
+            self.index = faiss.read_index(self.index_file)
+            with open(self.metadata_file, "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+
+            if isinstance(data, list):
+                self.metadata = data
+            elif isinstance(data, dict) and "metadata" in data:
+                self.metadata = data["metadata"]
+                self.dimension = data.get("dimension", self.dimension)
             else:
-                logger.info("No existing index found, starting fresh")
-        except Exception as e:
-            logger.warning(f"Could not load index: {e}, starting fresh")
+                raise ValueError(f"Unsupported metadata format: {type(data)}")
+
+            self.doc_count = len(self.metadata)
+            logger.info(
+                "Loaded FAISS index (%s documents, metric=%s)",
+                self.doc_count,
+                getattr(self.index, "metric_type", "unknown"),
+            )
+        except Exception as exc:
+            logger.warning("Could not load FAISS index: %s", exc)
             self.metadata = []
             self.doc_count = 0
-    
-    def get_stats(self) -> Dict[str, int]:
-        """Get index statistics"""
+
+    def get_stats(self) -> Dict[str, Any]:
         return {
             "document_count": self.doc_count,
             "index_size": self.index.ntotal,
-            "dimension": self.dimension,
+            "dimension": self.index.d,
             "metadata_count": len(self.metadata),
-            "synced": self.doc_count == self.index.ntotal == len(self.metadata)
+            "metric_type": getattr(self.index, "metric_type", "unknown"),
+            "synced": self.doc_count == self.index.ntotal == len(self.metadata),
         }
-    
+
     def validate_integrity(self) -> bool:
-        """
-        Check if index and metadata are in sync
-        
-        Returns:
-            True if valid, False if corrupted
-        """
         faiss_size = self.index.ntotal
         metadata_size = len(self.metadata)
-        
+
         if faiss_size != metadata_size:
             logger.error(
-                f"❌ INDEX CORRUPTION DETECTED:\n"
-                f"  FAISS vectors: {faiss_size}\n"
-                f"  Metadata entries: {metadata_size}\n"
-                f"  Synced: {faiss_size == metadata_size}"
+                "FAISS integrity mismatch: vectors=%s metadata=%s",
+                faiss_size,
+                metadata_size,
             )
             return False
-        
+
         if faiss_size != self.doc_count:
             logger.error(
-                f"❌ DOC COUNT MISMATCH:\n"
-                f"  FAISS vectors: {faiss_size}\n"
-                f"  doc_count: {self.doc_count}"
+                "FAISS document count mismatch: vectors=%s doc_count=%s",
+                faiss_size,
+                self.doc_count,
             )
             return False
-        
-        logger.info(f"✅ Index integrity OK ({self.doc_count} documents)")
+
         return True
 
 
-# Global instance
-_index: FAISSIndex = None
+_index: FAISSIndex | None = None
 
 
 def get_index() -> FAISSIndex:
-    """Get or create global FAISS index"""
+    """Return the shared FAISS index instance."""
     global _index
     if _index is None:
         _index = FAISSIndex(dimension=384)

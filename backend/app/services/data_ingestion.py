@@ -6,7 +6,7 @@ Coordinates: scrape -> chunk -> embed -> store -> index
 
 import logging
 from typing import List, Tuple
-from app.services.scraper.college_scraper import AIMSWebScraper
+from app.services.scraper.playwright_scraper import scrape_aims_website_enhanced
 from app.services.embeddings.embedding_service import embed_batch
 from app.services.retrieval.faiss_index import get_index
 
@@ -15,29 +15,34 @@ logger = logging.getLogger(__name__)
 
 def ingest_college_data() -> dict:
     """
-    Full ingestion pipeline: scrape AIMS website, chunk, embed, index
+    Full ingestion pipeline: scrape AIMS website (Playwright), chunk, embed, index
     
     Returns:
         Stats dict with counts
     """
-    logger.info("🔄 Starting data ingestion pipeline...")
+    logger.info("🔄 Starting enhanced data ingestion pipeline...")
     
     # 1. Scrape
-    scraper = AIMSWebScraper()
-    pages = scraper.scrape_all()
+    docs = scrape_aims_website_enhanced()
     
-    if not pages:
-        logger.warning("No pages scraped")
-        return {"status": "failed", "message": "No pages scraped"}
+    if not docs:
+        logger.warning("No documents scraped")
+        return {"status": "failed", "message": "No documents scraped"}
     
-    logger.info(f"✅ Scraped {len(pages)} pages")
+    logger.info(f"✅ Scraped {len(docs)} documents")
     
     # 2. Chunk
     chunks = []
     chunk_metadata = []  # (text, url, heading)
     
-    for url, title, content in pages:
-        page_chunks = AIMSWebScraper.chunk_text(content, chunk_size=500, overlap=50)
+    from app.services.scraper.college_scraper import AIMSWebScraper
+    
+    for doc in docs:
+        url = doc.get("url", "")
+        title = doc.get("title", "")
+        content = doc.get("content", "")
+        
+        page_chunks = AIMSWebScraper.chunk_text(content, chunk_size=600, overlap=60)
         for chunk in page_chunks:
             chunks.append(chunk)
             chunk_metadata.append((chunk, url, title))
@@ -63,7 +68,7 @@ def ingest_college_data() -> dict:
     
     return {
         "status": "success",
-        "pages_scraped": len(pages),
+        "docs_scraped": len(docs),
         "chunks_created": len(chunks),
         "embeddings_generated": len(embeddings),
         "index_stats": stats

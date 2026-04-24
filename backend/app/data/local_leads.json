@@ -1,0 +1,30 @@
+{
+  "leads": [
+    {
+      "id": "51754959-f2a8-4619-be45-349fb96e2b9e",
+      "name": "Test User",
+      "email": "test.user@example.com",
+      "phone": "9876543210",
+      "interest": "MBA",
+      "source": "chatbot",
+      "lead_score": 0.5,
+      "status": "new",
+      "storage": "local",
+      "created_at": "2026-04-24T01:53:25.169783+00:00",
+      "updated_at": "2026-04-24T01:53:25.169783+00:00"
+    },
+    {
+      "id": "74f33080-00a4-4e59-b75e-172df1bdace4",
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "phone": "N/A",
+      "interest": "MBA",
+      "source": "chatbot_gated",
+      "lead_score": 0.5,
+      "status": "new",
+      "storage": "local",
+      "created_at": "2026-04-24T06:38:07.254432+00:00",
+      "updated_at": "2026-04-24T06:38:07.254432+00:00"
+    }
+  ]
+}

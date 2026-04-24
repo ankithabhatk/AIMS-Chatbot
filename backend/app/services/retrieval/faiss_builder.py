@@ -1,181 +1,146 @@
 """
-Enhanced FAISS Index Builder with Metadata
-
-Builds and maintains FAISS vector index with:
-- Document ID tracking
-- Metadata storage (URL, heading, chunk_index)
-- Persistence to disk
-- Batch operations
+FAISS builder that persists cosine-compatible indexes and rich metadata.
 """
 
-import logging
+from __future__ import annotations
+
 import json
+import logging
 import os
-from typing import List, Dict, Tuple, Optional
-import numpy as np
+from typing import Dict, List, Optional
+
 import faiss
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 class FAISSIndexBuilder:
-    """Build and manage FAISS index with metadata"""
-    
-    def __init__(self, index_path: str = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index", dimension: int = 384):
-        """
-        Initialize index builder
-        
-        Args:
-            index_path: Path to store index files
-            dimension: Embedding dimension (384 for all-MiniLM-L6-v2)
-        """
+    """Build and load a cosine-similarity FAISS index."""
+
+    def __init__(self, index_path: Optional[str] = None, dimension: int = 384):
+        if index_path is None:
+            index_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                "data",
+                "faiss_index",
+            )
+
         self.index_path = index_path
         self.dimension = dimension
         self.index = None
-        self.metadata = []  # [{doc_id, url, heading, chunk_index}, ...]
-        self.doc_id_map = {}  # {document_uuid -> index_position}
-        
+        self.metadata: List[Dict] = []
+        self.doc_id_map: Dict[str, int] = {}
         os.makedirs(index_path, exist_ok=True)
-    
-    def create_index(self) -> faiss.IndexFlatL2:
-        """Create new FAISS index (L2 distance)"""
-        logger.info(f"Creating new FAISS index (dimension={self.dimension})")
-        return faiss.IndexFlatL2(self.dimension)
-    
-    def add_embeddings(
-        self,
-        embeddings: np.ndarray,
-        metadata: List[Dict],
-        doc_ids: List[str]
-    ) -> None:
-        """
-        Add embeddings and metadata to index
-        
-        Args:
-            embeddings: (N, 384) array of embeddings
-            metadata: List of {url, heading, chunk_index, tokens}
-            doc_ids: List of document UUIDs (same length as embeddings)
-        """
+
+    def create_index(self) -> faiss.IndexFlatIP:
+        logger.info("Creating FAISS cosine index (dimension=%s)", self.dimension)
+        return faiss.IndexFlatIP(self.dimension)
+
+    def add_embeddings(self, embeddings: np.ndarray, metadata: List[Dict], doc_ids: List[str]) -> None:
         if self.index is None:
             self.index = self.create_index()
-        
-        # Ensure embeddings are float32
-        embeddings = np.array(embeddings, dtype=np.float32)
-        
+
+        embeddings = np.asarray(embeddings, dtype=np.float32)
+        if embeddings.ndim != 2:
+            raise ValueError("Embeddings must be a 2D array")
+
         if embeddings.shape[1] != self.dimension:
             raise ValueError(
                 f"Embedding dimension mismatch: {embeddings.shape[1]} vs {self.dimension}"
             )
-        
-        # Add to FAISS
+
+        faiss.normalize_L2(embeddings)
         start_idx = self.index.ntotal
         self.index.add(embeddings)
-        
-        # Track metadata
-        for i, (doc_id, meta) in enumerate(zip(doc_ids, metadata)):
-            idx = start_idx + i
+
+        for offset, (doc_id, meta) in enumerate(zip(doc_ids, metadata)):
+            idx = start_idx + offset
             self.doc_id_map[doc_id] = idx
-            self.metadata.append({
-                'index_position': idx,
-                'doc_id': doc_id,
-                **meta
-            })
-        
-        logger.info(f"Added {len(embeddings)} embeddings to index (total: {self.index.ntotal})")
-    
-    def search(
-        self,
-        query_embedding: np.ndarray,
-        k: int = 5
-    ) -> List[Dict]:
-        """
-        Search index
-        
-        Args:
-            query_embedding: (384,) embedding array
-            k: Number of results to return
-        
-        Returns:
-            List of {distance, content, url, heading, chunk_index, score}
-        """
+            self.metadata.append(
+                {
+                    "index_position": idx,
+                    "doc_id": doc_id,
+                    **meta,
+                }
+            )
+
+        logger.info("Added %s embeddings to index (total=%s)", len(embeddings), self.index.ntotal)
+
+    def search(self, query_embedding: np.ndarray, k: int = 5) -> List[Dict]:
         if self.index is None or self.index.ntotal == 0:
             return []
-        
-        query_embedding = np.array([query_embedding], dtype=np.float32)
+
+        query_embedding = np.asarray(query_embedding, dtype=np.float32).reshape(1, -1)
+        faiss.normalize_L2(query_embedding)
         distances, indices = self.index.search(query_embedding, min(k, self.index.ntotal))
-        
-        results = []
+
+        results: List[Dict] = []
         for dist, idx in zip(distances[0], indices[0]):
             if idx < 0 or idx >= len(self.metadata):
                 continue
-            
+
             meta = self.metadata[idx]
-            
-            # Convert L2 distance to similarity score (0-1)
-            # L2 distance in range [0, ∞], convert to [1, 0] similarity
-            similarity = 1 / (1 + dist)  # Sigmoid-like conversion
-            
-            results.append({
-                'distance': float(dist),
-                'similarity_score': float(similarity),
-                'url': meta.get('url', ''),
-                'heading': meta.get('heading', ''),
-                'chunk_index': meta.get('chunk_index', 0),
-                'tokens': meta.get('tokens', 0),
-                'index_position': idx
-            })
-        
+            similarity = max(0.0, min((float(dist) + 1.0) / 2.0, 1.0))
+            results.append(
+                {
+                    "distance": float(dist),
+                    "similarity_score": similarity,
+                    "url": meta.get("url", ""),
+                    "heading": meta.get("heading", ""),
+                    "chunk_index": meta.get("chunk_index", 0),
+                    "tokens": meta.get("tokens", 0),
+                    "index_position": idx,
+                    "doc_id": meta.get("doc_id"),
+                }
+            )
+
         return results
-    
+
     def save(self) -> None:
-        """Save index to disk"""
         if self.index is None:
-            logger.warning("No index to save")
+            logger.warning("No FAISS index to save")
             return
-        
+
         index_file = os.path.join(self.index_path, "index.faiss")
         metadata_file = os.path.join(self.index_path, "metadata.json")
-        
-        # Save FAISS index
+
         faiss.write_index(self.index, index_file)
-        logger.info(f"Saved FAISS index to {index_file}")
-        
-        # Save metadata
-        with open(metadata_file, 'w') as f:
-            json.dump({
-                'metadata': self.metadata,
-                'doc_id_map': self.doc_id_map,
-                'dimension': self.dimension,
-                'total_vectors': self.index.ntotal
-            }, f, indent=2)
-        logger.info(f"Saved metadata to {metadata_file}")
-    
+        with open(metadata_file, "w", encoding="utf-8") as handle:
+            json.dump(
+                {
+                    "metadata": self.metadata,
+                    "doc_id_map": self.doc_id_map,
+                    "dimension": self.dimension,
+                    "metric": "cosine_ip",
+                    "total_vectors": self.index.ntotal,
+                },
+                handle,
+                indent=2,
+            )
+
+        logger.info("Saved FAISS index to %s", index_file)
+
     def load(self) -> bool:
-        """Load index from disk"""
         index_file = os.path.join(self.index_path, "index.faiss")
         metadata_file = os.path.join(self.index_path, "metadata.json")
-        
+
         if not os.path.exists(index_file) or not os.path.exists(metadata_file):
-            logger.warning(f"Index files not found at {self.index_path}")
+            logger.warning("Index files not found at %s", self.index_path)
             return False
-        
+
         try:
-            # Load FAISS index
             self.index = faiss.read_index(index_file)
-            logger.info(f"Loaded FAISS index from {index_file}")
-            
-            # Load metadata
-            with open(metadata_file, 'r') as f:
-                data = json.load(f)
-                self.metadata = data['metadata']
-                self.doc_id_map = data['doc_id_map']
-                self.dimension = data['dimension']
-            
-            logger.info(f"Loaded metadata: {len(self.metadata)} documents")
+            with open(metadata_file, "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+
+            self.metadata = data["metadata"]
+            self.doc_id_map = data.get("doc_id_map", {})
+            self.dimension = data.get("dimension", self.dimension)
+            logger.info("Loaded FAISS index: %s vectors", self.index.ntotal)
             return True
-        
-        except Exception as e:
-            logger.error(f"Failed to load index: {e}")
+        except Exception as exc:
+            logger.error("Failed to load FAISS index: %s", exc)
             return False
 
 
@@ -183,22 +148,10 @@ def build_faiss_index_from_embeddings(
     embeddings: List[List[float]],
     documents: List[Dict],
     doc_ids: List[str],
-    index_path: str = "/Users/maneeth/Desktop/Chat-Bot/backend/app/data/faiss_index"
+    index_path: Optional[str] = None,
 ) -> FAISSIndexBuilder:
-    """
-    Build FAISS index from embeddings
-    
-    Args:
-        embeddings: List of embedding vectors
-        documents: List of {url, heading, chunk_index, tokens}
-        doc_ids: List of document IDs
-        index_path: Where to save index
-    
-    Returns:
-        FAISSIndexBuilder instance
-    """
-    builder = FAISSIndexBuilder(index_path=index_path)
-    embeddings_array = np.array(embeddings, dtype=np.float32)
+    builder = FAISSIndexBuilder(index_path=index_path, dimension=len(embeddings[0]) if embeddings else 384)
+    embeddings_array = np.asarray(embeddings, dtype=np.float32)
     builder.add_embeddings(embeddings_array, documents, doc_ids)
     builder.save()
     return builder

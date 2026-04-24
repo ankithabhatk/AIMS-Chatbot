@@ -6,67 +6,34 @@ Replaces the requests-based scraper for all high-value pages.
 
 import logging
 import time
-from typing import List, Dict
+import os
+import io
+import requests
+from typing import List, Dict, Optional
 from urllib.parse import urljoin, urlparse
+from pypdf import PdfReader
 
 logger = logging.getLogger(__name__)
 
-# The complete list of AIMS pages discovered via crawl
-AIMS_SEED_URLS = [
-    # Core / Brand
-    "https://www.theaims.ac.in/",
-    "https://www.theaims.ac.in/business-school",
+# We will load the seed URLs dynamically from a data file if available
+def load_urls_from_file() -> List[str]:
+    urls_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "urls.txt")
+    if os.path.exists(urls_path):
+        try:
+            with open(urls_path, 'r', encoding='utf-8') as f:
+                return [line.strip() for line in f if line.strip().startswith('http')]
+        except Exception as e:
+            logger.error(f"Error reading URLs file: {e}")
+    
+    # Fallback to a minimal list if file is missing
+    return [
+        "https://www.theaims.ac.in/",
+        "https://www.theaims.ac.in/placement",
+        "https://www.theaims.ac.in/business-school/master-business-administration",
+        "https://www.theaims.ac.in/admission-process"
+    ]
 
-    # Programs
-    "https://www.theaims.ac.in/business-school/master-business-administration",
-    "https://www.theaims.ac.in/business-school/bachelor-business-administration",
-    "https://www.theaims.ac.in/business-school/bachelor-business-administration-aviation-management",
-    "https://www.theaims.ac.in/phd-doctoral-programs",
-
-    # Placements (HIGH VALUE)
-    "https://www.theaims.ac.in/placement",
-
-    # Admissions
-    "https://www.theaims.ac.in/student-information-zone",
-    "https://www.theaims.ac.in/scholarships",
-    "https://www.theaims.ac.in/enquiry-now",
-
-    # Campus
-    "https://www.theaims.ac.in/campus-facilities",
-    "https://www.theaims.ac.in/aims-alumni-association",
-
-    # Faculty & Academics
-    "https://www.theaims.ac.in/aims-list-of-faculty",
-    "https://www.theaims.ac.in/aims-academic-calendar",
-    "https://www.theaims.ac.in/aims-journal-of-research",
-    "https://www.theaims.ac.in/articles-publications",
-
-    # Rankings & Accreditations
-    "https://www.theaims.ac.in/naac-accreditation",
-    "https://www.theaims.ac.in/iacbe-accreditation",
-    "https://www.theaims.ac.in/nirf-ranking",
-    "https://www.theaims.ac.in/aicte-aims",
-
-    # Info & Support
-    "https://www.theaims.ac.in/faqs",
-    "https://www.theaims.ac.in/contact-us",
-    "https://www.theaims.ac.in/grievance-redressal",
-    "https://www.theaims.ac.in/student-university-rank-holders",
-
-    # Community & Activities
-    "https://www.theaims.ac.in/rotaract-club",
-    "https://www.theaims.ac.in/news",
-    "https://www.theaims.ac.in/events",
-    "https://www.theaims.ac.in/blogs",
-    "https://www.theaims.ac.in/gallery",
-    "https://www.theaims.ac.in/patents",
-    "https://www.theaims.ac.in/iqac-internal-quality-assurance-cell",
-    "https://www.theaims.ac.in/cells-committees-antiragging-sexual-harassment-grievances-equal-opportunity",
-    "https://www.theaims.ac.in/code-of-conduct-ethics",
-    "https://www.theaims.ac.in/aims-newsletters",
-    "https://www.theaims.ac.in/environment-sustainability-policy-report",
-    "https://www.theaims.ac.in/aims-alumni-association",
-]
+AIMS_SEED_URLS = load_urls_from_file()
 
 # Extra known factual data to inject directly (verified from site/prior scrapes)
 # This ensures key facts are ALWAYS in the index regardless of JS rendering
@@ -224,6 +191,43 @@ STATIC_KNOWLEDGE = [
 ]
 
 
+def scrape_pdf(url: str) -> Optional[Dict]:
+    """Download and extract text from a PDF document"""
+    try:
+        logger.info(f"  [pdf] Scraping: {url}")
+        response = requests.get(url, timeout=30)
+        if response.status_code != 200:
+            logger.warning(f"    ✗ Failed to download PDF: {url} (Status: {response.status_code})")
+            return None
+        
+        with io.BytesIO(response.content) as f:
+            reader = PdfReader(f)
+            text_parts = []
+            for page in reader.pages:
+                text_parts.append(page.extract_text())
+            
+            content = " ".join(text_parts).strip()
+            
+            if len(content) > 100:
+                # Use filename as title if possible
+                filename = os.path.basename(urlparse(url).path)
+                title = filename.replace('-', ' ').replace('_', ' ').replace('.pdf', '').title()
+                
+                return {
+                    "title": f"Document: {title}",
+                    "content": content,
+                    "url": url,
+                    "type": "document"
+                }
+            else:
+                logger.warning(f"    ✗ PDF content too short or empty: {url}")
+                return None
+                
+    except Exception as e:
+        logger.error(f"    ✗ Error scraping PDF {url}: {e}")
+        return None
+
+
 def scrape_with_playwright() -> List[Dict]:
     """Scrape AIMS website using Playwright for JS-rendered content"""
     try:
@@ -246,10 +250,17 @@ def scrape_with_playwright() -> List[Dict]:
 
         for url in AIMS_SEED_URLS:
             try:
+                # Handle PDFs separately
+                if url.lower().endswith('.pdf'):
+                    pdf_result = scrape_pdf(url)
+                    if pdf_result:
+                        results.append(pdf_result)
+                    continue
+
                 logger.info(f"  [playwright] Scraping: {url}")
-                page.goto(url, wait_until="domcontentloaded", timeout=15000)
-                # Wait for Next.js to render content
-                page.wait_for_timeout(3000)
+                page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                # Wait for Next.js to render content (reduced for speed on large crawls)
+                page.wait_for_timeout(2000)
 
                 # Extract all meaningful text
                 text = page.evaluate("""() => {

@@ -12,22 +12,34 @@ import logging
 from typing import List, Tuple
 import re
 
+from app.config import get_settings
+
 logger = logging.getLogger(__name__)
 
 
 class AnswerGenerator:
     """Generate coherent answers from multiple retrieved chunks"""
     
-    def __init__(self, max_answer_length: int = 1200, min_sentence_length: int = 20):
+    def __init__(
+        self,
+        max_answer_length: int = 1400,
+        min_sentence_length: int = 20,
+        max_answer_tokens: int = 320,
+        max_context_tokens: int = 900,
+    ):
         """
         Initialize answer generator
         
         Args:
-            max_answer_length: Maximum answer length in characters (increased to 800)
-            min_sentence_length: Minimum sentence length (reduced to 20 to capture stats)
+            max_answer_length: Maximum answer length in characters
+            min_sentence_length: Minimum sentence length
+            max_answer_tokens: Final response token budget
+            max_context_tokens: Max retrieved context consumed by synthesis
         """
         self.max_answer_length = max_answer_length
         self.min_sentence_length = min_sentence_length
+        self.max_answer_tokens = max_answer_tokens
+        self.max_context_tokens = max_context_tokens
     
     def synthesize(self, query: str, chunks: List[Tuple[str, float, str, str]]) -> str:
         """
@@ -42,6 +54,8 @@ class AnswerGenerator:
         """
         if not chunks:
             return ""
+
+        chunks = self._limit_context(chunks)
         
         # Step 1: Extract sentences from all chunks
         all_sentences = self._extract_sentences(chunks)
@@ -219,6 +233,7 @@ class AnswerGenerator:
         
         answer_parts = []
         current_length = 0
+        current_tokens = 0
         
         logger.debug(f"Building structured answer from {len(ranked_sentences)} sentences")
         
@@ -231,13 +246,17 @@ class AnswerGenerator:
                 bullet_sent = f"• {stripped}"
             
             sent_length = len(bullet_sent) + 1  # +1 for newline
+            sent_tokens = self._estimate_tokens(bullet_sent)
             
             # Stop if answer would exceed max length
             if current_length + sent_length > self.max_answer_length:
                 break
+            if current_tokens + sent_tokens > self.max_answer_tokens:
+                break
             
             answer_parts.append(bullet_sent)
             current_length += sent_length
+            current_tokens += sent_tokens
         
         if not answer_parts:
             # Fallback: use raw first chunk content — always better than empty
@@ -324,6 +343,7 @@ class AnswerGenerator:
         
         answer_parts = []
         current_length = 0
+        current_tokens = 0
         
         for sent in sentences:
             sent = sent.strip()
@@ -331,11 +351,15 @@ class AnswerGenerator:
                 continue
             
             sent_length = len(sent) + 1
+            sent_tokens = self._estimate_tokens(sent)
             if current_length + sent_length > self.max_answer_length:
+                break
+            if current_tokens + sent_tokens > self.max_answer_tokens:
                 break
             
             answer_parts.append(sent)
             current_length += sent_length
+            current_tokens += sent_tokens
         
         answer = " ".join(answer_parts)
         
@@ -343,6 +367,22 @@ class AnswerGenerator:
             answer += "."
         
         return answer
+
+    def _limit_context(self, chunks: List[Tuple[str, float, str, str]]) -> List[Tuple[str, float, str, str]]:
+        """Trim retrieved context to a bounded token budget."""
+        selected = []
+        token_total = 0
+        for chunk in chunks:
+            text = chunk[0] if chunk else ""
+            tokens = self._estimate_tokens(text)
+            if selected and token_total + tokens > self.max_context_tokens:
+                break
+            selected.append(chunk)
+            token_total += tokens
+        return selected or chunks[:1]
+
+    def _estimate_tokens(self, text: str) -> int:
+        return max(len((text or "").split()), len((text or "")) // 4)
 
 
 # Global instance
@@ -353,5 +393,10 @@ def get_answer_generator() -> AnswerGenerator:
     """Get or create answer generator"""
     global _generator
     if _generator is None:
-        _generator = AnswerGenerator()
+        settings = get_settings()
+        _generator = AnswerGenerator(
+            max_answer_length=1400,
+            max_answer_tokens=getattr(settings, "answer_token_limit", 320),
+            max_context_tokens=getattr(settings, "context_token_limit", 900),
+        )
     return _generator

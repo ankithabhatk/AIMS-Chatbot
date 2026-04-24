@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
   
   /* Logo Derived Palette */
   --aims-magenta: #931E6F;
@@ -431,6 +429,20 @@ body {
   background-color: var(--sidebar-bg);
   color: var(--text-muted);
   border: 1px solid var(--border-light);
+}
+
+.bot-avatar-empty {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aims-magenta) 0%, var(--aims-orange) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(147, 30, 111, 0.2);
+  color: white !important;
 }
 
 .user-avatar {

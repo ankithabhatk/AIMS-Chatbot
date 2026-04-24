@@ -15,7 +15,7 @@ from typing import List, Dict, Tuple
 from datetime import datetime
 
 # Add parent to path
-sys.path.insert(0, '/Users/maneeth/Desktop/Chat-Bot/backend')
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.services.scraper.web_scraper import WebScraper
 from app.services.scraper.playwright_scraper import scrape_aims_website_enhanced
@@ -23,7 +23,11 @@ from app.services.data_cleaning import TextCleaner, SmartChunker, chunk_document
 from app.services.embeddings.embed_pipeline import EmbeddingPipeline
 from app.services.retrieval.faiss_builder import build_faiss_index_from_embeddings
 from app.services.improved_content_filter import ImprovedContentFilter
-from app.services.database.supabase_vector_store import SupabaseVectorStore
+
+try:
+    from app.services.database.supabase_vector_store import SupabaseVectorStore
+except ImportError:
+    SupabaseVectorStore = None
 
 # Configure logging
 logging.basicConfig(

@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
 import { MessageBubble } from './MessageBubble';
+import { RobotAvatar } from './RobotAvatar';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { WelcomeMessage } from './WelcomeMessage';
@@ -62,7 +63,9 @@ export const ChatWindow: React.FC = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
-                  <div className="message-avatar bot-avatar">AI</div>
+                  <div className="message-avatar bot-avatar-empty">
+                    <RobotAvatar size={32} isAnimated={true} />
+                  </div>
                   <div className="message-container">
                     <div className="sender-info">AIMS Assistant</div>
                     <div className="message-bubble bot-bubble" style={{ padding: '12px 20px' }}>

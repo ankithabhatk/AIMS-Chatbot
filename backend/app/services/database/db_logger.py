@@ -1,233 +1,180 @@
 """
-Database Logger — Production-Grade Supabase Persistence
-=========================================================
-Handles all persistent writes to Supabase chat_logs with:
-  - Credentials resolved ONCE at import time (fixes background-task env issue)
-  - Retry logic (max 2 retries with backoff)
-  - Visible error logging (no silent failures)
-  - DB health check function
+Offline-safe database logger.
 
-Architecture:
-  chat_phase4.py → background_tasks.add_task(persist_chat_turn, ...)
-                 ↓ (after response sent)
-                 db_logger.persist_chat_turn()
-                 ↓
-                 Supabase chat_logs table
+Prefers Supabase when reachable and transparently falls back to local JSON
+storage so chat logging never breaks the assistant.
 """
 
+from __future__ import annotations
+
+import logging
 import os
 import time
-import logging
-from typing import Optional
+from typing import Callable
+
+from app.services.database.local_store import fetch_local_chat_history, persist_chat_log_sync
 
 logger = logging.getLogger(__name__)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# CREDENTIALS — resolved once at import time, NOT inside thread
-# ─────────────────────────────────────────────────────────────────────────────
 
 def _get_supabase_client():
-    """Create a fresh Supabase client using currently-loaded env vars."""
+    """Create a fresh Supabase client using the loaded env vars."""
     try:
         from supabase import create_client
+
         url = os.getenv("SUPABASE_URL", "")
-        key = (
-            os.getenv("SUPABASE_SERVICE_ROLE_KEY") or
-            os.getenv("SUPABASE_ANON_KEY") or
-            ""
-        )
+        key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_ANON_KEY") or ""
         if not url or not key:
-            logger.error("[DB] SUPABASE_URL or key not set — check .env")
+            logger.warning("[DB] Supabase env missing; local persistence will be used")
             return None
         return create_client(url, key)
-    except Exception as e:
-        logger.error(f"[DB] Failed to create Supabase client: {e}")
+    except Exception as exc:
+        logger.error("[DB] Failed to create Supabase client: %s", exc)
         return None
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# RETRY HELPER
-# ─────────────────────────────────────────────────────────────────────────────
-
-def _with_retry(fn, max_retries: int = 2, delay: float = 0.5):
-    """
-    Execute fn() with up to max_retries attempts.
-    Raises the last exception if all attempts fail.
-    """
+def _with_retry(fn: Callable[[], object], max_retries: int = 2, delay: float = 0.5):
+    """Execute fn with a few retries before surfacing the last error."""
     last_exc = None
-    for attempt in range(1, max_retries + 2):  # 1 + max_retries total tries
+    for attempt in range(1, max_retries + 2):
         try:
             return fn()
-        except Exception as e:
-            last_exc = e
+        except Exception as exc:
+            last_exc = exc
             if attempt <= max_retries:
-                logger.warning(f"[DB] Attempt {attempt} failed: {e} — retrying in {delay}s")
+                logger.warning("[DB] Attempt %s failed: %s; retrying in %ss", attempt, exc, delay)
                 time.sleep(delay)
     raise last_exc
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC: persist_chat_turn
-# ─────────────────────────────────────────────────────────────────────────────
-
 def persist_chat_turn(
     *,
-    session_id:         str,
-    query:              str,
-    response:           str,
-    intent:             str = "QUESTION",
-    confidence_score:   float = 0.0,
-    processing_time_ms: int   = 0,
-    status:             str   = "unlock",
-    is_fallback:        bool  = False,
+    session_id: str,
+    query: str,
+    response: str,
+    intent: str = "QUESTION",
+    confidence_score: float = 0.0,
+    processing_time_ms: int = 0,
+    status: str = "unlock",
+    is_fallback: bool = False,
 ) -> bool:
-    """
-    Persist one chat turn to Supabase chat_logs.
-    Runs inside a BackgroundTask (separate thread).
-    Returns True on success, False on failure.
-    Logs ALL failures visibly — no silent pass.
-    """
+    """Persist one chat turn to Supabase or local JSON."""
+    payload = {
+        "session_id": session_id,
+        "query": query,
+        "response": response[:2000],
+        "intent": intent,
+        "confidence_score": round(confidence_score, 4),
+        "processing_time_ms": processing_time_ms,
+        "status": status,
+        "is_fallback": is_fallback,
+    }
+
     client = _get_supabase_client()
     if client is None:
-        logger.error(f"[DB][{session_id}] Supabase client unavailable — row NOT saved")
-        return False
-
-    payload = {
-        "session_id":         session_id,
-        "query":              query,
-        "response":           response[:2000],
-        "intent":             intent,
-        "confidence_score":   round(confidence_score, 4),
-        "processing_time_ms": processing_time_ms,
-        "status":             status,
-        "is_fallback":        is_fallback,
-    }
+        persist_chat_log_sync(**payload)
+        logger.warning("[DB][%s] Logged locally because Supabase is unavailable", session_id)
+        return True
 
     try:
         _with_retry(lambda: client.table("chat_logs").insert(payload).execute())
-        logger.debug(f"[DB][{session_id}] ✅ Persisted to Supabase")
+        logger.debug("[DB][%s] Persisted to Supabase", session_id)
         return True
-    except Exception as e:
-        logger.error(f"[DB][{session_id}] ❌ FAILED after retries: {type(e).__name__}: {e}")
-        return False
+    except Exception as exc:
+        persist_chat_log_sync(**payload)
+        logger.warning("[DB][%s] Supabase write failed, logged locally: %s", session_id, exc)
+        return True
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC: db_health_check
-# ─────────────────────────────────────────────────────────────────────────────
 
 def db_health_check() -> dict:
-    """
-    Quick write-read health check.
-    Returns {"status": "ok", "latency_ms": N} or {"status": "error", "detail": str}
-    """
+    """Quick connectivity check for the active persistence mode."""
     client = _get_supabase_client()
     if client is None:
-        return {"status": "error", "detail": "SUPABASE_URL or key not configured"}
+        return {"status": "degraded", "detail": "Supabase unavailable; local persistence active"}
 
     start = time.time()
     try:
-        # Just a SELECT — non-destructive, fastest way to test connectivity
         client.table("chat_logs").select("id").limit(1).execute()
         latency_ms = round((time.time() - start) * 1000)
         return {"status": "ok", "latency_ms": latency_ms}
-    except Exception as e:
+    except Exception as exc:
         latency_ms = round((time.time() - start) * 1000)
-        logger.error(f"[DB] Health check failed: {e}")
-        return {"status": "error", "detail": str(e), "latency_ms": latency_ms}
+        logger.error("[DB] Health check failed: %s", exc)
+        return {
+            "status": "degraded",
+            "detail": f"{exc}; local persistence active",
+            "latency_ms": latency_ms,
+        }
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC: fetch_chat_history
-# ─────────────────────────────────────────────────────────────────────────────
 
 def fetch_chat_history(session_id: str) -> list:
-    """
-    Read all chat turns for a session from Supabase chat_logs.
-    Returns a list in the format expected by summary_engine.generate_summary():
-      [{"user": "...", "bot": "...", "timestamp": "..."}, ...]
-    """
+    """Read session chat history from Supabase or local JSON."""
     client = _get_supabase_client()
     if client is None:
-        return []
+        return fetch_local_chat_history(session_id)
+
     try:
-        result = client.table("chat_logs") \
-            .select("query, response, intent, confidence_score, created_at") \
-            .eq("session_id", session_id) \
-            .order("created_at") \
+        result = (
+            client.table("chat_logs")
+            .select("query, response, intent, confidence_score, created_at")
+            .eq("session_id", session_id)
+            .order("created_at")
             .execute()
+        )
         return [
             {
-                "user":      row["query"],
-                "bot":       row["response"],
+                "user": row["query"],
+                "bot": row["response"],
                 "timestamp": row["created_at"],
-                "intent":    row.get("intent", ""),
+                "intent": row.get("intent", ""),
                 "confidence": row.get("confidence_score", 0),
             }
             for row in (result.data or [])
         ]
-    except Exception as e:
-        logger.error(f"[DB] fetch_chat_history({session_id}) failed: {e}")
-        return []
+    except Exception as exc:
+        logger.error("[DB] fetch_chat_history(%s) failed: %s", session_id, exc)
+        return fetch_local_chat_history(session_id)
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# PUBLIC: persist_session_summary
-# ─────────────────────────────────────────────────────────────────────────────
 
 def persist_session_summary(session_id: str) -> bool:
     """
-    Generate an intelligence profile for session_id and upsert it to
-    the session_summaries table.
-
-    Called as a BackgroundTask after each chat turn — keeps summaries
-    current without blocking the response.
-
-    Returns True on success, False on failure.
+    Generate an intelligence profile for a session and upsert it when Supabase
+    is available. In offline mode this becomes a no-op success.
     """
     from app.services.summary_engine import generate_summary
 
-    # 1. Pull chat history from Supabase
     history = fetch_chat_history(session_id)
     if not history:
-        logger.debug(f"[DB][{session_id}] No history to summarise")
+        logger.debug("[DB][%s] No history to summarise", session_id)
         return False
 
-    # 2. Generate intelligence profile (rule-based, instant)
     profile = generate_summary(history)
-
-    # 3. Upsert to session_summaries (insert or update on conflict)
     client = _get_supabase_client()
     if client is None:
-        return False
+        logger.debug("[DB][%s] Summary generated locally; remote upsert skipped", session_id)
+        return True
 
     payload = {
-        "session_id":              session_id,
-        "courses":                 profile["courses"],
-        "primary_intent":          profile["primary_intent"],
-        "all_intents":             profile["all_intents"],
-        "sentiment":               profile["sentiment"],
-        "lead_score":              profile["lead_score"],
-        "conversion_probability":  profile["conversion_probability"],
-        "recommended_action":      profile["recommended_action"],
-        "summary_text":            profile["summary"],
-        "message_count":           profile["messages"],
-        "has_lead":                False,
-        "updated_at":              "now()",
-        # Predictive layer fields
-        "conversion_timeline":     profile.get("conversion_timeline", ""),
-        "next_expected_queries":   profile.get("next_expected_queries", []),
+        "session_id": session_id,
+        "courses": profile["courses"],
+        "primary_intent": profile["primary_intent"],
+        "all_intents": profile["all_intents"],
+        "sentiment": profile["sentiment"],
+        "lead_score": profile["lead_score"],
+        "conversion_probability": profile["conversion_probability"],
+        "recommended_action": profile["recommended_action"],
+        "summary_text": profile["summary"],
+        "message_count": profile["messages"],
+        "has_lead": False,
+        "updated_at": "now()",
+        "conversion_timeline": profile.get("conversion_timeline", ""),
+        "next_expected_queries": profile.get("next_expected_queries", []),
     }
 
     try:
         _with_retry(lambda: client.table("session_summaries").upsert(payload).execute())
-        logger.debug(
-            f"[DB][{session_id}] ✅ Summary persisted — "
-            f"score={profile['lead_score']} | {profile['conversion_probability']} | "
-            f"timeline: {profile.get('conversion_timeline','?')}"
-        )
+        logger.debug("[DB][%s] Summary persisted to Supabase", session_id)
         return True
-    except Exception as e:
-        logger.error(f"[DB][{session_id}] ❌ Summary persist FAILED: {type(e).__name__}: {e}")
-        return False
-
+    except Exception as exc:
+        logger.warning("[DB][%s] Summary upsert skipped after Supabase failure: %s", session_id, exc)
+        return True

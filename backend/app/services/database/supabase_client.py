@@ -11,14 +11,22 @@ Uses Supabase (PostgreSQL) for persistent storage.
 FAISS remains local for fast vector search.
 """
 
-import os
 import logging
-from typing import List, Optional, Dict, Any
+import os
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
-import supabase
-from supabase import create_client, Client
+from supabase import Client, create_client
+
+from app.services.database.local_store import (
+    create_local_lead,
+    get_local_chat_logs,
+    get_local_lead,
+    get_local_leads_by_email,
+    persist_chat_log_sync,
+    update_local_lead,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +67,11 @@ class DocumentStore:
     TABLE_NAME = "documents"
     
     def __init__(self):
-        self.client = SupabaseClient.get_client()
+        try:
+            self.client = SupabaseClient.get_client()
+        except Exception as exc:
+            logger.warning("Supabase document store unavailable: %s", exc)
+            self.client = None
     
     async def store_document(
         self,
@@ -84,6 +96,8 @@ class DocumentStore:
                 "updated_at": datetime.utcnow().isoformat()
             }
             
+            if self.client is None:
+                raise RuntimeError("Supabase document store unavailable")
             response = self.client.table(self.TABLE_NAME).insert(data).execute()
             logger.info(f"Stored document: {doc_id}")
             return response.data[0] if response.data else data
@@ -95,6 +109,8 @@ class DocumentStore:
     async def get_document(self, doc_id: str) -> Optional[Dict[str, Any]]:
         """Retrieve document by ID"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase document store unavailable")
             response = self.client.table(self.TABLE_NAME).select("*").eq("id", doc_id).execute()
             return response.data[0] if response.data else None
         except Exception as e:
@@ -104,6 +120,8 @@ class DocumentStore:
     async def get_documents_by_ids(self, doc_ids: List[str]) -> List[Dict[str, Any]]:
         """Retrieve multiple documents by IDs"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase document store unavailable")
             response = self.client.table(self.TABLE_NAME).select("*").in_("id", doc_ids).execute()
             return response.data if response.data else []
         except Exception as e:
@@ -113,6 +131,8 @@ class DocumentStore:
     async def get_all_documents(self, limit: int = 1000) -> List[Dict[str, Any]]:
         """Get all documents (for indexing)"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase document store unavailable")
             response = self.client.table(self.TABLE_NAME).select("*").limit(limit).execute()
             return response.data if response.data else []
         except Exception as e:
@@ -122,6 +142,8 @@ class DocumentStore:
     async def count_documents(self) -> int:
         """Count total documents"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase document store unavailable")
             response = self.client.table(self.TABLE_NAME).select("id", count="exact").execute()
             return response.count if hasattr(response, 'count') else 0
         except Exception as e:
@@ -135,7 +157,11 @@ class LeadStore:
     TABLE_NAME = "leads"
     
     def __init__(self):
-        self.client = SupabaseClient.get_client()
+        try:
+            self.client = SupabaseClient.get_client()
+        except Exception as exc:
+            logger.warning("Supabase lead store unavailable: %s", exc)
+            self.client = None
     
     async def create_lead(
         self,
@@ -146,58 +172,70 @@ class LeadStore:
         source: str = "chatbot"
     ) -> Dict[str, Any]:
         """Create a new lead"""
+        lead_id = str(uuid4())
+        data = {
+            "id": lead_id,
+            "name": name,
+            "email": email,
+            "phone": phone,
+            "interest": interest,
+            "source": source,
+            "lead_score": 0.5,
+            "status": "new",
+            "created_at": datetime.utcnow().isoformat(),
+            "updated_at": datetime.utcnow().isoformat(),
+        }
+
         try:
-            lead_id = str(uuid4())
-            
-            data = {
-                "id": lead_id,
-                "name": name,
-                "email": email,
-                "phone": phone,
-                "interest": interest,
-                "source": source,
-                "lead_score": 0.5,  # Initial score
-                "status": "new",
-                "created_at": datetime.utcnow().isoformat(),
-                "updated_at": datetime.utcnow().isoformat()
-            }
-            
+            if self.client is None:
+                raise RuntimeError("Supabase lead store unavailable")
             response = self.client.table(self.TABLE_NAME).insert(data).execute()
-            logger.info(f"Created lead: {lead_id}")
+            logger.info("Created lead in Supabase: %s", lead_id)
             return response.data[0] if response.data else data
-        
         except Exception as e:
-            logger.error(f"Failed to create lead: {e}")
-            raise
+            logger.warning("Supabase lead insert failed, using local fallback: %s", e)
+            return create_local_lead(
+                name=name,
+                email=email,
+                phone=phone,
+                interest=interest,
+                source=source,
+            )
     
     async def get_lead(self, lead_id: str) -> Optional[Dict[str, Any]]:
         """Get lead by ID"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase lead store unavailable")
             response = self.client.table(self.TABLE_NAME).select("*").eq("id", lead_id).execute()
             return response.data[0] if response.data else None
         except Exception as e:
-            logger.error(f"Failed to get lead: {e}")
-            return None
+            logger.warning("Supabase lead lookup failed, checking local fallback: %s", e)
+            return get_local_lead(lead_id)
     
     async def get_leads_by_email(self, email: str) -> List[Dict[str, Any]]:
         """Check if email exists (deduplication)"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase lead store unavailable")
             response = self.client.table(self.TABLE_NAME).select("*").eq("email", email).execute()
             return response.data if response.data else []
         except Exception as e:
-            logger.error(f"Failed to get leads: {e}")
-            return []
+            logger.warning("Supabase lead dedupe failed, checking local fallback: %s", e)
+            return get_local_leads_by_email(email)
     
     async def update_lead(self, lead_id: str, updates: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Update lead information"""
         try:
             updates["updated_at"] = datetime.utcnow().isoformat()
+            if self.client is None:
+                raise RuntimeError("Supabase lead store unavailable")
             response = self.client.table(self.TABLE_NAME).update(updates).eq("id", lead_id).execute()
-            logger.info(f"Updated lead: {lead_id}")
+            logger.info("Updated lead in Supabase: %s", lead_id)
             return response.data[0] if response.data else None
         except Exception as e:
-            logger.error(f"Failed to update lead: {e}")
-            raise
+            logger.warning("Supabase lead update failed, using local fallback: %s", e)
+            return update_local_lead(lead_id, updates)
 
 
 class ChatLogStore:
@@ -206,7 +244,11 @@ class ChatLogStore:
     TABLE_NAME = "chat_logs"
     
     def __init__(self):
-        self.client = SupabaseClient.get_client()
+        try:
+            self.client = SupabaseClient.get_client()
+        except Exception as exc:
+            logger.warning("Supabase chat log store unavailable: %s", exc)
+            self.client = None
     
     async def log_chat(
         self,
@@ -219,13 +261,14 @@ class ChatLogStore:
         user_email: Optional[str] = None
     ) -> Dict[str, Any]:
         """Log a chat interaction for analytics"""
+        answer_text = response
         try:
             log_id = str(uuid4())
             
             data = {
                 "id": log_id,
                 "query": query,
-                "response": response,
+                "response": answer_text,
                 "session_id": session_id,
                 "user_email": user_email,
                 "confidence_score": confidence_score,
@@ -234,14 +277,23 @@ class ChatLogStore:
                 "created_at": datetime.utcnow().isoformat()
             }
             
-            response = self.client.table(self.TABLE_NAME).insert(data).execute()
+            if self.client is None:
+                raise RuntimeError("Supabase chat log store unavailable")
+            db_response = self.client.table(self.TABLE_NAME).insert(data).execute()
             logger.debug(f"Logged chat: {log_id}")
-            return response.data[0] if response.data else data
+            return db_response.data[0] if db_response.data else data
         
         except Exception as e:
-            logger.error(f"Failed to log chat: {e}")
-            # Don't raise - logging shouldn't break the chat endpoint
-            return {}
+            logger.warning("Supabase chat log insert failed, using local fallback: %s", e)
+            return persist_chat_log_sync(
+                query=query,
+                response=answer_text,
+                session_id=session_id,
+                confidence_score=confidence_score,
+                processing_time_ms=processing_time_ms,
+                is_fallback=is_fallback,
+                user_email=user_email,
+            )
     
     async def get_chat_logs(
         self,
@@ -251,6 +303,8 @@ class ChatLogStore:
     ) -> List[Dict[str, Any]]:
         """Retrieve chat logs for analytics"""
         try:
+            if self.client is None:
+                raise RuntimeError("Supabase chat log store unavailable")
             query = self.client.table(self.TABLE_NAME).select("*")
             
             if session_id:
@@ -262,8 +316,8 @@ class ChatLogStore:
             return response.data if response.data else []
         
         except Exception as e:
-            logger.error(f"Failed to get chat logs: {e}")
-            return []
+            logger.warning("Supabase chat log lookup failed, using local fallback: %s", e)
+            return get_local_chat_logs(session_id=session_id, user_email=user_email, limit=limit)
 
 
 # Singleton instances

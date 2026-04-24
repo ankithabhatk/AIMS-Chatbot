@@ -4,8 +4,11 @@ from fastapi import APIRouter
 from datetime import datetime
 import logging
 
+from app.config import get_settings
+from app.services.conversation_store import get_conversation_store
 from app.services.retrieval.faiss_index import get_index
-from app.services.embeddings.embedding_service import load_embedding_model
+from app.services.embeddings.embedding_service import get_embedding_cache_stats, load_embedding_model
+from app.services.query_cache import get_query_response_cache
 
 router = APIRouter(prefix="/api/v1", tags=["health"])
 logger = logging.getLogger(__name__)
@@ -28,6 +31,7 @@ async def health_check():
         }
     """
     try:
+        settings = get_settings()
         # Check FAISS index
         index = get_index()
         stats = index.get_stats()
@@ -57,7 +61,12 @@ async def health_check():
             "faiss_loaded": faiss_loaded,
             "embedding_model_loaded": embedding_model_loaded,
             "documents_indexed": documents_indexed,
-            "last_updated": datetime.utcnow().isoformat()
+            "last_updated": datetime.utcnow().isoformat(),
+            "query_cache": get_query_response_cache().get_stats(),
+            "embedding_cache": get_embedding_cache_stats(),
+            "conversation_store": get_conversation_store().get_stats(),
+            "answer_token_limit": settings.answer_token_limit,
+            "context_token_limit": settings.context_token_limit,
         }
     
     except Exception as e:
@@ -67,5 +76,8 @@ async def health_check():
             "faiss_loaded": False,
             "embedding_model_loaded": False,
             "documents_indexed": 0,
-            "last_updated": datetime.utcnow().isoformat()
+            "last_updated": datetime.utcnow().isoformat(),
+            "query_cache": {},
+            "embedding_cache": {},
+            "conversation_store": {},
         }

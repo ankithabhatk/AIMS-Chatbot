@@ -1,43 +1,50 @@
 import os
+
 from dotenv import load_dotenv
 from supabase import create_client
+
+
+def _print(message: str) -> None:
+    print(message.encode("ascii", errors="replace").decode("ascii"))
+
 
 def verify():
     load_dotenv()
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
-    
+
     if not url or not key:
-        print("❌ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY")
+        _print("ERROR Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY")
         return False
-        
+
     client = create_client(url, key)
-    
-    # Check table
-    print("Checking 'documents' table...")
+
+    _print("Checking 'documents' table...")
     try:
-        res = client.table("documents").select("id", count="exact").limit(1).execute()
-        print(f"✅ Table 'documents' exists.")
+        client.table("documents").select("id", count="exact").limit(1).execute()
+        _print("OK Table 'documents' exists.")
     except Exception as e:
-        print(f"❌ Table 'documents' NOT FOUND: {e}")
+        _print(f"ERROR Table 'documents' NOT FOUND: {e}")
         return False
-        
-    # Check RPC
-    print("Checking 'match_documents' function...")
+
+    _print("Checking 'match_documents' function...")
     try:
-        # Mock search with zero vector
         dummy_embedding = [0.0] * 384
-        res = client.rpc("match_documents", {
-            "query_embedding": dummy_embedding,
-            "match_count": 1
-        }).execute()
-        print(f"✅ Function 'match_documents' exists.")
+        client.rpc(
+            "match_documents",
+            {
+                "query_embedding": dummy_embedding,
+                "match_count": 1,
+            },
+        ).execute()
+        _print("OK Function 'match_documents' exists.")
     except Exception as e:
-        print(f"❌ Function 'match_documents' NOT FOUND: {e}")
+        _print(f"ERROR Function 'match_documents' NOT FOUND: {e}")
         return False
-        
-    print("\n🚀 Database is READY for ingestion.")
+
+    _print("Database is READY for ingestion.")
     return True
+
 
 if __name__ == "__main__":
     verify()

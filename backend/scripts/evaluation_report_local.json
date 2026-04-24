@@ -1,0 +1,12 @@
+{
+  "total_cases": 115,
+  "retrieval_accuracy": 0.852,
+  "answer_correctness": 0.965,
+  "fallback_correctness": 0.93,
+  "typo_handling_success": 0.846,
+  "grounded_answer_rate": 0.948,
+  "hallucination_rate": 0.052,
+  "overall_accuracy": 0.748,
+  "avg_confidence": 0.76,
+  "avg_latency_ms": 1416.44
+}

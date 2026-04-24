@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useChat } from '../../context/ChatContext';
+import { RobotAvatar } from './RobotAvatar';
 
 export const WelcomeMessage: React.FC = () => {
   const { sendMessage, saveProfile } = useChat();
@@ -56,7 +57,9 @@ export const WelcomeMessage: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className="message-avatar bot-avatar">AI</div>
+      <div className="message-avatar bot-avatar-empty">
+        <RobotAvatar size={32} isAnimated={true} />
+      </div>
       <div className="message-container" style={{ maxWidth: '600px' }}>
         <div className="sender-info">AIMS Assistant</div>
         <div className="message-bubble bot-bubble" style={{ padding: '32px' }}>

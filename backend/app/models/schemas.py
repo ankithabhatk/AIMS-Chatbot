@@ -27,6 +27,7 @@ class ChatRequest(BaseModel):
     query: str
     user: Optional[UserInfo] = None
     context: Optional[ContextInfo] = None
+    session_id: Optional[str] = None  # legacy fallback for older frontend calls
 
     class Config:
         json_schema_extra = {
@@ -56,6 +57,8 @@ class ChatResponseSuccess(BaseModel):
     sources: List[SourceCitation]
     confidence: float  # 0.0-1.0
     status: str = "unlock" # "lock" or "unlock"
+    intent: str = "factual"
+    course: str = "General"
     fallback: bool = False
     suggestions: List[str] = []
     meta: Dict[str, Any] = {}  # Contains response_time_ms, chunks_used, etc.

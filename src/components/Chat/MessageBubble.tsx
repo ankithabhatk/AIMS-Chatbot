@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ChatMessage, useChat } from '../../context/ChatContext';
 import { FeedbackButtons } from './FeedbackButtons';
 import { UserSummaryCard } from './UserSummaryCard';
+import { RobotAvatar } from './RobotAvatar';
 
 interface MessageBubbleProps {
   message: ChatMessage;
@@ -22,7 +23,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
 
   const initials = isUser 
     ? (profile?.name || "S").split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase().slice(0, 1)
-    : "AI";
+    : "";
 
   // Check if this is an onboarding summary message
   const isOnboardingSummary = isUser && message.content.startsWith("Name: ") && message.content.includes("Course: ");
@@ -34,8 +35,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className={`message-avatar ${isUser ? 'user-avatar' : 'bot-avatar'}`}>
-        {initials}
+      <div className={`message-avatar ${isUser ? 'user-avatar' : 'bot-avatar-empty'}`}>
+        {isUser ? initials : <RobotAvatar size={32} isAnimated={true} />}
       </div>
       
       <div className="message-content-wrapper">
