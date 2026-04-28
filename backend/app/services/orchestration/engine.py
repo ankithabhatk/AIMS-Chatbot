@@ -26,6 +26,18 @@ from app.config.college_courses import COLLEGE_COURSES, enforce_course_boundary
 # College course boundary
 VALID_COURSES = set([v["code"] for v in COLLEGE_COURSES.values()] + list(COLLEGE_COURSES.keys()))
 
+# PHASE 2 FIX: Protected words that should NOT be spell-corrected
+# These are critical domain terms that must be preserved exactly
+PROTECTED_WORDS = {
+    "bca", "bcom", "btech", "ba", "bsc",  # Degree codes
+    "mca", "mba", "mtech", "ma", "msc",   # Master codes
+    "aims", "aiims",                       # Institution names
+    "placement", "placements",             # Key terms
+    "fees", "fee",                         # Key terms
+    "admission", "admissions",             # Key terms
+    "hostel", "campus",                    # Key terms
+}
+
 # ═══════════════════════════════════════════════════════════════════════════
 # ENRICHED DATA INJECTION (MICRO FIX - STEP 1)
 # Load enriched dataset with decision-support fields
@@ -283,6 +295,8 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
     
     PHASE 1: Simple multi-intent detection (no aggressive splitting).
     Detects all intents present in the query without breaking natural language.
+    
+    IMPORTANT: Preserves query order for natural response ordering.
     """
     scores = compute_intent_scores(query)
     
@@ -293,17 +307,53 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
         if intent in STRUCTURED_INTENTS and score >= 0.4
     ]
     
-    # Sort by score (highest first)
-    multi_intents.sort(key=lambda x: x[1], reverse=True)
+    # PHASE 2 FIX: Preserve query order instead of sorting by score
+    # This makes responses feel natural, not robotic
+    # Find position of each intent keyword in query
+    query_lower = query.lower()
+    intents_with_position = []
+    
+    for intent, score in multi_intents:
+        # Get keywords for this intent
+        intent_keywords = INTENT_KEYWORDS.get(intent, [])
+        
+        # Find earliest position of any keyword for this intent
+        min_position = len(query)
+        for keyword in intent_keywords:
+            pos = query_lower.find(keyword.lower())
+            if pos != -1 and pos < min_position:
+                min_position = pos
+        
+        intents_with_position.append((intent, score, min_position))
+    
+    # Sort by position in query (preserves natural order)
+    intents_with_position.sort(key=lambda x: x[2])
+    
+    # Return without position (for backward compatibility)
+    multi_intents = [(intent, score) for intent, score, _ in intents_with_position]
     
     if len(multi_intents) > 1:
-        logger.info(f"[MULTI_INTENT] Detected {len(multi_intents)} intents: {[i[0] for i in multi_intents]}")
+        logger.info(f"[MULTI_INTENT] Detected {len(multi_intents)} intents (query order): {[i[0] for i in multi_intents]}")
     
     return multi_intents
 
 # Legacy compatibility
 LOCATION_KEYWORDS = TOOL_INTENT_WEIGHTS["location"]["keywords"]
 CONTACT_KEYWORDS = TOOL_INTENT_WEIGHTS["contact"]["keywords"]
+
+# PHASE 2 FIX: Intent keywords for query order preservation
+INTENT_KEYWORDS = {
+    "fees": ["fee", "fees", "cost", "price", "charges", "structure"],
+    "admission": ["admission", "admissions", "apply", "apply process", "eligibility"],
+    "placements": ["placement", "placements", "placed", "jobs", "salary", "package"],
+    "courses": ["course", "courses", "program", "programs", "study", "degree"],
+    "hostel": ["hostel", "accommodation", "housing", "dorm"],
+    "exam": ["exam", "exams", "test", "entrance"],
+    "scholarship": ["scholarship", "scholarships", "financial aid"],
+    "about_aims": ["what is aims", "about aims", "aims institutes", "institution"],
+    "why_aims": ["why aims", "why choose", "choose aims", "benefits"],
+    "aims_features": ["facilities", "campus", "infrastructure", "features"],
+}
 
 # ===== DATA STRUCTURES =====
 class OrchestrationResult:
@@ -413,6 +463,8 @@ def correct_query_typos_word_level(query: str) -> Tuple[str, str]:
     
     PHASE 1: Word-level correction - safer than sentence-level.
     Corrects individual words while preserving sentence structure.
+    
+    PHASE 2 FIX: Protects critical domain terms from over-correction.
     """
     if len(query) < 3:
         return query, query
@@ -437,6 +489,12 @@ def correct_query_typos_word_level(query: str) -> Tuple[str, str]:
         corrections_made = []
         
         for word in words:
+            # PHASE 2 FIX: Skip protected words (critical domain terms)
+            if word.lower() in PROTECTED_WORDS:
+                corrected_words.append(word)
+                logger.debug(f"[TYPO_WORD] Skipped protected word: {word}")
+                continue
+            
             # Skip very short words (less likely to be typos)
             if len(word) < 3:
                 corrected_words.append(word)
