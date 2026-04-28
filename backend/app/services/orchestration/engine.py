@@ -22,6 +22,7 @@ from app.services.counselor.conversion import detect_conversion_intent, generate
 from app.services.learning.optimizer import apply_tuning, SYSTEM_TUNING
 from app.services.learning.reinforcement import reinforce_response
 from app.config.college_courses import COLLEGE_COURSES, enforce_course_boundary
+from app.services.orchestration.deployment_logger import log_deployment_event
 
 # College course boundary
 VALID_COURSES = set([v["code"] for v in COLLEGE_COURSES.values()] + list(COLLEGE_COURSES.keys()))
@@ -1857,61 +1858,85 @@ def execute_orchestration(
             suggestions=[]
         )
     
-    # ===== INTENT SCORING ROUTING (FIX #2 & #3) =====
-    # Use COMPARATIVE scoring, not order
+    # ===== UNIFIED MULTI-INTENT DETECTION (FIX: Detect ALL intents FIRST) =====
+    # CRITICAL: Detect all significant intents BEFORE committing to any layer
+    # This prevents early returns that skip secondary intents
+    
     tool_intent, tool_score = detect_tool_intent(working_query)
     structured_intent, struct_score = detect_structured_intent(working_query)
+    multi_intents = detect_multiple_intents(working_query)  # Get ALL structured intents
     
-    logger.info(f"[ROUTING] tool=({tool_intent}, {tool_score:.2f}) vs structured=({structured_intent}, {struct_score:.2f})")
+    logger.info(f"[ROUTING_UNIFIED] tool=({tool_intent}, {tool_score:.2f}) | struct=({structured_intent}, {struct_score:.2f}) | multi={[(i, f'{s:.2f}') for i, s in multi_intents]}")
     
-    # Multi-intent detection: both scores significant
     has_tool_intent = tool_intent and tool_score >= 0.3
     has_structured_intent = structured_intent and struct_score >= 0.4
+    has_multiple_structured = len(multi_intents) > 1
     
-    # FIX #2: Handle multi-intent queries
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ROUTING LOGIC: Order of precedence:
+    # 1. Multi-intent (2+ structured intents) → Process ALL in parallel
+    # 2. Tool + Structured (both significant) → Hybrid response
+    # 3. Tool only (dominates) → Tool response
+    # 4. Single structured intent → Structured response
+    # 5. Counselor pipeline (guidance, comparison, etc.)
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    # CASE 1: Multiple structured intents detected (e.g., "fees AND placements AND hostel")
+    if has_multiple_structured:
+        logger.info(f"[ROUTING] CASE 1: Multi-intent mode - {len(multi_intents)} intents")
+        responses = []
+        
+        for intent, score in multi_intents:
+            # Fetch response for each intent
+            resp = get_structured_response_for_intent(intent, working_query, context)
+            if resp and resp.get("answer"):
+                # Build natural, flowing response (no bold labels if just 2-3 intents)
+                if len(multi_intents) <= 3:
+                    responses.append(resp["answer"])
+                else:
+                    responses.append(f"**{intent.upper()}:**\n{resp['answer']}")
+        
+        if responses:
+            # Merge responses naturally
+            combined_answer = "\n\n".join(responses)
+            logger.info(f"[MULTI_INTENT_HANDLER] Combined {len(responses)} responses from {len(multi_intents)} intents")
+            return OrchestrationResult(
+                answer=combined_answer,
+                intent="multi_intent",
+                confidence=0.9,
+                mode="structured",
+                fallback=False,
+                suggestions=[]
+            )
+    
+    # CASE 2: Both tool and structured intents significant and close → Hybrid
     if has_tool_intent and has_structured_intent:
-        # Weak-intent suppression: avoid hybrid when one intent is much stronger
         score_diff = abs(tool_score - struct_score)
         
-        # If structured is much stronger (e.g., 0.80 vs 0.35), skip hybrid
+        # If one dominates by > 0.30, skip hybrid and go to CASE 3 or 4
         if struct_score > tool_score + 0.30:
-            logger.info(f"[ROUTING] Skipping hybrid - structured much stronger: {struct_score:.2f} vs {tool_score:.2f}")
-            # Fall through to structured handling below
-        # If tool is much stronger, skip hybrid
+            logger.info(f"[ROUTING] CASE 2 SKIP: Structured dominates ({struct_score:.2f} vs {tool_score:.2f})")
+            # Fall through to CASE 4
         elif tool_score > struct_score + 0.30:
-            logger.info(f"[ROUTING] Skipping hybrid - tool much stronger: {tool_score:.2f} vs {struct_score:.2f}")
-            tool_response = get_conversational_tool_response(tool_intent, working_query)
-            if tool_response:
-                return tool_response
+            logger.info(f"[ROUTING] CASE 2 SKIP: Tool dominates ({tool_score:.2f} vs {struct_score:.2f})")
+            # Fall through to CASE 3
         else:
-            # Both intents significant and close - combine responses
-            logger.info(f"[MULTI-INTENT] tool={tool_intent}, structured={structured_intent}")
+            # Both are close enough for hybrid
+            logger.info(f"[ROUTING] CASE 2: Hybrid - tool={tool_intent} + struct={structured_intent}")
             
-            parts = []
-            
-            # Get structured part
             struct_resp = get_structured_response_for_intent(structured_intent, working_query, context)
-            if struct_resp and struct_resp.get("answer"):
-                parts.append(struct_resp["answer"])
-            
-            # Get tool part
             tool_resp = get_conversational_tool_response(tool_intent, working_query)
             
-            if tool_resp:
-                # Build natural, merged response instead of stitched parts
-                # Use tool answer as primary, enrich with structured context if available
+            if tool_resp and struct_resp:
+                # Merge: tool primary + structured secondary
                 answer = tool_resp.answer
-                struct_answer = struct_resp.get("answer", "") if struct_resp else ""
+                struct_answer = struct_resp.get("answer", "")
                 
-                if struct_answer:
-                    # Merge: prefer tool answer, append brief structured context
-                    # Avoid duplication by checking overlap
-                    if struct_answer not in answer:
-                        # Add a short bridge so it reads as one answer
-                        answer = answer.rstrip()
-                        if not answer.endswith("\n"):
-                            answer += "\n\n"
-                        answer += f"Additional details: {struct_answer}"
+                if struct_answer and struct_answer not in answer:
+                    answer = answer.rstrip()
+                    if not answer.endswith("\n"):
+                        answer += "\n\n"
+                    answer += f"📌 Additional details: {struct_answer}"
                 
                 return OrchestrationResult(
                     answer=answer,
@@ -1919,47 +1944,19 @@ def execute_orchestration(
                     confidence=0.95,
                     mode="hybrid",
                     fallback=False,
-                    suggestions=struct_resp.get("suggestions", []) if struct_resp else []
+                    suggestions=struct_resp.get("suggestions", [])
                 )
     
-    # FIX #3: Use comparative scoring (not order)
-    # Compare scores, not priority
+    # CASE 3: Tool intent only (or dominates structured)
     if has_tool_intent and tool_score > struct_score:
-        logger.info(f"[ROUTING] tool wins: {tool_score:.2f} > {struct_score:.2f}")
+        logger.info(f"[ROUTING] CASE 3: Tool only - {tool_intent} ({tool_score:.2f})")
         tool_response = get_conversational_tool_response(tool_intent, working_query)
         if tool_response:
             return tool_response
     
+    # CASE 4: Single structured intent (or structured dominates tool)
     if has_structured_intent:
-        logger.info(f"[ROUTING] structured wins: {struct_score:.2f} >= {tool_score:.2f}")
-        
-        # ===== PHASE 1: MULTI-INTENT DETECTION =====
-        # Check if there are multiple intents in the query
-        multi_intents = detect_multiple_intents(working_query)
-        
-        if len(multi_intents) > 1:
-            # Multiple intents detected - handle them separately
-            logger.info(f"[MULTI_INTENT_HANDLER] Processing {len(multi_intents)} intents")
-            responses = []
-            
-            for intent, score in multi_intents:
-                resp = get_structured_response_for_intent(intent, working_query, context)
-                if resp and resp.get("answer"):
-                    responses.append(f"**{intent.upper()}:**\n{resp['answer']}")
-            
-            if responses:
-                combined_answer = "\n\n".join(responses)
-                logger.info(f"[MULTI_INTENT_HANDLER] Combined {len(responses)} responses")
-                return OrchestrationResult(
-                    answer=combined_answer,
-                    intent="multi_intent",
-                    confidence=0.9,
-                    mode="structured",
-                    fallback=False,
-                    suggestions=[],
-                )
-        
-        # Single intent - handle normally
+        logger.info(f"[ROUTING] CASE 4: Single structured - {structured_intent} ({struct_score:.2f})")
         structured_response = get_structured_response_for_intent(structured_intent, working_query, context)
         if structured_response:
             return OrchestrationResult(
@@ -1968,7 +1965,7 @@ def execute_orchestration(
                 confidence=structured_response.get("confidence", 0.9),
                 mode=structured_response.get("mode", "structured"),
                 fallback=False,
-                suggestions=structured_response.get("suggestions", []),
+                suggestions=structured_response.get("suggestions", [])
             )
     
     # ===== PROGRAM FALLBACK INTENT =====
@@ -2209,6 +2206,49 @@ def execute_orchestration(
         f"[ORCHESTRATION_COMPLETE] mode={result.mode} | confidence={result.confidence:.2f} | "
         f"intent={result.intent} | fallback={result.fallback}"
     )
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DEPLOYMENT LOGGING (CRITICAL FOR OBSERVATION PHASE)
+    # Log the 4 critical fields for controlled deployment analysis
+    # ═══════════════════════════════════════════════════════════════════════════
+    try:
+        fallback_reason = None
+        if result.fallback:
+            # Determine why fallback occurred
+            if result.confidence < 0.6:
+                fallback_reason = "low_confidence"
+            elif result.mode == "fallback" and result.intent == "unknown":
+                fallback_reason = "no_intent"
+            elif result.mode == "fallback":
+                fallback_reason = "routing_gap"
+            else:
+                fallback_reason = "unknown"
+        
+        # Build intent scores from parsed intents (if available)
+        intent_scores = {}
+        if intents:
+            # intents is a list of tuples: [(intent_name, score), ...]
+            for i, (intent_name, score) in enumerate(intents[:3]):  # Top 3
+                intent_scores[intent_name] = float(score)
+        
+        log_deployment_event(
+            raw_query=query,  # Original query from user
+            query=working_query,  # Query after typo correction
+            intents=[result.intent] if result.intent else [],
+            intent_scores=intent_scores,
+            response=result.answer,
+            fallback=result.fallback,
+            fallback_reason=fallback_reason,
+            session_id=session_id,
+            metadata={
+                "confidence": result.confidence,
+                "mode": result.mode,
+                "course": entities.get("course") if entities else None
+            }
+        )
+    except Exception as e:
+        logger.error(f"[DEPLOYMENT_LOG_ERROR] Failed to log deployment event: {e}")
+    
     return result
 
 # ===== HELPER FUNCTIONS =====

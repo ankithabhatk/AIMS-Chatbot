@@ -46,27 +46,33 @@ def log_deployment_event(
     fallback: bool,
     fallback_reason: Optional[str] = None,
     session_id: Optional[str] = None,
-    metadata: Optional[Dict[str, Any]] = None
+    metadata: Optional[Dict[str, Any]] = None,
+    raw_query: Optional[str] = None,
+    intent_scores: Optional[Dict[str, float]] = None
 ) -> None:
     """
     Log a single deployment observation event.
     
     Args:
-        query: User's exact query
+        query: Processed query (after typo correction, normalization)
         intents: List of detected intents
         response: Final answer returned to user
         fallback: Whether fallback was triggered
         fallback_reason: Why fallback occurred (e.g., "no_intent", "low_confidence", "routing_gap")
         session_id: Optional session identifier
         metadata: Optional additional context
+        raw_query: Original query before processing (CRITICAL for debugging)
+        intent_scores: Top intent scores for debugging threshold issues
     
     Returns:
         None
     
     Example:
         log_deployment_event(
-            query="What are BCA fees?",
+            raw_query="feees for bca",
+            query="fees for bca",
             intents=["fees"],
+            intent_scores={"fees": 0.95, "courses": 0.12},
             response="BCA fees are ₹30,000 - ₹60,000",
             fallback=False,
             fallback_reason=None,
@@ -77,8 +83,11 @@ def log_deployment_event(
     try:
         log_entry = {
             "timestamp": datetime.utcnow().isoformat(),
-            "query": query,
-            "intents": intents,
+            "raw_query": raw_query or query,  # Original query before processing
+            "processed_query": query,  # Query after typo correction, normalization
+            "detected_intents": intents,
+            "final_intent": intents[0] if intents else None,
+            "intent_scores": intent_scores or {},  # Top 3 scores for debugging
             "response": response[:500],  # Truncate long responses
             "fallback": fallback,
             "fallback_reason": fallback_reason,
@@ -136,7 +145,8 @@ def analyze_deployment_logs() -> Dict[str, Any]:
         - fallback_rate: % of queries that triggered fallback
         - top_intents: Most common intents detected
         - fallback_reasons: Distribution of fallback reasons
-        - language_mismatches: Potential keyword mismatches
+        - language_mismatches: Potential keyword mismatches (raw vs processed)
+        - low_confidence_intents: Intents with low scores (threshold issues)
     """
     logs = get_deployment_logs()
     
@@ -149,7 +159,7 @@ def analyze_deployment_logs() -> Dict[str, Any]:
     # Collect intents
     all_intents = []
     for log in logs:
-        all_intents.extend(log.get("intents", []))
+        all_intents.extend(log.get("detected_intents", []))
     
     # Count intent frequencies
     intent_counts = {}
@@ -163,12 +173,42 @@ def analyze_deployment_logs() -> Dict[str, Any]:
             reason = log.get("fallback_reason", "unknown")
             fallback_reasons[reason] = fallback_reasons.get(reason, 0) + 1
     
+    # Detect language mismatches (raw vs processed query differences)
+    language_mismatches = []
+    for log in logs:
+        raw = log.get("raw_query", "").lower()
+        processed = log.get("processed_query", "").lower()
+        if raw != processed:
+            language_mismatches.append({
+                "raw": raw,
+                "processed": processed,
+                "fallback": log.get("fallback"),
+                "reason": log.get("fallback_reason")
+            })
+    
+    # Detect low confidence intents (potential threshold issues)
+    low_confidence_intents = []
+    for log in logs:
+        scores = log.get("intent_scores", {})
+        for intent, score in scores.items():
+            if score < 0.65:  # Below typical threshold
+                low_confidence_intents.append({
+                    "intent": intent,
+                    "score": score,
+                    "query": log.get("processed_query"),
+                    "fallback": log.get("fallback")
+                })
+    
     return {
         "total_queries": total,
         "fallback_rate": f"{(fallback_count / total * 100):.1f}%",
         "fallback_count": fallback_count,
         "top_intents": sorted(intent_counts.items(), key=lambda x: x[1], reverse=True)[:5],
         "fallback_reasons": fallback_reasons,
+        "language_mismatches_count": len(language_mismatches),
+        "language_mismatches_sample": language_mismatches[:5],  # First 5 examples
+        "low_confidence_intents_count": len(low_confidence_intents),
+        "low_confidence_intents_sample": low_confidence_intents[:5],  # First 5 examples
         "log_file": str(DEPLOYMENT_LOG_FILE)
     }
 
@@ -194,18 +234,33 @@ def export_deployment_logs_csv() -> str:
         with open(csv_file, "w", newline="") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["timestamp", "query", "intents", "fallback", "fallback_reason", "session_id"]
+                fieldnames=[
+                    "timestamp",
+                    "raw_query",
+                    "processed_query",
+                    "detected_intents",
+                    "final_intent",
+                    "intent_scores",
+                    "fallback",
+                    "fallback_reason",
+                    "session_id",
+                    "confidence"
+                ]
             )
             writer.writeheader()
             
             for log in logs:
                 writer.writerow({
                     "timestamp": log.get("timestamp"),
-                    "query": log.get("query"),
-                    "intents": ",".join(log.get("intents", [])),
+                    "raw_query": log.get("raw_query"),
+                    "processed_query": log.get("processed_query"),
+                    "detected_intents": ",".join(log.get("detected_intents", [])),
+                    "final_intent": log.get("final_intent"),
+                    "intent_scores": json.dumps(log.get("intent_scores", {})),
                     "fallback": log.get("fallback"),
                     "fallback_reason": log.get("fallback_reason"),
-                    "session_id": log.get("session_id")
+                    "session_id": log.get("session_id"),
+                    "confidence": log.get("metadata", {}).get("confidence")
                 })
         
         logger.info(f"[DEPLOYMENT_LOG] Exported {len(logs)} logs to {csv_file}")
