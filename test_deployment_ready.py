@@ -36,6 +36,11 @@ TEST_QUERIES = [
         "description": "Multi-intent query"
     },
     {
+        "query": "I like coding but maybe BCA what about hostel and fees",
+        "expected_pattern": "compound_real_user",
+        "description": "Compound real-user query (stress test)"
+    },
+    {
         "query": "xyz abc def",
         "expected_pattern": "fallback",
         "description": "Gibberish - should fallback"
