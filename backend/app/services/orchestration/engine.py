@@ -2213,6 +2213,8 @@ def execute_orchestration(
     # ═══════════════════════════════════════════════════════════════════════════
     try:
         fallback_reason = None
+        response_type = result.mode  # Use mode as response_type (structured, rag, fallback, etc.)
+        
         if result.fallback:
             # Determine why fallback occurred
             if result.confidence < 0.6:
@@ -2237,6 +2239,7 @@ def execute_orchestration(
             intents=[result.intent] if result.intent else [],
             intent_scores=intent_scores,
             response=result.answer,
+            response_type=response_type,  # How response was generated
             fallback=result.fallback,
             fallback_reason=fallback_reason,
             session_id=session_id,

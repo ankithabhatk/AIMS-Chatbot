@@ -48,7 +48,8 @@ def log_deployment_event(
     session_id: Optional[str] = None,
     metadata: Optional[Dict[str, Any]] = None,
     raw_query: Optional[str] = None,
-    intent_scores: Optional[Dict[str, float]] = None
+    intent_scores: Optional[Dict[str, float]] = None,
+    response_type: Optional[str] = None
 ) -> None:
     """
     Log a single deployment observation event.
@@ -63,6 +64,7 @@ def log_deployment_event(
         metadata: Optional additional context
         raw_query: Original query before processing (CRITICAL for debugging)
         intent_scores: Top intent scores for debugging threshold issues
+        response_type: How response was generated ("structured", "rag", "fallback", "form", "counselor")
     
     Returns:
         None
@@ -74,6 +76,7 @@ def log_deployment_event(
             intents=["fees"],
             intent_scores={"fees": 0.95, "courses": 0.12},
             response="BCA fees are ₹30,000 - ₹60,000",
+            response_type="structured",
             fallback=False,
             fallback_reason=None,
             session_id="user_123",
@@ -88,6 +91,7 @@ def log_deployment_event(
             "detected_intents": intents,
             "final_intent": intents[0] if intents else None,
             "intent_scores": intent_scores or {},  # Top 3 scores for debugging
+            "response_type": response_type or "unknown",  # How response was generated
             "response": response[:500],  # Truncate long responses
             "fallback": fallback,
             "fallback_reason": fallback_reason,
@@ -99,7 +103,7 @@ def log_deployment_event(
         with open(DEPLOYMENT_LOG_FILE, "a") as f:
             f.write(json.dumps(log_entry) + "\n")
         
-        logger.debug(f"[DEPLOYMENT_LOG] Logged event: intents={intents}, fallback={fallback}")
+        logger.debug(f"[DEPLOYMENT_LOG] Logged event: intents={intents}, response_type={response_type}, fallback={fallback}")
         
     except Exception as e:
         logger.error(f"[DEPLOYMENT_LOG_ERROR] Failed to log event: {e}")
@@ -147,6 +151,7 @@ def analyze_deployment_logs() -> Dict[str, Any]:
         - fallback_reasons: Distribution of fallback reasons
         - language_mismatches: Potential keyword mismatches (raw vs processed)
         - low_confidence_intents: Intents with low scores (threshold issues)
+        - routing_errors: Cases where intent was detected but wrong response_type used
     """
     logs = get_deployment_logs()
     
@@ -199,16 +204,41 @@ def analyze_deployment_logs() -> Dict[str, Any]:
                     "fallback": log.get("fallback")
                 })
     
+    # Detect routing errors (correct intent but wrong response_type)
+    routing_errors = []
+    for log in logs:
+        intents = log.get("detected_intents", [])
+        response_type = log.get("response_type", "unknown")
+        fallback = log.get("fallback")
+        
+        # Heuristic: if intent detected but response is fallback/form, might be routing error
+        if intents and response_type in ["fallback", "form"] and not fallback:
+            routing_errors.append({
+                "intents": intents,
+                "response_type": response_type,
+                "query": log.get("processed_query"),
+                "confidence": log.get("metadata", {}).get("confidence")
+            })
+    
+    # Count response types
+    response_types = {}
+    for log in logs:
+        rt = log.get("response_type", "unknown")
+        response_types[rt] = response_types.get(rt, 0) + 1
+    
     return {
         "total_queries": total,
         "fallback_rate": f"{(fallback_count / total * 100):.1f}%",
         "fallback_count": fallback_count,
         "top_intents": sorted(intent_counts.items(), key=lambda x: x[1], reverse=True)[:5],
         "fallback_reasons": fallback_reasons,
+        "response_types": response_types,
         "language_mismatches_count": len(language_mismatches),
         "language_mismatches_sample": language_mismatches[:5],  # First 5 examples
         "low_confidence_intents_count": len(low_confidence_intents),
         "low_confidence_intents_sample": low_confidence_intents[:5],  # First 5 examples
+        "routing_errors_count": len(routing_errors),
+        "routing_errors_sample": routing_errors[:5],  # First 5 examples
         "log_file": str(DEPLOYMENT_LOG_FILE)
     }
 
@@ -241,6 +271,7 @@ def export_deployment_logs_csv() -> str:
                     "detected_intents",
                     "final_intent",
                     "intent_scores",
+                    "response_type",
                     "fallback",
                     "fallback_reason",
                     "session_id",
@@ -257,6 +288,7 @@ def export_deployment_logs_csv() -> str:
                     "detected_intents": ",".join(log.get("detected_intents", [])),
                     "final_intent": log.get("final_intent"),
                     "intent_scores": json.dumps(log.get("intent_scores", {})),
+                    "response_type": log.get("response_type"),
                     "fallback": log.get("fallback"),
                     "fallback_reason": log.get("fallback_reason"),
                     "session_id": log.get("session_id"),
