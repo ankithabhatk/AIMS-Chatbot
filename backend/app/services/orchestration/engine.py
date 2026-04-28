@@ -319,6 +319,9 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
         if intent in STRUCTURED_INTENTS and score >= 0.4
     ]
     
+    # PHASE 3 FIX: Post-process intents to remove conflicts and add forced detections
+    multi_intents = _post_process_intents(query, multi_intents)
+    
     # PHASE 2 FIX: Preserve query order instead of sorting by score
     # This makes responses feel natural, not robotic
     # Find position of each intent keyword in query
@@ -338,8 +341,9 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
         
         intents_with_position.append((intent, score, min_position))
     
-    # Sort by position in query (preserves natural order)
-    intents_with_position.sort(key=lambda x: x[2])
+    # PHASE 3 FIX: Sort by position first, then by confidence score (descending)
+    # This ensures query order is preserved, but higher confidence intents appear first within same position
+    intents_with_position.sort(key=lambda x: (x[2], -x[1]))
     
     # Return without position (for backward compatibility)
     multi_intents = [(intent, score) for intent, score, _ in intents_with_position]
@@ -348,6 +352,39 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
         logger.info(f"[MULTI_INTENT] Detected {len(multi_intents)} intents (query order): {[i[0] for i in multi_intents]}")
     
     return multi_intents
+
+
+def _post_process_intents(query: str, intents: List[Tuple[str, float]]) -> List[Tuple[str, float]]:
+    """Post-process intents to remove conflicts and add forced detections.
+    
+    PHASE 3 FIX: Control rules for intent behavior
+    """
+    intent_names = [intent for intent, score in intents]
+    query_lower = query.lower()
+    
+    # RULE 1: Intent conflict resolution
+    # If why_aims is detected, remove about_aims (they conflict)
+    if "why_aims" in intent_names and "about_aims" in intent_names:
+        intents = [(i, s) for i, s in intents if i != "about_aims"]
+        logger.debug(f"[INTENT_CONFLICT] Removed about_aims (why_aims takes priority)")
+    
+    # RULE 2: Forced detection for critical intents
+    # If "hostel" keyword is present, force hostel intent even if score is low
+    hostel_keywords = ["hostel", "accommodation", "stay", "dorm", "housing"]
+    if any(kw in query_lower for kw in hostel_keywords):
+        if "hostel" not in intent_names:
+            intents.append(("hostel", 0.9))
+            logger.debug(f"[FORCED_DETECTION] Added hostel intent (keyword match)")
+    
+    # RULE 3: Remove duplicate intents
+    seen = set()
+    unique_intents = []
+    for intent, score in intents:
+        if intent not in seen:
+            unique_intents.append((intent, score))
+            seen.add(intent)
+    
+    return unique_intents
 
 # Legacy compatibility
 LOCATION_KEYWORDS = TOOL_INTENT_WEIGHTS["location"]["keywords"]
