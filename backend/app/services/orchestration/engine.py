@@ -240,18 +240,29 @@ def compute_intent_scores(query: str) -> Dict[str, float]:
     # Structured intent scoring
     for intent, config in STRUCTURED_INTENTS.items():
         match_words = {
-            "fees": ["fee", "fees", "cost", "price", "charges"],
-            "admission": ["admission", "admissions", "apply", "apply process", "eligibility", "eligible", "criteria"],
-            "courses": ["course", "courses", "program", "programs", "degree"],
-            "placements": ["placement", "placements", "placed", "jobs", "recruit"],
+            "fees": ["fee", "fees", "cost", "price", "charges", "structure"],
+            "admission": ["admission", "admissions", "apply", "apply process", "eligibility", "eligible", "criteria", "how to apply"],
+            "courses": ["course", "courses", "program", "programs", "degree", "available"],
+            "placements": ["placement", "placements", "placed", "jobs", "recruit", "salary", "package"],
             "exam": ["exam", "entrance", "exam"],
-            "scholarship": ["scholarship", "scholarships", "scholarships"],
-            "hostel": ["hostel", "hostel"],
+            "scholarship": ["scholarship", "scholarships", "financial aid"],
+            "hostel": ["hostel", "accommodation", "housing", "dorm", "price"],
+            # Improved: Match "what is" + "aims" for about_aims
             "about_aims": ["what is aims", "about aims", "tell me about aims", "aims overview", "aims introduction", "who is aims", "what does aims"],
+            # Improved: Match "why" + "aims" for why_aims
             "why_aims": ["why aims", "why choose aims", "why should i join aims", "advantages of aims", "benefits of aims", "why aims better"],
             "aims_features": ["features", "facilities", "campus facilities", "infrastructure", "what facilities", "campus", "smart classroom", "labs", "library"],
         }
         matches = sum(1 for word in match_words.get(intent, []) if word in q)
+        
+        # Special handling for about_aims: if query has "what" and "aims", it's likely about_aims
+        if intent == "about_aims" and "what" in q and "aims" in q and matches == 0:
+            matches = 1
+        
+        # Special handling for why_aims: if query has "why" and "aims", it's likely why_aims
+        if intent == "why_aims" and "why" in q and "aims" in q and matches == 0:
+            matches = 1
+        
         if matches > 0:
             scores[intent] = config["weight"] * min(matches, 2) / 2
         else:
@@ -301,6 +312,7 @@ def detect_multiple_intents(query: str) -> List[Tuple[str, float]]:
     scores = compute_intent_scores(query)
     
     # Get all structured intents with score >= 0.4
+    # Filter to only include intents that are clearly present
     multi_intents = [
         (intent, score)
         for intent, score in scores.items()

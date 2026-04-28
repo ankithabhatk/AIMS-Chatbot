@@ -1,0 +1,186 @@
+[
+  {
+    "query": "asdfgh",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  },
+  {
+    "query": "123456",
+    "input_classification": "NONSENSE",
+    "intent_detected": "nonsense",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": [
+      "Classified as NONSENSE"
+    ]
+  },
+  {
+    "query": "!!!@@@",
+    "input_classification": "NONSENSE",
+    "intent_detected": "nonsense",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": [
+      "Classified as NONSENSE"
+    ]
+  },
+  {
+    "query": "??",
+    "input_classification": "NONSENSE",
+    "intent_detected": "nonsense",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": [
+      "Classified as NONSENSE"
+    ]
+  },
+  {
+    "query": "hi",
+    "input_classification": "GREETING",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": false,
+    "notes": [
+      "Classified as GREETING"
+    ]
+  },
+  {
+    "query": "ok",
+    "input_classification": "NONSENSE",
+    "intent_detected": "nonsense",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": [
+      "Classified as NONSENSE"
+    ]
+  },
+  {
+    "query": "fees",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "fees",
+    "structured_score": 1.0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  },
+  {
+    "query": "fees???",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "fees",
+    "structured_score": 1.0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  },
+  {
+    "query": "bca!!!",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": "BCA",
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  },
+  {
+    "query": "admission???",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "admission",
+    "structured_score": 1.0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  },
+  {
+    "query": "admisson",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": "admission",
+    "fallback": true,
+    "notes": [
+      "Typo correction: 'admisson' \u2192 'admission'"
+    ]
+  },
+  {
+    "query": "feees",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": "fees",
+    "fallback": true,
+    "notes": [
+      "Typo correction: 'feees' \u2192 'fees'"
+    ]
+  },
+  {
+    "query": "plcement",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": "placement",
+    "fallback": true,
+    "notes": [
+      "Typo correction: 'plcement' \u2192 'placement'"
+    ]
+  },
+  {
+    "query": "aims collge",
+    "input_classification": "QUESTION",
+    "intent_detected": "unknown",
+    "intent_score": 0.0,
+    "structured_intent": "none",
+    "structured_score": 0,
+    "program_detected": null,
+    "typo_corrected": null,
+    "fallback": true,
+    "notes": []
+  }
+]

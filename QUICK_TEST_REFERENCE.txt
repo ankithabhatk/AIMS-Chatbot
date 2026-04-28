@@ -1,0 +1,214 @@
+================================================================================
+                    INPUT HANDLING TEST - QUICK REFERENCE
+================================================================================
+
+TEST DATE: Apr 28, 2026
+TOTAL QUERIES: 14
+FALLBACK RATE: 92.9% (13/14)
+
+================================================================================
+                              TEST RESULTS TABLE
+================================================================================
+
+GARBAGE INPUTS (4 queries, 100% fallback)
+┌─────────────┬──────────────┬────────────────┬──────────┬─────────────────┐
+│ Query       │ Classification│ Intent Detected│ Fallback │ Notes           │
+├─────────────┼──────────────┼────────────────┼──────────┼─────────────────┤
+│ asdfgh      │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Random chars    │
+│ 123456      │ NONSENSE ✓   │ nonsense (0.0) │ YES ✓    │ Numeric only    │
+│ !!!@@@      │ NONSENSE ✓   │ nonsense (0.0) │ YES ✓    │ Special chars   │
+│ ??          │ NONSENSE ✓   │ nonsense (0.0) │ YES ✓    │ Too short       │
+└─────────────┴──────────────┴────────────────┴──────────┴─────────────────┘
+
+SHORT QUERIES (3 queries, 66.7% fallback)
+┌─────────────┬──────────────┬────────────────┬──────────┬─────────────────┐
+│ Query       │ Classification│ Intent Detected│ Fallback │ Notes           │
+├─────────────┼──────────────┼────────────────┼──────────┼─────────────────┤
+│ hi          │ GREETING ✓   │ unknown (0.0)  │ NO ✓     │ Greeting bypass │
+│ ok          │ NONSENSE ✓   │ nonsense (0.0) │ YES ✓    │ Too short       │
+│ fees        │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Struct: fees(1) │
+└─────────────┴──────────────┴────────────────┴──────────┴─────────────────┘
+
+MIXED GARBAGE + INTENT (3 queries, 100% fallback)
+┌─────────────┬──────────────┬────────────────┬──────────┬─────────────────┐
+│ Query       │ Classification│ Intent Detected│ Fallback │ Notes           │
+├─────────────┼──────────────┼────────────────┼──────────┼─────────────────┤
+│ fees???     │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Struct: fees(1) │
+│ bca!!!      │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Program: BCA    │
+│ admission???│ QUESTION     │ unknown (0.0)  │ YES ✗    │ Struct: adm(1)  │
+└─────────────┴──────────────┴────────────────┴──────────┴─────────────────┘
+
+TYPOS (4 queries, 100% fallback)
+┌─────────────┬──────────────┬────────────────┬──────────┬─────────────────┐
+│ Query       │ Classification│ Intent Detected│ Fallback │ Notes           │
+├─────────────┼──────────────┼────────────────┼──────────┼─────────────────┤
+│ admisson    │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Corrected→adm   │
+│ feees       │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Corrected→fees  │
+│ plcement    │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Corrected→plac  │
+│ aims collge │ QUESTION     │ unknown (0.0)  │ YES ✗    │ Multi-word typo │
+└─────────────┴──────────────┴────────────────┴──────────┴─────────────────┘
+
+================================================================================
+                              KEY STATISTICS
+================================================================================
+
+Total Queries Tested:           14
+Fallback Triggered:             13 (92.9%)
+NONSENSE Classified:             4 (28.6%)
+GREETING Classified:             1 (7.1%)
+Intent Router Success:           0 (0.0%)  ⚠️ CRITICAL
+Structured Intent Detected:      5 (35.7%)
+Typos Corrected:                 3 (21.4%)
+Program Detected:                1 (7.1%)
+
+================================================================================
+                            CRITICAL ISSUES
+================================================================================
+
+🔴 ISSUE #1: Intent Router Non-Functional
+   - compute_intent_scores() returns 0.0 for ALL queries
+   - No intents detected by router layer (0/14)
+   - Causes fallback even when structured intent exists
+
+🔴 ISSUE #2: Structured Intent Not Routed
+   - "fees" detected (score 1.0) but fallback triggered
+   - "fees???" detected (score 1.0) but fallback triggered
+   - "admission???" detected (score 1.0) but fallback triggered
+   - Routing logic doesn't use structured intent scores
+
+🟡 ISSUE #3: Typo Correction Not Re-evaluated
+   - "admisson" → corrected to "admission" ✓
+   - But corrected query not re-checked for intent
+   - Fallback triggered on original, not corrected version
+
+🟡 ISSUE #4: Special Characters Not Stripped
+   - "fees???" and "admission???" pass as QUESTION
+   - Special chars should be removed before intent detection
+   - Structured layer handles correctly, router doesn't
+
+================================================================================
+                            WHAT WORKS ✓
+================================================================================
+
+✓ NONSENSE Classification
+  - Catches numeric-only: "123456" → NONSENSE
+  - Catches special-char-only: "!!!@@@" → NONSENSE
+  - Catches very short: "??" → NONSENSE
+
+✓ Greeting Detection
+  - "hi" correctly identified as GREETING
+  - Bypasses fallback (no fallback triggered)
+
+✓ Typo Correction
+  - "admisson" → "admission" ✓
+  - "feees" → "fees" ✓
+  - "plcement" → "placement" ✓
+
+✓ Structured Intent Detection
+  - "fees" → fees (1.0) ✓
+  - "fees???" → fees (1.0) ✓
+  - "admission???" → admission (1.0) ✓
+
+✓ Program Detection
+  - "bca!!!" → BCA program detected ✓
+
+================================================================================
+                            WHAT FAILS ✗
+================================================================================
+
+✗ Intent Router
+  - All queries return 0.0 scores
+  - No intents detected (0/14 success)
+
+✗ Structured Intent Routing
+  - Detected but not used in fallback decision
+  - Routing logic only checks intent router scores
+
+✗ Typo Re-evaluation
+  - Corrected queries not re-checked for intent
+  - Fallback decision on original, not corrected
+
+✗ Special Character Handling
+  - Not stripped before intent router
+  - Structured layer handles correctly
+
+✗ Short Single-Word Queries
+  - "fees" should not fallback when structured intent = 1.0
+
+================================================================================
+                          FALLBACK RATE BY CATEGORY
+================================================================================
+
+Garbage Inputs:          4/4 (100%)  - Intent router broken
+Short Queries:           2/3 (66.7%) - "fees" has struct intent but fallback
+Mixed Garbage + Intent:  3/3 (100%)  - Struct intent not routed
+Typos:                   4/4 (100%)  - Corrected queries not re-evaluated
+
+================================================================================
+                            ROOT CAUSE ANALYSIS
+================================================================================
+
+The chatbot has a ROUTING LAYER FAILURE:
+
+1. Input Handler ✓ (works correctly)
+   - GREETING/EXIT/NONSENSE/QUESTION classification
+
+2. Structured Knowledge Layer ✓ (works correctly)
+   - Detects fees, admission, courses with high confidence
+
+3. Intent Router ✗ (broken)
+   - Returns 0.0 for all queries
+   - No intents detected
+
+4. Routing Decision ✗ (doesn't use structured scores)
+   - Only checks intent router scores
+   - Doesn't check structured intent scores
+   - Result: 92.9% fallback despite correct detection
+
+================================================================================
+                            RECOMMENDATIONS
+================================================================================
+
+1. Debug compute_intent_scores()
+   - Why all scores 0.0?
+   - Check intent keyword matching
+   - Verify scoring weights
+
+2. Fix Routing Logic
+   - Use structured intent scores in fallback decision
+   - Don't fallback if structured intent ≥ 0.9
+
+3. Re-evaluate After Typo Correction
+   - Apply intent detection to corrected query
+   - Use corrected query for fallback decision
+
+4. Strip Special Characters
+   - Before intent router
+   - After input classification
+
+5. Adjust Short Query Handling
+   - "fees" should not fallback when structured intent = 1.0
+
+================================================================================
+                            FILES GENERATED
+================================================================================
+
+test_input_handling.py                    - Test script
+test_input_handling_report.json            - Raw test data (JSON)
+INPUT_HANDLING_TEST_RESULTS.md             - Detailed analysis
+TEST_SUMMARY_TABLE.md                      - Quick reference table
+OBSERVATIONS_AND_PATTERNS.md               - Detailed observations
+QUICK_TEST_REFERENCE.txt                   - This file
+
+================================================================================
+                            EXECUTION DETAILS
+================================================================================
+
+Date:           Apr 28, 2026
+Time:           ~2 seconds
+Environment:    Python 3.x, Backend services loaded
+Test Type:      Structured input handling analysis
+Scope:          14 queries across 4 categories
+Status:         Complete - No fixes applied (observation only)
+
+================================================================================
