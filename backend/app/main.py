@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import admin as admin_api
-from app.api import analytics, chat, health, leads, stats
+from app.api import analytics, chat, health, leads, stats, deployment_logs
 from app.config import get_settings
 from app.core.brain import BRAIN
 
@@ -115,6 +115,7 @@ app.include_router(chat.router)
 app.include_router(leads.router)
 app.include_router(analytics.router)
 app.include_router(admin_api.router)
+app.include_router(deployment_logs.router)
 
 
 @app.get("/")
