@@ -526,6 +526,18 @@ def detect_program(query: str) -> str:
     return None
 
 
+def get_program_intent(query: str) -> tuple:
+    """If program is detected but no explicit intent, return courses intent.
+    
+    Example: "bca!!!" → program=BCA, intent=courses
+    """
+    program = detect_program(query)
+    if program:
+        # Program mentioned → user is asking about that course
+        return ("courses", 0.8)
+    return (None, 0.0)
+
+
 def is_structured_intent(query: str) -> tuple:
     """🚀 RESTRICTED INTENT MATCHING
     

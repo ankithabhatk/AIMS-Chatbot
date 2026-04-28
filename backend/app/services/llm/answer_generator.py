@@ -12,6 +12,8 @@ import logging
 from typing import List, Tuple
 import re
 
+import sys
+sys.path.insert(0, '/Users/maneeth/Desktop/Chat-Bot/backend')
 from app.config import get_settings
 
 logger = logging.getLogger(__name__)

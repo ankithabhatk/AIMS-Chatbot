@@ -1971,6 +1971,23 @@ def execute_orchestration(
                 suggestions=structured_response.get("suggestions", []),
             )
     
+    # ===== PROGRAM FALLBACK INTENT =====
+    # If no structured intent but program detected, treat as courses inquiry
+    from app.services.structured_knowledge import get_program_intent
+    program_intent, program_score = get_program_intent(working_query)
+    if program_intent and program_score >= 0.7:
+        logger.info(f"[PROGRAM_FALLBACK] Program detected, treating as '{program_intent}' intent")
+        program_response = get_structured_response_for_intent(program_intent, working_query, context)
+        if program_response:
+            return OrchestrationResult(
+                answer=program_response["answer"],
+                intent=program_intent,
+                confidence=program_score,
+                mode="structured",
+                fallback=False,
+                suggestions=program_response.get("suggestions", []),
+            )
+    
     # ===== COUNSELOR LAYER (Guidance, Comparison, Career Advice) =====
     # Only called if structured/tool layers didn't handle the query
     # Pass the existing context to maintain continuity
