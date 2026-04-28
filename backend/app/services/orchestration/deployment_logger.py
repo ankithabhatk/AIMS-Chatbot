@@ -49,7 +49,8 @@ def log_deployment_event(
     metadata: Optional[Dict[str, Any]] = None,
     raw_query: Optional[str] = None,
     intent_scores: Optional[Dict[str, float]] = None,
-    response_type: Optional[str] = None
+    response_type: Optional[str] = None,
+    matched_keywords: Optional[List[str]] = None
 ) -> None:
     """
     Log a single deployment observation event.
@@ -65,6 +66,7 @@ def log_deployment_event(
         raw_query: Original query before processing (CRITICAL for debugging)
         intent_scores: Top intent scores for debugging threshold issues
         response_type: How response was generated ("structured", "rag", "fallback", "form", "counselor")
+        matched_keywords: Keywords that matched in the query (for language gap analysis)
     
     Returns:
         None
@@ -75,6 +77,7 @@ def log_deployment_event(
             query="fees for bca",
             intents=["fees"],
             intent_scores={"fees": 0.95, "courses": 0.12},
+            matched_keywords=["fees", "bca"],
             response="BCA fees are ₹30,000 - ₹60,000",
             response_type="structured",
             fallback=False,
@@ -88,6 +91,7 @@ def log_deployment_event(
             "timestamp": datetime.utcnow().isoformat(),
             "raw_query": raw_query or query,  # Original query before processing
             "processed_query": query,  # Query after typo correction, normalization
+            "matched_keywords": matched_keywords or [],  # Keywords that matched
             "detected_intents": intents,
             "final_intent": intents[0] if intents else None,
             "intent_scores": intent_scores or {},  # Top 3 scores for debugging
@@ -103,7 +107,7 @@ def log_deployment_event(
         with open(DEPLOYMENT_LOG_FILE, "a") as f:
             f.write(json.dumps(log_entry) + "\n")
         
-        logger.debug(f"[DEPLOYMENT_LOG] Logged event: intents={intents}, response_type={response_type}, fallback={fallback}")
+        logger.debug(f"[DEPLOYMENT_LOG] Logged event: intents={intents}, keywords={matched_keywords}, response_type={response_type}, fallback={fallback}")
         
     except Exception as e:
         logger.error(f"[DEPLOYMENT_LOG_ERROR] Failed to log event: {e}")
@@ -152,6 +156,7 @@ def analyze_deployment_logs() -> Dict[str, Any]:
         - language_mismatches: Potential keyword mismatches (raw vs processed)
         - low_confidence_intents: Intents with low scores (threshold issues)
         - routing_errors: Cases where intent was detected but wrong response_type used
+        - language_gaps: Keywords that didn't match (for normalization rules)
     """
     logs = get_deployment_logs()
     
@@ -220,6 +225,18 @@ def analyze_deployment_logs() -> Dict[str, Any]:
                 "confidence": log.get("metadata", {}).get("confidence")
             })
     
+    # Detect language gaps (queries with no matched keywords)
+    language_gaps = []
+    for log in logs:
+        matched = log.get("matched_keywords", [])
+        if not matched and log.get("fallback"):
+            language_gaps.append({
+                "raw_query": log.get("raw_query"),
+                "processed_query": log.get("processed_query"),
+                "fallback_reason": log.get("fallback_reason"),
+                "intent_scores": log.get("intent_scores", {})
+            })
+    
     # Count response types
     response_types = {}
     for log in logs:
@@ -239,6 +256,8 @@ def analyze_deployment_logs() -> Dict[str, Any]:
         "low_confidence_intents_sample": low_confidence_intents[:5],  # First 5 examples
         "routing_errors_count": len(routing_errors),
         "routing_errors_sample": routing_errors[:5],  # First 5 examples
+        "language_gaps_count": len(language_gaps),
+        "language_gaps_sample": language_gaps[:5],  # First 5 examples
         "log_file": str(DEPLOYMENT_LOG_FILE)
     }
 
@@ -268,6 +287,7 @@ def export_deployment_logs_csv() -> str:
                     "timestamp",
                     "raw_query",
                     "processed_query",
+                    "matched_keywords",
                     "detected_intents",
                     "final_intent",
                     "intent_scores",
@@ -285,6 +305,7 @@ def export_deployment_logs_csv() -> str:
                     "timestamp": log.get("timestamp"),
                     "raw_query": log.get("raw_query"),
                     "processed_query": log.get("processed_query"),
+                    "matched_keywords": ",".join(log.get("matched_keywords", [])),
                     "detected_intents": ",".join(log.get("detected_intents", [])),
                     "final_intent": log.get("final_intent"),
                     "intent_scores": json.dumps(log.get("intent_scores", {})),

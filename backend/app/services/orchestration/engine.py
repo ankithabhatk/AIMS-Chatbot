@@ -2233,11 +2233,24 @@ def execute_orchestration(
             for i, (intent_name, score) in enumerate(intents[:3]):  # Top 3
                 intent_scores[intent_name] = float(score)
         
+        # Extract matched keywords from entities
+        matched_keywords = []
+        if entities:
+            # Collect all entity values that were found
+            if entities.get("course"):
+                matched_keywords.append(entities.get("course").lower())
+            if entities.get("courses"):
+                matched_keywords.extend([c.lower() for c in entities.get("courses", [])])
+            # Add detected intents as matched keywords
+            if result.intent and result.intent != "unknown":
+                matched_keywords.append(result.intent)
+        
         log_deployment_event(
             raw_query=query,  # Original query from user
             query=working_query,  # Query after typo correction
             intents=[result.intent] if result.intent else [],
             intent_scores=intent_scores,
+            matched_keywords=list(set(matched_keywords)),  # Remove duplicates
             response=result.answer,
             response_type=response_type,  # How response was generated
             fallback=result.fallback,
