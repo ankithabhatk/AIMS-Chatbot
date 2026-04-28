@@ -1,0 +1,40 @@
+Name,Place,Type,Course,Duration_Years,Fees_Annual_INR,Placement_Percentage,Contact,Website,Affiliation
+AIMS College,Bangalore,Private,BCA,3,50000,85,9876543210,www.aimsbanglore.edu,Autonomous
+AIMS College,Bangalore,Private,BBA,2,45000,80,9876543210,www.aimsbanglore.edu,Autonomous
+AIMS College,Bangalore,Private,B.Com,3,40000,75,9876543210,www.aimsbanglore.edu,Autonomous
+AIMS College,Bangalore,Private,MBA,2,100000,90,9876543210,www.aimsbanglore.edu,Autonomous
+AIMS College,Bangalore,Private,MCA,2,80000,88,9876543210,www.aimsbanglore.edu,Autonomous
+AIMS College,Bangalore,Private,M.Com,2,70000,82,9876543210,www.aimsbanglore.edu,Autonomous
+Delhi University,Delhi,Government,BCA,3,5000,75,9111111111,www.du.ac.in,Central University
+Delhi University,Delhi,Government,BBA,3,5000,72,9111111111,www.du.ac.in,Central University
+Delhi University,Delhi,Government,B.Com,3,5000,70,9111111111,www.du.ac.in,Central University
+Delhi University,Delhi,Government,MBA,2,20000,85,9111111111,www.du.ac.in,Central University
+Mumbai University,Mumbai,Government,BCA,3,8000,78,9222222222,www.mu.ac.in,State University
+Mumbai University,Mumbai,Government,BBA,3,8000,76,9222222222,www.mu.ac.in,State University
+Mumbai University,Mumbai,Government,B.Com,3,8000,74,9222222222,www.mu.ac.in,State University
+Mumbai University,Mumbai,Government,MBA,2,30000,87,9222222222,www.mu.ac.in,State University
+IIM Bangalore,Bangalore,Private,MBA,2,2000000,95,9444444444,www.iimb.ac.in,Deemed University
+IIM Delhi,Delhi,Private,MBA,2,1800000,94,9555555555,www.iimdelhi.ac.in,Deemed University
+Christ University,Bangalore,Private,BCA,3,120000,88,9666666666,www.christuniversity.in,Deemed University
+Christ University,Bangalore,Private,BBA,3,110000,86,9666666666,www.christuniversity.in,Deemed University
+Christ University,Bangalore,Private,B.Com,3,100000,82,9666666666,www.christuniversity.in,Deemed University
+Christ University,Bangalore,Private,MBA,2,300000,91,9666666666,www.christuniversity.in,Deemed University
+Symbiosis Pune,Pune,Private,BCA,3,150000,90,9777777777,www.symbiosis.ac.in,Deemed University
+Symbiosis Pune,Pune,Private,BBA,3,140000,88,9777777777,www.symbiosis.ac.in,Deemed University
+Symbiosis Pune,Pune,Private,MBA,2,350000,92,9777777777,www.symbiosis.ac.in,Deemed University
+VIT Vellore,Vellore,Private,BCA,4,200000,85,9888888888,www.vit.ac.in,Deemed University
+VIT Vellore,Vellore,Private,BBA,4,190000,83,9888888888,www.vit.ac.in,Deemed University
+IIIT Hyderabad,Hyderabad,Government,BCA,4,10000,92,9999999999,www.iiithyd.ac.in,Autonomous
+IIIT Hyderabad,Hyderabad,Government,MCA,2,25000,94,9999999999,www.iiithyd.ac.in,Autonomous
+Rajasthan University,Jaipur,Government,BCA,3,3000,65,9333333333,www.uniraj.ac.in,State University
+Rajasthan University,Jaipur,Government,BBA,3,3000,63,9333333333,www.uniraj.ac.in,State University
+Rajasthan University,Jaipur,Government,B.Com,3,3000,60,9333333333,www.uniraj.ac.in,State University
+Maharaja College,Indore,Private,BCA,3,60000,81,9444555666,www.maharajacollege.in,Affiliated
+Maharaja College,Indore,Private,BBA,3,55000,79,9444555666,www.maharajacollege.in,Affiliated
+Maharaja College,Indore,Private,B.Com,3,50000,77,9444555666,www.maharajacollege.in,Affiliated
+Presidency College,Chennai,Government,BCA,3,4000,77,9666777888,www.presidency.edu.in,Autonomous
+Presidency College,Chennai,Government,BBA,3,4000,75,9666777888,www.presidency.edu.in,Autonomous
+Presidency College,Chennai,Government,B.Com,3,4000,72,9666777888,www.presidency.edu.in,Autonomous
+Banaras Hindu University,Varanasi,Private,BCA,3,85000,84,9777888999,www.bhu.ac.in,Deemed University
+Banaras Hindu University,Varanasi,Private,BBA,3,80000,82,9777888999,www.bhu.ac.in,Deemed University
+Banaras Hindu University,Varanasi,Private,MBA,2,250000,89,9777888999,www.bhu.ac.in,Deemed University

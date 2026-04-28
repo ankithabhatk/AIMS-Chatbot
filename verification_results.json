@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-04-27T00:24:58.939666",
+  "overall": {
+    "passed": 40,
+    "total": 49,
+    "percentage": 81.63265306122449,
+    "verdict": "\u2705 STABLE (NEEDS TUNING)"
+  },
+  "test_groups": {
+    "brain": {
+      "passed": 10,
+      "total": 15,
+      "percentage": 66.66666666666666
+    },
+    "pipeline": {
+      "passed": 5,
+      "total": 5,
+      "percentage": 100.0
+    },
+    "memory": {
+      "passed": 4,
+      "total": 4,
+      "percentage": 100.0
+    },
+    "locking": {
+      "passed": 4,
+      "total": 5,
+      "percentage": 80.0
+    },
+    "apply_flow": {
+      "passed": 4,
+      "total": 4,
+      "percentage": 100.0
+    },
+    "fallback": {
+      "passed": 2,
+      "total": 4,
+      "percentage": 50.0
+    },
+    "determinism": {
+      "passed": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "stage_transitions": {
+      "passed": 3,
+      "total": 3,
+      "percentage": 100.0
+    },
+    "multiturn": {
+      "passed": 2,
+      "total": 3,
+      "percentage": 66.66666666666666
+    },
+    "contradictions": {
+      "passed": 3,
+      "total": 3,
+      "percentage": 100.0
+    }
+  }
+}

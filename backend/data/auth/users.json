@@ -1,0 +1,222 @@
+[
+  {
+    "id": "51c7243a-11d9-49e8-9bec-d4b893c2eab7",
+    "email": "codex-auth-check@example.com",
+    "name": "Codex Check",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "1ff1b1d7bf060067fb632f2d68ccb01b",
+    "passwordHash": "a8bda109e322a0d947507ab70eaa77b44fec6f94b7ebe2e0544afb5283544342",
+    "createdAt": 1777067519670
+  },
+  {
+    "id": "d4beb79b-a94b-472e-9144-923b6a31e620",
+    "email": "codex-e2e-1777067989@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "611a46aff228fbf9ac1200df082ca58c",
+    "passwordHash": "76f62998b063735e8ed572c6b107e77b54cbf6ab39615565c509200a5cb6a2c0",
+    "createdAt": 1777067989470
+  },
+  {
+    "id": "b39ab71a-7e7c-46ac-8ced-b7c7bc35db88",
+    "email": "codex-e2e-1777068089@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "7d2444c435718aa0f80ff12ff5d8dda2",
+    "passwordHash": "f27b703261e7eaf306d5a54906cba49b1d7d4cab541b8324c2474ec79ad8baf9",
+    "createdAt": 1777068089291
+  },
+  {
+    "id": "ca5228f4-0019-4a67-a53b-107805aca4e4",
+    "email": "codex-e2e-1777068204@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "5354ab9c1a499d066a5a93da8837af06",
+    "passwordHash": "6a0c7d04a203f2a61fef62b178d744933788aacb07825896631beacf495bb47b",
+    "createdAt": 1777068206970
+  },
+  {
+    "id": "6658704b-e3c5-49f5-b418-e12f671e14f8",
+    "email": "codex-e2e-1777068318@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "d0bc0a729e789515d59aa0651d53634b",
+    "passwordHash": "017e5fd3b757f7b28b1312d4cf5ff2e5304f9e1b9a155a947ce03c40e474211b",
+    "createdAt": 1777068319477
+  },
+  {
+    "id": "e69d0229-dd41-4b39-9a96-d50a2dd0d6eb",
+    "email": "codex-e2e-1777068369@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "28d0a476f2f950af58e297dd0bb0bd35",
+    "passwordHash": "8b0d2a7c7f170cde637386d7ffd5d1420d0dd4f0dc90d70d7cee0ef33b87a9e3",
+    "createdAt": 1777068371155
+  },
+  {
+    "id": "96beab2a-0777-484e-a18a-8529ed9daef0",
+    "email": "codex-e2e-1777068534@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "d21c4846493ef021331d5b53f85bdd3b",
+    "passwordHash": "ae7eb30f2335f78c5127d6a35205e37a5d58a1495822a6ca412e1a2d5d8f0b54",
+    "createdAt": 1777068536218
+  },
+  {
+    "id": "9bd14246-6006-4e7c-a547-993069f91ec2",
+    "email": "codex-e2e-1777068557@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "d33d3c4c597d7a322f00cd3d60c7e53c",
+    "passwordHash": "0fc83e064b86c225c8dd3d22721a16d8f73c173d53453e23e5adab497d39b77f",
+    "createdAt": 1777068557768
+  },
+  {
+    "id": "df64cf34-573d-4402-8078-317ec2939d7d",
+    "email": "codex-e2e-1777068644@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "5acfbd55e1e100feeeff7c51fdc9376b",
+    "passwordHash": "a0ae914c541ffb324406558b87ac499a72262db220915d623cf3f7b4112dd2a9",
+    "createdAt": 1777068644609
+  },
+  {
+    "id": "aea75faf-4e4d-42d5-915d-b00d91c42b4f",
+    "email": "codex-e2e-1777068673@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "4b84db54a3db82f7c2c641745ca18e9e",
+    "passwordHash": "b45f5764ddc17ccea948a4b5824e6df0f23da9a8ed61a0305173147bb1621466",
+    "createdAt": 1777068673994
+  },
+  {
+    "id": "bb24ce3f-9c89-45ae-9e6e-8127587f1886",
+    "email": "codex-e2e-1777068703@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "115bd8fbfe07293e20b9ec9e91ed19ef",
+    "passwordHash": "6b2a0a8a3e42fc0d26722c9ff8f5479ab82514aba23b3f1e925273b45f4803cd",
+    "createdAt": 1777068704054
+  },
+  {
+    "id": "33fed4ec-32e4-4a30-965d-75caa73b8347",
+    "email": "codex-e2e-1777068730@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "0b6c350f41e64476f8cc0987fcbb7168",
+    "passwordHash": "50028032b8fdcf529220de37d21d86190326dbe16d6cd4e23524317afa5ba674",
+    "createdAt": 1777068730504
+  },
+  {
+    "id": "c5804ce1-a955-4475-a8e8-987e96108b4c",
+    "email": "codex-e2e-1777068884@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "faaf3f5bb5d8bc5706738b8faeb2fe50",
+    "passwordHash": "a3b01348942577831c2e158adf37ab42e6b73c31bf249764873392d2e120a4ca",
+    "createdAt": 1777068889700
+  },
+  {
+    "id": "691c3e07-240e-4ea1-88a7-d6f136bb7950",
+    "email": "codex-e2e-1777069023@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "be05b5f8da8819f2f19ee411cda55ae6",
+    "passwordHash": "3b13a752362376c55f03f48bc711733ce09cad74ad4424650d7d8e9fe5f7f999",
+    "createdAt": 1777069030540
+  },
+  {
+    "id": "1f15fb1d-d2f0-42c8-8a0b-bbb2429af269",
+    "email": "codex-e2e-1777069052@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "2cf27fc2e809ed1dbcaa188352f660c8",
+    "passwordHash": "cd0f3047f8dfe4dc53b5f800359a03e3b93fd3fbed0128883904a8146c6d65cc",
+    "createdAt": 1777069056620
+  },
+  {
+    "id": "ad586f4c-8e56-4c29-941d-ba870543712d",
+    "email": "codex-e2e-1777069346@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "d782b355d027abaf0cc4c249115e5f1b",
+    "passwordHash": "19ffc7aa127b038600af412d0a6d6f7b7761e2a1440e905676a4e2fe526df487",
+    "createdAt": 1777069357289
+  },
+  {
+    "id": "46953a63-4023-4a46-a883-4bb2a709e954",
+    "email": "codex-e2e-1777069464@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "64693cf7536752bb2c79c693f87a66ed",
+    "passwordHash": "6812e33c542423da876528f9f31213c7bc415d95437f223c3a799587489448dc",
+    "createdAt": 1777069482354
+  },
+  {
+    "id": "3c965193-3e11-41a2-a20c-99d882274219",
+    "email": "codex-e2e-1777069634@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "c80e687a526156c38aefb14cd3eda79e",
+    "passwordHash": "6b40ba2072041ec9ec886b47e38e9b571baf054d42dac11413e611d93a6612d6",
+    "createdAt": 1777069640212
+  },
+  {
+    "id": "15e6d9d8-83a7-48af-924a-bcceada1850e",
+    "email": "codex-e2e-1777069706@example.com",
+    "name": "Codex Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "e26a32e46accf59338a9b5f59e6f55e9",
+    "passwordHash": "895e391a6fa74ecd9f35e6dae824ad1b2080ea3d932786b172534d6d09f239a3",
+    "createdAt": 1777069721215
+  },
+  {
+    "id": "ca034473-e34a-4cea-aa8f-f1a0473b7429",
+    "email": "visual-proof-1777265270@example.com",
+    "name": "Visual Proof Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "45d0fd01d002621ec256e30afde44d85",
+    "passwordHash": "d244fd06e1289aa961fca40d05fc85d737000cae7c44e298db8cf43eb1d4f9f5",
+    "createdAt": 1777265273696
+  },
+  {
+    "id": "5533a97e-467f-4e55-b512-f721500ad582",
+    "email": "visual-proof-1777265321@example.com",
+    "name": "Visual Proof Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "7cb979a951ea1d0532bb5f76aaf9d7b8",
+    "passwordHash": "c943d0e5d4c114e557c6a75ff422452f0675f0ce93828d67aff84178858f88ff",
+    "createdAt": 1777265323042
+  },
+  {
+    "id": "d1da0110-8802-4684-9ecd-dfe281b9237c",
+    "email": "visual-proof-1777265370@example.com",
+    "name": "Visual Proof Student",
+    "role": "student",
+    "organization_id": "AIMS2024",
+    "passwordSalt": "800e4665c0e7367c38ca1673d43fa5cc",
+    "passwordHash": "f249c2521c62c6d2c3ce8f26422752dc6a226c7d018009baa3d9fe63313d381e",
+    "createdAt": 1777265371898
+  }
+]

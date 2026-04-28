@@ -1,0 +1,134 @@
+{
+  "BCA": {
+    "roles": [
+      "Cloud Engineer",
+      "Cybersecurity Analyst",
+      "Business Analyst",
+      "Web Developer",
+      "Software Engineer",
+      "AI/ML Engineer"
+    ],
+    "avg_salary_lpa": 6.84,
+    "salary_range": "3.03\u201311.94 LPA",
+    "top_skills": [
+      "SQL",
+      "Aws",
+      "Java",
+      "Python",
+      "Machine Learning",
+      "Excel",
+      "Power BI",
+      "Linux"
+    ],
+    "growth": "Moderate",
+    "sample_size": 101
+  },
+  "MCA": {
+    "roles": [
+      "AI/ML Engineer",
+      "Data Scientist",
+      "Cloud Engineer",
+      "Software Engineer",
+      "Data Analyst",
+      "Web Developer"
+    ],
+    "avg_salary_lpa": 7.03,
+    "salary_range": "3.56\u201311.73 LPA",
+    "top_skills": [
+      "Java",
+      "Excel",
+      "SQL",
+      "Linux",
+      "Aws",
+      "Power BI",
+      "Machine Learning",
+      "Python"
+    ],
+    "growth": "High",
+    "sample_size": 87
+  },
+  "B.Com": {
+    "roles": [
+      "Accountant",
+      "Finance Executive",
+      "Banking Officer",
+      "Tax Consultant",
+      "Audit Associate"
+    ],
+    "avg_salary_lpa": 4.0,
+    "salary_range": "3.0\u20136.0 LPA",
+    "top_skills": [
+      "Tally",
+      "Excel",
+      "Financial Analysis",
+      "Taxation",
+      "GST"
+    ],
+    "growth": "Moderate",
+    "sample_size": 0,
+    "note": "Industry-standard estimate; B.Com roles distinct from data science roles"
+  },
+  "BBA": {
+    "roles": [
+      "Marketing Executive",
+      "Business Development Executive",
+      "HR Executive",
+      "Sales Manager",
+      "Operations Analyst"
+    ],
+    "avg_salary_lpa": 4.5,
+    "salary_range": "3.0\u20138.0 LPA",
+    "top_skills": [
+      "Communication",
+      "Excel",
+      "Leadership",
+      "CRM",
+      "Marketing Analytics"
+    ],
+    "growth": "High",
+    "sample_size": 0,
+    "note": "Estimated from industry standards; not from dataset"
+  },
+  "MBA": {
+    "roles": [
+      "Business Analyst",
+      "Marketing Manager",
+      "Product Manager",
+      "Consultant",
+      "Strategy Analyst"
+    ],
+    "avg_salary_lpa": 9.0,
+    "salary_range": "6.0\u201318.0 LPA",
+    "top_skills": [
+      "Strategy",
+      "Analytics",
+      "Communication",
+      "Finance",
+      "Leadership",
+      "Excel"
+    ],
+    "growth": "Very High",
+    "sample_size": 0,
+    "note": "Estimated from industry standards; not from dataset"
+  },
+  "BHM": {
+    "roles": [
+      "Hotel Manager",
+      "Front Office Executive",
+      "Event Planner",
+      "F&B Manager",
+      "Guest Relations Officer"
+    ],
+    "avg_salary_lpa": 3.5,
+    "salary_range": "2.5\u20137.0 LPA",
+    "top_skills": [
+      "Customer Service",
+      "Operations",
+      "Communication",
+      "Hospitality Management"
+    ],
+    "growth": "Moderate",
+    "sample_size": 0,
+    "note": "Estimated from industry standards; not from dataset"
+  }
+}

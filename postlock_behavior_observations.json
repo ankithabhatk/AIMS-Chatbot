@@ -1,0 +1,213 @@
+{
+  "timestamp": "2026-04-27T07:16:22.820116",
+  "total_scenarios": 20,
+  "smooth_count": 11,
+  "friction_count": 3,
+  "recovery_count": 3,
+  "abandon_count": 3,
+  "conversion_rate": "70.0%",
+  "friction_rate": "15.0%",
+  "abandon_rate": "15.0%",
+  "observations": [
+    {
+      "scenario": 1,
+      "name": "Lock \u2192 Immediate apply",
+      "expected": "smooth",
+      "actual": "recovery",
+      "locked": true,
+      "action_taken": false,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 2,
+      "name": "Lock \u2192 One question \u2192 Apply",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 3,
+      "name": "Lock \u2192 Fees check \u2192 Apply",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 4,
+      "name": "Lock \u2192 Same question 3x",
+      "expected": "friction",
+      "actual": "friction",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": true,
+      "abandoned": false
+    },
+    {
+      "scenario": 5,
+      "name": "Lock \u2192 Fee confusion",
+      "expected": "friction",
+      "actual": "friction",
+      "locked": true,
+      "action_taken": false,
+      "has_friction": true,
+      "abandoned": false
+    },
+    {
+      "scenario": 6,
+      "name": "Lock \u2192 Unclear process",
+      "expected": "friction",
+      "actual": "friction",
+      "locked": false,
+      "action_taken": false,
+      "has_friction": true,
+      "abandoned": false
+    },
+    {
+      "scenario": 7,
+      "name": "Lock \u2192 No next step",
+      "expected": "abandon",
+      "actual": "recovery",
+      "locked": true,
+      "action_taken": false,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 8,
+      "name": "Lock \u2192 Overwhelm",
+      "expected": "abandon",
+      "actual": "abandon",
+      "locked": false,
+      "action_taken": false,
+      "has_friction": true,
+      "abandoned": true
+    },
+    {
+      "scenario": 9,
+      "name": "Lock \u2192 Distraction",
+      "expected": "abandon",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 10,
+      "name": "Lock \u2192 Doubt \u2192 Reaffirm",
+      "expected": "recovery",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 11,
+      "name": "Lock \u2192 Alternative \u2192 Return",
+      "expected": "recovery",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 12,
+      "name": "Lock \u2192 Family check \u2192 Proceed",
+      "expected": "recovery",
+      "actual": "recovery",
+      "locked": true,
+      "action_taken": false,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 13,
+      "name": "Lock \u2192 Eligibility \u2192 Apply",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 14,
+      "name": "Lock \u2192 Admission steps",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": false,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 15,
+      "name": "Lock \u2192 Timeline check \u2192 Apply",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": false,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 16,
+      "name": "Lock \u2192 Form confusion",
+      "expected": "abandon",
+      "actual": "abandon",
+      "locked": true,
+      "action_taken": false,
+      "has_friction": true,
+      "abandoned": true
+    },
+    {
+      "scenario": 17,
+      "name": "Lock \u2192 Document confusion",
+      "expected": "abandon",
+      "actual": "abandon",
+      "locked": false,
+      "action_taken": false,
+      "has_friction": true,
+      "abandoned": true
+    },
+    {
+      "scenario": 18,
+      "name": "Lock \u2192 Deadline panic",
+      "expected": "abandon",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": true
+    },
+    {
+      "scenario": 19,
+      "name": "Lock \u2192 Clear action path",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    },
+    {
+      "scenario": 20,
+      "name": "Lock \u2192 Direct to apply",
+      "expected": "smooth",
+      "actual": "smooth",
+      "locked": true,
+      "action_taken": true,
+      "has_friction": false,
+      "abandoned": false
+    }
+  ]
+}

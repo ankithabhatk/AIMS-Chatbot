@@ -1,0 +1,705 @@
+{
+  "timestamp": "2026-04-27T07:07:32.301198",
+  "total_scenarios": 10,
+  "pattern_a_count": 1,
+  "pattern_b_count": 9,
+  "no_soft_count": 0,
+  "dominant_pattern": "B",
+  "observations": [
+    {
+      "scenario_id": 1,
+      "scenario_name": "Soft commit + deepening",
+      "flow": [
+        "What courses do you offer?",
+        "Tell me about BCA and BBA",
+        "I think BCA might be good",
+        "What's the placement record?",
+        "How much does it cost?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "What courses do you offer?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "fallback"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Tell me about BCA and BBA",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "I think BCA might be good",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "What's the placement record?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "How much does it cost?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 2,
+      "scenario_name": "Soft commit + comparison",
+      "flow": [
+        "I'm interested in coding",
+        "Tell me more about BCA",
+        "I think BCA could work",
+        "But how does it compare to B.Tech?",
+        "When can I apply?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I'm interested in coding",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "I think BCA could work",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "But how does it compare to B.Tech?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "When can I apply?",
+          "is_soft_decision": false,
+          "mode": "apply",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "apply"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 3,
+      "scenario_name": "Generic to soft commit",
+      "flow": [
+        "I want to study engineering",
+        "What's the best course?",
+        "I'm leaning towards BCA",
+        "Tell me about fees",
+        "Can I apply online?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I want to study engineering",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "fallback"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "What's the best course?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "fallback"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "I'm leaning towards BCA",
+          "is_soft_decision": true,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "Tell me about fees",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "Can I apply online?",
+          "is_soft_decision": false,
+          "mode": "clarification",
+          "confidence": 1.0,
+          "locked_course": null,
+          "intents": [
+            "clarification"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": null,
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 4,
+      "scenario_name": "Hesitant progression",
+      "flow": [
+        "I like business and coding",
+        "Maybe BCA is right",
+        "Or should I do BBA?",
+        "I think BCA might be better",
+        "Let me think about it"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I like business and coding",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Maybe BCA is right",
+          "is_soft_decision": true,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Or should I do BBA?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "I think BCA might be better",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "Let me think about it",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 2,
+      "locked_after_soft": null,
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 5,
+      "scenario_name": "Soft commit then backtrack",
+      "flow": [
+        "BCA seems interesting",
+        "I think I'll do BCA",
+        "Actually, tell me about MBA",
+        "Is MBA better than BCA?",
+        "I'm not sure now"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "BCA seems interesting",
+          "is_soft_decision": true,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I think I'll do BCA",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Actually, tell me about MBA",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "Is MBA better than BCA?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "I'm not sure now",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 1,
+      "locked_after_soft": null,
+      "hesitation_after_soft": true,
+      "final_outcome": "PATTERN_A"
+    },
+    {
+      "scenario_id": 6,
+      "scenario_name": "Quick soft decision",
+      "flow": [
+        "What's your top course?",
+        "I think BCA is good",
+        "How do I apply?",
+        "What documents do I need?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "What's your top course?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "fallback"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I think BCA is good",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "How do I apply?",
+          "is_soft_decision": false,
+          "mode": "apply",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "apply"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "What documents do I need?",
+          "is_soft_decision": false,
+          "mode": "apply",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "apply"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 2,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 7,
+      "scenario_name": "Interest to action",
+      "flow": [
+        "I like coding",
+        "Which course teaches that?",
+        "I think BCA is probably the one",
+        "Okay, how do I get started?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I like coding",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Which course teaches that?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "I think BCA is probably the one",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "Okay, how do I get started?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 8,
+      "scenario_name": "Cautious with soft commit",
+      "flow": [
+        "I'm not sure what to study",
+        "Tell me about your options",
+        "Maybe BCA could work for me",
+        "What's the duration?",
+        "Is it worth it?"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I'm not sure what to study",
+          "is_soft_decision": false,
+          "mode": "confusion",
+          "confidence": 1.0,
+          "locked_course": null,
+          "intents": [
+            "confusion"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Tell me about your options",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "fallback"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "Maybe BCA could work for me",
+          "is_soft_decision": true,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "What's the duration?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "Is it worth it?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": null,
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 9,
+      "scenario_name": "Multiple + soft decision",
+      "flow": [
+        "I like both finance and coding",
+        "Which course fits?",
+        "I think BCA might be better for coding",
+        "Tell me more about placements",
+        "I'm ready to apply"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "I like both finance and coding",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "Which course fits?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "error"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "I think BCA might be better for coding",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "Tell me more about placements",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "I'm ready to apply",
+          "is_soft_decision": false,
+          "mode": "apply",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "apply"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 3,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    },
+    {
+      "scenario_id": 10,
+      "scenario_name": "Cost-conscious soft commit",
+      "flow": [
+        "What courses are available?",
+        "I think BCA is good",
+        "But how much does it cost?",
+        "Is there financial aid?",
+        "Okay, I can manage that"
+      ],
+      "turns": [
+        {
+          "turn": 1,
+          "query": "What courses are available?",
+          "is_soft_decision": false,
+          "mode": "fallback",
+          "confidence": 0.0,
+          "locked_course": null,
+          "intents": [
+            "unknown"
+          ]
+        },
+        {
+          "turn": 2,
+          "query": "I think BCA is good",
+          "is_soft_decision": true,
+          "mode": "guidance",
+          "confidence": 0.95,
+          "locked_course": "BCA",
+          "intents": [
+            "guidance"
+          ]
+        },
+        {
+          "turn": 3,
+          "query": "But how much does it cost?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 4,
+          "query": "Is there financial aid?",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        },
+        {
+          "turn": 5,
+          "query": "Okay, I can manage that",
+          "is_soft_decision": false,
+          "mode": "locked",
+          "confidence": 1.0,
+          "locked_course": "BCA",
+          "intents": [
+            "locked"
+          ]
+        }
+      ],
+      "soft_decision_detected": true,
+      "soft_decision_index": 2,
+      "locked_after_soft": "BCA",
+      "hesitation_after_soft": null,
+      "final_outcome": "PATTERN_B"
+    }
+  ]
+}

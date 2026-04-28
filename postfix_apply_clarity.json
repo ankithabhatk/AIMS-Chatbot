@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-04-27T07:27:52.743109",
+  "test_type": "post-fix_apply_clarity",
+  "total_tests": 10,
+  "average_clarity": 0.725,
+  "cta_presence": 7,
+  "time_estimate_presence": 7,
+  "doc_list_presence": 8,
+  "support_presence": 7,
+  "measurements": [
+    {
+      "scenario": 1,
+      "name": "BCA Apply Query",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Perfect! You're ready to apply for **BCA**.\n\n\ud83d\udc49 **Next Step:** Start your application at our portal.\n   Time needed: ~10 minutes\n\n\ud83d\udccb **Required:** 10th "
+    },
+    {
+      "scenario": 2,
+      "name": "BBA Apply Query",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Great! You're ready to apply for **BBA**.\n\n\ud83d\udc49 **Start here:** Visit our application portal and create your profile.\n   (You can complete this in ~10 mi"
+    },
+    {
+      "scenario": 3,
+      "name": "B.Com Apply Query",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Great! You're ready to apply for **B.Com**.\n\n\ud83d\udc49 **Start here:** Visit our application portal and create your profile.\n   (You can complete this in ~10 "
+    },
+    {
+      "scenario": 4,
+      "name": "Apply Steps Query",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Great! You're ready to apply for **BBA**.\n\n\ud83d\udc49 **Start here:** Visit our application portal and create your profile.\n   (You can complete this in ~10 mi"
+    },
+    {
+      "scenario": 5,
+      "name": "Application Process Query",
+      "mode": "clarification",
+      "has_clear_cta": false,
+      "has_time_estimate": false,
+      "has_doc_list": false,
+      "has_support": false,
+      "clarity_score": 0.0,
+      "response_preview": "Which course would you like to apply for? Let me know and I'll walk you through the steps."
+    },
+    {
+      "scenario": 6,
+      "name": "Direct Apply Query",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Perfect! You're ready to apply for **BCA**.\n\n\ud83d\udc49 **Next Step:** Start your application at our portal.\n   Time needed: ~10 minutes\n\n\ud83d\udccb **Required:** 10th "
+    },
+    {
+      "scenario": 7,
+      "name": "Immediate Apply Query",
+      "mode": "locked",
+      "has_clear_cta": false,
+      "has_time_estimate": false,
+      "has_doc_list": false,
+      "has_support": false,
+      "clarity_score": 0.0,
+      "response_preview": "You've chosen **BBA**. What would you like to know more about?"
+    },
+    {
+      "scenario": 8,
+      "name": "Apply Guidance Query",
+      "mode": "apply",
+      "has_clear_cta": false,
+      "has_time_estimate": false,
+      "has_doc_list": true,
+      "has_support": false,
+      "clarity_score": 0.25,
+      "response_preview": "**Required Documents for BCA:**\n  \u2022 10th & 12th Standard Marksheets (Original + 2 copies)\n  \u2022 Transfer Certificate (TC) & Migration Certificate\n  \u2022 5 "
+    },
+    {
+      "scenario": 9,
+      "name": "Apply Steps Detailed",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Great! You're ready to apply for **BCA**.\n\n\ud83d\udc49 **Start here:** Visit our application portal and create your profile.\n   (You can complete this in ~10 mi"
+    },
+    {
+      "scenario": 10,
+      "name": "How to Start Apply",
+      "mode": "apply",
+      "has_clear_cta": true,
+      "has_time_estimate": true,
+      "has_doc_list": true,
+      "has_support": true,
+      "clarity_score": 1.0,
+      "response_preview": "Perfect! You're ready to apply for **BCA**.\n\n\ud83d\udc49 **Next Step:** Start your application at our portal.\n   Time needed: ~10 minutes\n\n\ud83d\udccb **Required:** 10th "
+    }
+  ]
+}

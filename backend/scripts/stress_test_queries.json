@@ -1,0 +1,29 @@
+{
+  "test_queries": [
+    {"category": "Fees", "query": "What are the fees for MBA?"},
+    {"category": "Fees", "query": "mca fee structure"},
+    {"category": "Fees", "query": "how much is bca cost?"},
+    {"category": "Fees", "query": "MBA feeees and scholerships"},
+    {"category": "Fees", "query": "fees"},
+    {"category": "Admission", "query": "How to apply for admission?"},
+    {"category": "Admission", "query": "mba admission procedure"},
+    {"category": "Admission", "query": "eligibility for bca"},
+    {"category": "Admission", "query": "admission 2024 last date"},
+    {"category": "Admission", "query": "can i apply now?"},
+    {"category": "Placements", "query": "What are the placement highlights?"},
+    {"category": "Placements", "query": "average salary package for mca"},
+    {"category": "Placements", "query": "top recruiters at aims"},
+    {"category": "Placements", "query": "highest ctc last year"},
+    {"category": "Placements", "query": "placement record"},
+    {"category": "Garbage/Typos", "query": "whre is cllege?"},
+    {"category": "Garbage/Typos", "query": "admision mca"},
+    {"category": "Garbage/Typos", "query": "fess for mb"},
+    {"category": "Out-of-Scope", "query": "How to get into IIT Bombay?"},
+    {"category": "Out-of-Scope", "query": "admission in harvard university"},
+    {"category": "Out-of-Scope", "query": "what is the best engineering college in india?"},
+    {"category": "Short/Messy", "query": "hi"},
+    {"category": "Short/Messy", "query": "ok"},
+    {"category": "Long/Confusing", "query": "I am interested in MBA but my friend said MCA is better but I want to know the fees for both and also the placement support for international students in Bangalore."},
+    {"category": "Long/Confusing", "query": "tell me everything about the college and all the courses and why should i join here instead of other colleges in karnataka."}
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "email": "storageeapp@gmail.com",
+  "timestamp": "2026-04-27T06:58:56.859943",
+  "journey": [
+    {
+      "turn": 1,
+      "query": "What courses do you offer?",
+      "mode": "fallback",
+      "confidence": 0.0,
+      "intents": [
+        "fallback"
+      ],
+      "answer_preview": "I want to make sure I guide you correctly.\n\nYou can ask me about:\n\u2022 Courses (BBA, BCA, B.Com, etc.)\n\u2022 Fees & Scholarship",
+      "memory": {
+        "locked_course": null,
+        "courses": [],
+        "turn_count": 1
+      }
+    },
+    {
+      "turn": 2,
+      "query": "Tell me about BCA and BBA",
+      "mode": "guidance",
+      "confidence": 0.95,
+      "intents": [
+        "guidance"
+      ],
+      "answer_preview": "Great choice! BCA is locked. What would you like to know?",
+      "memory": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA",
+          "BBA"
+        ],
+        "turn_count": 2
+      }
+    },
+    {
+      "turn": 3,
+      "query": "I think BCA is good for me",
+      "mode": "locked",
+      "confidence": 1.0,
+      "intents": [
+        "locked"
+      ],
+      "answer_preview": "You've chosen **BCA**. What would you like to know more about?",
+      "memory": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA",
+          "BBA"
+        ],
+        "turn_count": 3
+      }
+    },
+    {
+      "turn": 4,
+      "query": "What's the fee structure?",
+      "mode": "locked",
+      "confidence": 1.0,
+      "intents": [
+        "locked"
+      ],
+      "answer_preview": "You've chosen **BCA**. What would you like to know more about?\n\nSince you're aligned with BCA, would you like to see how",
+      "memory": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA",
+          "BBA"
+        ],
+        "turn_count": 4
+      }
+    }
+  ],
+  "pattern_checks": {
+    "Turn 1 routed (not fallback)": false,
+    "Turn 2 no premature lock": false,
+    "Turn 3 decision locked": true,
+    "Turn 4 lock persisted": true
+  },
+  "verdict": "FAILED"
+}

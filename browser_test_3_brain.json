@@ -1,0 +1,165 @@
+{
+  "test_info": {
+    "timestamp": "2026-04-27T00:18:53.367610",
+    "email": "storageeapp@gmail.com",
+    "session_id": "browser_test_brain",
+    "total_turns": 4
+  },
+  "conversation_log": [
+    {
+      "turn": 1,
+      "user": "I like business and marketing",
+      "assistant": "I want to make sure I guide you correctly.\n\nYou can ask me about:\n\u2022 Courses (BBA, BCA, B.Com, etc.)\n",
+      "memory": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 2,
+      "user": "What course should I take?",
+      "assistant": "I want to be as helpful as possible with your career choice.\n\nYou can ask me about:\n\u2022 Courses (BBA, ",
+      "memory": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 3,
+      "user": "I want BBA",
+      "assistant": "Great choice! BBA is locked. What would you like to know?",
+      "memory": {
+        "locked_course": "BBA",
+        "courses": [
+          "BBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 4,
+      "user": "Tell me more about it",
+      "assistant": "You've chosen **BBA**. What would you like to know more about?",
+      "memory": {
+        "locked_course": "BBA",
+        "courses": [
+          "BBA"
+        ],
+        "marks": null,
+        "turn_count": 4,
+        "conversion_stage": "none"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "step": "Turn 1",
+      "timestamp": "2026-04-27T00:18:53.368343",
+      "user_input": "I like business and marketing",
+      "assistant_response": "I want to make sure I guide you correctly.\n\nYou can ask me about:\n\u2022 Courses (BBA, BCA, B.Com, etc.)\n\u2022 Fees & Scholarships\n\u2022 Placements & Salary\n\u2022 Admission process\n\nWhat would you like to explore?",
+      "mode": "fallback",
+      "confidence": 0.0,
+      "memory_state": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "error"
+        ],
+        "stage": "fallback"
+      }
+    },
+    {
+      "step": "Turn 2",
+      "timestamp": "2026-04-27T00:18:53.368546",
+      "user_input": "What course should I take?",
+      "assistant_response": "I want to be as helpful as possible with your career choice.\n\nYou can ask me about:\n\u2022 Courses (BBA, BCA, B.Com, etc.)\n\u2022 Fees & Scholarships\n\u2022 Placements & Salary\n\u2022 Admission process\n\nWhat would you li",
+      "mode": "fallback",
+      "confidence": 0.0,
+      "memory_state": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "unknown"
+        ],
+        "stage": "fallback"
+      }
+    },
+    {
+      "step": "Turn 3",
+      "timestamp": "2026-04-27T00:18:53.368721",
+      "user_input": "I want BBA",
+      "assistant_response": "Great choice! BBA is locked. What would you like to know?",
+      "mode": "guidance",
+      "confidence": 0.95,
+      "memory_state": {
+        "locked_course": "BBA",
+        "courses": [
+          "BBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "guidance"
+        ],
+        "stage": "guidance"
+      }
+    },
+    {
+      "step": "Turn 4",
+      "timestamp": "2026-04-27T00:18:53.368875",
+      "user_input": "Tell me more about it",
+      "assistant_response": "You've chosen **BBA**. What would you like to know more about?",
+      "mode": "locked",
+      "confidence": 1.0,
+      "memory_state": {
+        "locked_course": "BBA",
+        "courses": [
+          "BBA"
+        ],
+        "marks": null,
+        "turn_count": 4,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "locked"
+        ],
+        "stage": "locked"
+      }
+    }
+  ],
+  "final_memory_state": {
+    "marks": null,
+    "courses": [
+      "BBA"
+    ],
+    "interests": "BCA",
+    "locked_course": "BBA",
+    "turn_count": 4,
+    "conversion_stage": "none",
+    "confusion_count": 0,
+    "last_seen": 1777229333.368738,
+    "session_id": "browser_test_brain"
+  }
+}

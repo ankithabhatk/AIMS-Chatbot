@@ -1,0 +1,101 @@
+{
+  "source": "NIRF India Rankings 2024",
+  "management_top10": [
+    {
+      "rank": 1,
+      "institution": "Indian Institute of Management Ahmedabad",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 2,
+      "institution": "Indian Institute of Management Bangalore",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 3,
+      "institution": "Indian Institute of Management Kozhikode",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 4,
+      "institution": "Indian Institute of Technology Delhi",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 5,
+      "institution": "Indian Institute of Management Calcutta",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 6,
+      "institution": "Indian Institute of Management Mumbai",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 7,
+      "institution": "Indian Institute of Management Lucknow",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 8,
+      "institution": "Indian Institute of Management Indore",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 9,
+      "institution": "Xavier Labour Relations Institute",
+      "tier": "Tier 1"
+    },
+    {
+      "rank": 10,
+      "institution": "Indian Institute of Management Shillong",
+      "tier": "Tier 1"
+    }
+  ],
+  "nirf_parameters": [
+    "TEACHING, LEARNING\n&\nRESOURCES",
+    "RESEARCH AND\nPROFESSIONAL PRACTICE",
+    "GRADUATION\nOUTCOME",
+    "OUTREACH AND\nINCLUSIVITY",
+    "PERCEPTION"
+  ],
+  "course_credibility": {
+    "MBA": {
+      "nirf_category": "Management",
+      "tier_context": "MBA programs at NIRF-ranked institutions consistently show placement rates above 85%.",
+      "trust_anchor": "MBA graduates from quality institutions secure roles in consulting, banking, and product management.",
+      "ranking_note": "India's top management programs (IIMs, XLRI) are consistently ranked by NIRF based on placements, faculty, and outcomes."
+    },
+    "BBA": {
+      "nirf_category": "Management",
+      "tier_context": "BBA is a strong foundation course recognized across management-focused institutions.",
+      "trust_anchor": "BBA graduates often progress to MBA and management roles in top companies.",
+      "ranking_note": "Management colleges evaluated by NIRF on graduation outcomes and placement quality."
+    },
+    "BCA": {
+      "nirf_category": "Engineering / IT",
+      "tier_context": "BCA aligns with CS/IT tracks evaluated in NIRF Engineering category \u2014 high demand sector.",
+      "trust_anchor": "BCA graduates enter roles like Software Engineer and Data Analyst, with starting packages of \u20b94\u20138 LPA.",
+      "ranking_note": "Technical programs show strongest placement correlation with institutional quality."
+    },
+    "MCA": {
+      "nirf_category": "Engineering / IT",
+      "tier_context": "MCA is a post-graduate technical program with strong industry demand.",
+      "trust_anchor": "MCA graduates command higher packages than UG counterparts due to specialization.",
+      "ranking_note": "Advanced CS programs show consistent upward salary trends in NIRF outcome data."
+    },
+    "B.Com": {
+      "nirf_category": "Management / Commerce",
+      "tier_context": "B.Com is widely offered and provides a stable, flexible foundation.",
+      "trust_anchor": "B.Com opens paths to CA, banking, and finance roles with structured growth.",
+      "ranking_note": "Commerce programs are evaluated under management/college categories in NIRF."
+    },
+    "BHM": {
+      "nirf_category": "Colleges",
+      "tier_context": "Hotel Management is evaluated under the NIRF Colleges category.",
+      "trust_anchor": "BHM graduates access global hospitality roles with structured career ladders.",
+      "ranking_note": "Hospitality programs have strong outreach and industry-interface scores in NIRF data."
+    }
+  },
+  "key_insight": "Institutions ranked by NIRF show significantly better placement outcomes. Management, Engineering, and Commerce programs from quality colleges consistently outperform in salary and employer access."
+}

@@ -1,0 +1,64 @@
+{
+  "BBA": {
+    "requires_degree": false,
+    "min_marks": 50,
+    "entrance_required": false,
+    "preferred_streams": [
+      "commerce",
+      "arts",
+      "science"
+    ]
+  },
+  "BCA": {
+    "requires_degree": false,
+    "min_marks": 50,
+    "entrance_required": false,
+    "preferred_streams": [
+      "science",
+      "computer applications"
+    ]
+  },
+  "MBA": {
+    "requires_degree": true,
+    "min_marks": 50,
+    "entrance_required": true,
+    "entrance_exams": [
+      "CAT",
+      "MAT",
+      "CET"
+    ],
+    "preferred_streams": [
+      "any"
+    ]
+  },
+  "B.Com": {
+    "requires_degree": false,
+    "min_marks": 45,
+    "entrance_required": false,
+    "preferred_streams": [
+      "commerce",
+      "arts"
+    ]
+  },
+  "MCA": {
+    "requires_degree": true,
+    "min_marks": 50,
+    "entrance_required": true,
+    "entrance_exams": [
+      "CET",
+      "NIMCET"
+    ],
+    "preferred_streams": [
+      "computer applications",
+      "science"
+    ]
+  },
+  "BHM": {
+    "requires_degree": false,
+    "min_marks": 45,
+    "entrance_required": false,
+    "preferred_streams": [
+      "any"
+    ]
+  }
+}

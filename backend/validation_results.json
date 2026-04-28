@@ -1,0 +1,363 @@
+[
+  {
+    "test_case": {
+      "query": "MBA fees",
+      "expected_source": "structured",
+      "expected_fallback": false,
+      "min_length": 50,
+      "description": "Structured KB query"
+    },
+    "result": {
+      "query": "MBA fees",
+      "answer": "MBA fee structure:\nAnnual fee: \u20b950,000 - \u20b91,00,000\nVaries by specialization. Contact admissions for exact figures.\nContact: admission@theaims.ac.in",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "fees",
+        "mode": "structured",
+        "source": "structured",
+        "score": 1.0,
+        "used_rag": false,
+        "used_structured": true,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "fees",
+        "mode": "structured",
+        "source": "structured",
+        "score": 1.0,
+        "used_rag": false,
+        "used_structured": true,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 147
+    }
+  },
+  {
+    "test_case": {
+      "query": "placement record",
+      "expected_source": "rag",
+      "expected_fallback": false,
+      "min_length": 100,
+      "description": "RAG query - placement"
+    },
+    "result": {
+      "query": "placement record",
+      "answer": "\u2022 Best Hospitality Management College for Professional Training\nAIMS Institutes, Bangalore, maintains a 100% placement record till date across national & international hospitality brands. Faculty with 260 years combined teaching + 208 years industry experience.\n\u2022 Among the Top MBA Colleges with Placement Support\nAIMS Institutes, Bangalore, offers an 84% MBA placement record.\n\u2022 Placement Cell\nDEADLINE FOR MBA ADMISSIONS APRIL 30, 2026\nAPPLY NOW FOR MBA SELECTION PROCESS 2026-27\nDEADLINE FOR MBA ADMISSIONS APRIL 30, 2026\nAPPLY NOW FOR MBA SELECTION PROCESS 2026-27\nDEADLINE FOR MBA ADMISSIONS APRIL 30, 2026\nAPPLY NOW FOR MBA SELECTION PROCESS 2026-27\nDEADLINE FOR MBA ADMISSI\n\u2022 Each year, reputed organisations from diverse sectors visit the campus to recruit students for internships and full-time positions. The Placement Cell ensures smooth coordination between companies and candidates, maintaining transparency and professionalism throughout the process.\n\u2022 Beyond just facilitating job opportunities, the placement cell also strives to build strong relationships with industry leaders and alumni, ensuring that students remain updated with current market trends and expectations. In essence, the Placement Cell is not only about securing jobs - it is about",
+      "meta": {
+        "response_time_ms": 2,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "placements",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 2,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "placements",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 1266
+    }
+  },
+  {
+    "test_case": {
+      "query": "campus facilities",
+      "expected_source": "rag",
+      "expected_fallback": false,
+      "min_length": 100,
+      "description": "RAG query - campus"
+    },
+    "result": {
+      "query": "campus facilities",
+      "answer": "\u2022 Student Testimonial\n\"Look at your handicap as a gift vs something to be embarrassed by, and it will help minimize the stigma and confusion with individuals who are not impaired\". The above lesson is what AIMS has taught my fellow learners and me on campus. They minimized the stigma by treating me li\n\u2022 Among the Top MBA Colleges with Placement Support\nAIMS Institutes, Bangalore, offers an 84% MBA placement record.\n\u2022 Dual Specialisations \u2022 Global Accreditations\nFaculty with 260 years combined teaching + 208 years industry experience\nEnquire Now\n\ud83c\uddee\ud83c\uddf3\n+91\nIndia\nSelect State *\nSelect State first\n2026-2027\nI agree to be contacted by AIMS Institutes or its authorized representatives via SMS, Email, RCS, WhatsApp, or ca\n\u2022 SUBMIT\nLearn from Bangalore's Top Ranked B School\nTITANIUM BRAND\nfor Outcome Based Learning\n(India Academia Ranking 2025)\n5th\nBest Private Institution for BBA in India under\n\"SUPER EXCELLENCE\"(GHRDC, 2025)\n13th\nBest Private Business School in South India\n(THE WEEK,\n2025)\n36th\nBest Private Business S\n\u2022 Dual Specialisation Tracks\nAIMS MBA Placements and Career Outcomes\nAt AIMS Institutes, Bangalore, every student is guided toward career success. This outcome-driven approach positions us among the best MBA colleges with good placement, supported by a strong corporate network that prepares you to per",
+      "meta": {
+        "response_time_ms": 1,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "courses",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 1,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "courses",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 1327
+    }
+  },
+  {
+    "test_case": {
+      "query": "hostel at AIMS",
+      "expected_source": "rag",
+      "expected_fallback": false,
+      "min_length": 80,
+      "description": "RAG query - hostel"
+    },
+    "result": {
+      "query": "hostel at AIMS",
+      "answer": "\u2022 Among the Top BCA Colleges in Bangalore For Practical Tech Skills\nAt AIMS Institutes, Bangalore, students gain hands-on training and 100% placement support for tech roles. Faculty with 260 years combined teaching + 208 years industry experience.\n\u2022 Enquire Now\n\ud83c\uddee\ud83c\uddf3\n+91\nIndia\nSelect State *\nSelect State first\n2026-2027\nI agree to be contacted by AIMS Institutes or its authorized representatives via SMS, Email, RCS, WhatsApp, or call regarding my enquiries, admissions, and updates. I understand that this consent overrides my NDNC registration.\n\u2022 SUBMIT\nAmong the Best Colleges in Bangalore for BCA Course\nTITANIUM BRAND\nfor Outcome Based Learning\n(India Academia Ranking 2025)\n11th\nBest Colleges of India - Under TOP 130 Private Institutes in South India\n(Outlook Best BCA Colleges Survey, 2024)\n20th\nBest Colleges of India - Under TOP 109 Privat\n\u2022 AIMS Bangalore BCA\nPlacement Highlights\nAt AIMS Institutes, career readiness is built alongside academics through structured placement training, mentoring, and industry exposure, a key reason we are recognised among the best BCA placement colleges in Bangalore. 74% of BCA students secured placements\n\u2022 BCA with IBM Certification (Autonomous)\nStudents can opt for BCA, an enhanced pathway that integrates IBM-certified training into the BCA curriculum for specialised technology careers. Available Tracks:\nBCA in Cyber Security\nBCA in Game Development\nThis option offers deeper technical exposure and gl",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "campus",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "campus",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 1455
+    }
+  },
+  {
+    "test_case": {
+      "query": "What about placements?",
+      "expected_source": "rag",
+      "expected_fallback": false,
+      "min_length": 80,
+      "uses_context": true,
+      "description": "Follow-up query - should use context from MBA"
+    },
+    "result": {
+      "query": "What about placements?",
+      "answer": "\u2022 Dual Specialisation Tracks\nAIMS MBA Placements and Career Outcomes\nAt AIMS Institutes, Bangalore, every student is guided toward career success. This outcome-driven approach positions us among the best MBA colleges with good placement, supported by a strong corporate network that prepares you to per\n\u2022 84% of MBA students secured placements\nTop recruiters include Deloitte, Infosys, EY, Accenture, TCS, and more\nHighest: \u20b923 LPA\nAverage package:\n\u20b98 LPA\nHiring network of\n300+ recruiters across sectors\nValue Added Programs (VAP)\nEvery semester at AIMS Institutes adds real-world value to your resume th\n\u2022 Eligibility & Selection\nGraduate degree (10+2+3 or 10+2+4 pattern) with minimum 50% aggregate marks\nValid scores in CAT, MAT, XAT or other recognised national-level entrance examinations\nSelection includes a detailed online application, AI-based behavioral interview, SWOC presentation, and final pan\n\u2022 Among the Top MBA Colleges with Placement Support\nAIMS Institutes, Bangalore, offers an 84% MBA placement record.\n\u2022 Dual Specialisations \u2022 Global Accreditations\nFaculty with 260 years combined teaching + 208 years industry experience\nEnquire Now\n\ud83c\uddee\ud83c\uddf3\n+91\nIndia\nSelect State *\nSelect State first\n2026-2027\nI agree to be contacted by AIMS Institutes or its authorized representatives via SMS, Email, RCS, WhatsApp, or ca",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "courses",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "courses",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 1327
+    }
+  },
+  {
+    "test_case": {
+      "query": "Tell me about campus",
+      "expected_source": "rag",
+      "expected_fallback": false,
+      "min_length": 100,
+      "description": "RAG query - campus info"
+    },
+    "result": {
+      "query": "Tell me about campus",
+      "answer": "\u2022 - Arti Sharma, BBA Aviation 2020-23\nAbout AIMS School of Business\nEstablished in 1998, the AIMS School of Business is part of AIMS Institutes, one of India\u2019s premier higher education institutions. Ranked among the top 1% of business schools in the country, its programs hold\nIACBE (USA)\naccreditation\n\u2022 Student Testimonial\nA person's early 20s shape their future, and I'm truly grateful that AIMS became part of mine. From my first visit, the vibrant campus atmosphere left me inspired. AIMS provided clarity, confidence, a...\n\u2022 A person's early 20s shape their future, and I'm truly grateful that AIMS became part of mine. From my first visit, the vibrant campus atmosphere left me inspired. AIMS provided clarity, confidence, and a global perspective through its diverse student community and supportive faculty. More than just\n\u2022 - Sanjay R, BBA\nAbout AIMS School of Business\nEstablished in 1998, the AIMS School of Business is part of AIMS Institutes, one of India's premier higher education institutions. Ranked among the\ntop 1% of business schools\nin the country, its programs hold\nIACBE (USA)\naccreditation and is\nNAAC 'A' Gra\n\u2022 This has helped me strive to improve my skills and make me better for today and tomorrow. I can testify to the fact that the person who stepped into this campus on day one is not who I am today...after three years; remarkable change. I am grateful for all the beautiful people whom I have met in this",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "campus",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "campus",
+        "mode": "rag",
+        "source": "rag",
+        "score": 0.7,
+        "used_rag": true,
+        "used_structured": false,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 1437
+    }
+  },
+  {
+    "test_case": {
+      "query": "scholarship eligibility",
+      "expected_source": "structured",
+      "expected_fallback": false,
+      "min_length": 50,
+      "description": "Structured KB query - scholarship"
+    },
+    "result": {
+      "query": "scholarship eligibility",
+      "answer": "Scholarship information:\nScholarships are available based on merit and category.\nEligibility depends on the program, admission cycle, and applicable category rules.\nContact admissions for current scholarship criteria and documentation.",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "scholarship",
+        "mode": "structured",
+        "source": "structured",
+        "score": 0.95,
+        "used_rag": false,
+        "used_structured": true,
+        "fallback": false,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "scholarship",
+        "mode": "structured",
+        "source": "structured",
+        "score": 0.95,
+        "used_rag": false,
+        "used_structured": true,
+        "fallback": false,
+        "self_score": {}
+      },
+      "answer_length": 235
+    }
+  },
+  {
+    "test_case": {
+      "query": "random xyz blah test",
+      "expected_source": "fallback",
+      "expected_fallback": true,
+      "min_length": 20,
+      "description": "Garbage query - should fallback"
+    },
+    "result": {
+      "query": "random xyz blah test",
+      "answer": "Try asking about courses, fees, or admission process.",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "general",
+        "mode": "fallback",
+        "source": "fallback",
+        "score": 0.2,
+        "used_rag": false,
+        "used_structured": false,
+        "fallback": true,
+        "self_score": {}
+      },
+      "status": "OK"
+    },
+    "validation": {
+      "passed": true,
+      "reason": "OK",
+      "meta": {
+        "response_time_ms": 0,
+        "chunks_used": 0,
+        "session_id": "validation_test",
+        "intent": "general",
+        "mode": "fallback",
+        "source": "fallback",
+        "score": 0.2,
+        "used_rag": false,
+        "used_structured": false,
+        "fallback": true,
+        "self_score": {}
+      },
+      "answer_length": 53
+    }
+  }
+]

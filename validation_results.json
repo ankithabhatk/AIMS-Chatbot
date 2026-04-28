@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-04-27T12:04:46.957124",
+  "steps": [
+    {
+      "step": 1,
+      "message": "I like coding",
+      "response": null,
+      "is_fallback": false,
+      "is_meaningful": false,
+      "reason": "No response received"
+    },
+    {
+      "step": 2,
+      "message": "Tell me about BCA",
+      "response": null,
+      "is_fallback": false,
+      "is_meaningful": false,
+      "reason": "No response received"
+    },
+    {
+      "step": 3,
+      "message": "What about MCA?",
+      "response": null,
+      "is_fallback": false,
+      "is_meaningful": false,
+      "reason": "No response received"
+    }
+  ],
+  "failures": [],
+  "backend_debug": []
+}

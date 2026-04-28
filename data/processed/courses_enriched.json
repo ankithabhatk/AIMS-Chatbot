@@ -1,0 +1,1367 @@
+[
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 50000,
+    "placement_percentage": 85,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 2,
+    "annual_fees_inr": 45000,
+    "placement_percentage": 80,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 40000,
+    "placement_percentage": 75,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 100000,
+    "placement_percentage": 90,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "MCA",
+    "duration_years": 2,
+    "annual_fees_inr": 80000,
+    "placement_percentage": 88,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "BCA graduates wanting advanced technical skills",
+      "Those interested in research or advanced development",
+      "Career aspirants in specialized tech roles"
+    ],
+    "career_paths": [
+      "Senior Software Architect",
+      "AI/ML Engineer",
+      "System Designer",
+      "Research Engineer",
+      "Technical Lead"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have strong coding fundamentals (BCA or equivalent). You want specialized technical skills in AI, systems, or advanced development. You enjoy research and complex problems.",
+    "not_recommended_if": "You dislike deep technical work, prefer business roles, don't enjoy continuous learning, or want to move away from coding.",
+    "avg_salary_range": "\u20b95L - \u20b910L (starting), \u20b910L - \u20b925L+ (with specialization)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "HIGH",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "AIMS College",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "MCOM",
+    "duration_years": 2,
+    "annual_fees_inr": 70000,
+    "placement_percentage": 82,
+    "college_website": "aimsbanglore.edu",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9876543210",
+    "best_for": [
+      "BCOM graduates wanting advanced accounting/finance",
+      "Those pursuing advanced professional certifications",
+      "Future financial strategy experts"
+    ],
+    "career_paths": [
+      "Senior Chartered Accountant",
+      "Financial Director",
+      "Chief Financial Officer",
+      "Financial Strategy Expert",
+      "Audit Partner"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have BCOM background and strong accounting knowledge. You want to specialize in advanced finance, taxation, or auditing. You're preparing for CA or similar qualifications.",
+    "not_recommended_if": "You want to leave accounting/finance, dislike detailed analysis, prefer management over technical accounting, or want broader business exposure.",
+    "avg_salary_range": "\u20b94L - \u20b98L (starting), \u20b915L - \u20b930L+ (as CFO/Partner)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Delhi University",
+    "location": "Delhi",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 5000,
+    "placement_percentage": 75,
+    "college_website": "du.ac.in",
+    "college_affiliation": "Central University",
+    "contact_phone": "+91-9111111111",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Delhi University",
+    "location": "Delhi",
+    "college_type": "GOVERNMENT",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 5000,
+    "placement_percentage": 72,
+    "college_website": "du.ac.in",
+    "college_affiliation": "Central University",
+    "contact_phone": "+91-9111111111",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Delhi University",
+    "location": "Delhi",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 5000,
+    "placement_percentage": 70,
+    "college_website": "du.ac.in",
+    "college_affiliation": "Central University",
+    "contact_phone": "+91-9111111111",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Delhi University",
+    "location": "Delhi",
+    "college_type": "GOVERNMENT",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 20000,
+    "placement_percentage": 85,
+    "college_website": "du.ac.in",
+    "college_affiliation": "Central University",
+    "contact_phone": "+91-9111111111",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Mumbai University",
+    "location": "Mumbai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 8000,
+    "placement_percentage": 78,
+    "college_website": "mu.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9222222222",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Mumbai University",
+    "location": "Mumbai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 8000,
+    "placement_percentage": 76,
+    "college_website": "mu.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9222222222",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Mumbai University",
+    "location": "Mumbai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 8000,
+    "placement_percentage": 74,
+    "college_website": "mu.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9222222222",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Mumbai University",
+    "location": "Mumbai",
+    "college_type": "GOVERNMENT",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 30000,
+    "placement_percentage": 87,
+    "college_website": "mu.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9222222222",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "IIM Bangalore",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 2000000,
+    "placement_percentage": 95,
+    "college_website": "iimb.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9444444444",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "IIM Delhi",
+    "location": "Delhi",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 1800000,
+    "placement_percentage": 94,
+    "college_website": "iimdelhi.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9555555555",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Christ University",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 120000,
+    "placement_percentage": 88,
+    "college_website": "christuniversity.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9666666666",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Christ University",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 110000,
+    "placement_percentage": 86,
+    "college_website": "christuniversity.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9666666666",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Christ University",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 100000,
+    "placement_percentage": 82,
+    "college_website": "christuniversity.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9666666666",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Christ University",
+    "location": "Bangalore",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 300000,
+    "placement_percentage": 91,
+    "college_website": "christuniversity.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9666666666",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Symbiosis Pune",
+    "location": "Pune",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 150000,
+    "placement_percentage": 90,
+    "college_website": "symbiosis.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777777777",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Symbiosis Pune",
+    "location": "Pune",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 140000,
+    "placement_percentage": 88,
+    "college_website": "symbiosis.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777777777",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Symbiosis Pune",
+    "location": "Pune",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 350000,
+    "placement_percentage": 92,
+    "college_website": "symbiosis.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777777777",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "VIT Vellore",
+    "location": "Vellore",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 4,
+    "annual_fees_inr": 200000,
+    "placement_percentage": 85,
+    "college_website": "vit.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9888888888",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "VIT Vellore",
+    "location": "Vellore",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 4,
+    "annual_fees_inr": 190000,
+    "placement_percentage": 83,
+    "college_website": "vit.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9888888888",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "IIIT Hyderabad",
+    "location": "Hyderabad",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCA",
+    "duration_years": 4,
+    "annual_fees_inr": 10000,
+    "placement_percentage": 92,
+    "college_website": "iiithyd.ac.in",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9999999999",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "IIIT Hyderabad",
+    "location": "Hyderabad",
+    "college_type": "GOVERNMENT",
+    "course_name": "MCA",
+    "duration_years": 2,
+    "annual_fees_inr": 25000,
+    "placement_percentage": 94,
+    "college_website": "iiithyd.ac.in",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9999999999",
+    "best_for": [
+      "BCA graduates wanting advanced technical skills",
+      "Those interested in research or advanced development",
+      "Career aspirants in specialized tech roles"
+    ],
+    "career_paths": [
+      "Senior Software Architect",
+      "AI/ML Engineer",
+      "System Designer",
+      "Research Engineer",
+      "Technical Lead"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have strong coding fundamentals (BCA or equivalent). You want specialized technical skills in AI, systems, or advanced development. You enjoy research and complex problems.",
+    "not_recommended_if": "You dislike deep technical work, prefer business roles, don't enjoy continuous learning, or want to move away from coding.",
+    "avg_salary_range": "\u20b95L - \u20b910L (starting), \u20b910L - \u20b925L+ (with specialization)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "HIGH",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Rajasthan University",
+    "location": "Jaipur",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 3000,
+    "placement_percentage": 65,
+    "college_website": "uniraj.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9333333333",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Rajasthan University",
+    "location": "Jaipur",
+    "college_type": "GOVERNMENT",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 3000,
+    "placement_percentage": 63,
+    "college_website": "uniraj.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9333333333",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Rajasthan University",
+    "location": "Jaipur",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 3000,
+    "placement_percentage": 60,
+    "college_website": "uniraj.ac.in",
+    "college_affiliation": "State University",
+    "contact_phone": "+91-9333333333",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Maharaja College",
+    "location": "Indore",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 60000,
+    "placement_percentage": 81,
+    "college_website": "maharajacollege.in",
+    "college_affiliation": "Affiliated",
+    "contact_phone": "+91-9444555666",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Maharaja College",
+    "location": "Indore",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 55000,
+    "placement_percentage": 79,
+    "college_website": "maharajacollege.in",
+    "college_affiliation": "Affiliated",
+    "contact_phone": "+91-9444555666",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Maharaja College",
+    "location": "Indore",
+    "college_type": "PRIVATE",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 50000,
+    "placement_percentage": 77,
+    "college_website": "maharajacollege.in",
+    "college_affiliation": "Affiliated",
+    "contact_phone": "+91-9444555666",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Presidency College",
+    "location": "Chennai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 4000,
+    "placement_percentage": 77,
+    "college_website": "presidency.edu.in",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9666777888",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Presidency College",
+    "location": "Chennai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 4000,
+    "placement_percentage": 75,
+    "college_website": "presidency.edu.in",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9666777888",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Presidency College",
+    "location": "Chennai",
+    "college_type": "GOVERNMENT",
+    "course_name": "BCOM",
+    "duration_years": 3,
+    "annual_fees_inr": 4000,
+    "placement_percentage": 72,
+    "college_website": "presidency.edu.in",
+    "college_affiliation": "Autonomous",
+    "contact_phone": "+91-9666777888",
+    "best_for": [
+      "Students interested in accounting and finance",
+      "Those pursuing careers in auditing or taxation",
+      "Future accountants and financial analysts"
+    ],
+    "career_paths": [
+      "Chartered Accountant (CA)",
+      "Financial Analyst",
+      "Tax Consultant",
+      "Auditor",
+      "Accounts Manager"
+    ],
+    "difficulty_level": "medium-high",
+    "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+    "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+    "avg_salary_range": "\u20b92L - \u20b95L (starting), \u20b95L - \u20b915L+ (with CA/qualifications)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "HIGH",
+      "business": "MEDIUM",
+      "creativity": "LOW",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Banaras Hindu University",
+    "location": "Varanasi",
+    "college_type": "PRIVATE",
+    "course_name": "BCA",
+    "duration_years": 3,
+    "annual_fees_inr": 85000,
+    "placement_percentage": 84,
+    "college_website": "bhu.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777888999",
+    "best_for": [
+      "Students who enjoy logical thinking and coding",
+      "Career aspirants in IT/Software development",
+      "Those interested in data structures and algorithms"
+    ],
+    "career_paths": [
+      "Software Developer",
+      "Data Analyst",
+      "Web Developer",
+      "Systems Administrator",
+      "IT Consultant"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+    "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+    "avg_salary_range": "\u20b93L - \u20b98L (starting), \u20b98L - \u20b920L+ (with experience)",
+    "skill_fit": {
+      "coding": "HIGH",
+      "math": "HIGH",
+      "business": "LOW",
+      "creativity": "MEDIUM",
+      "communication": "MEDIUM"
+    }
+  },
+  {
+    "college_name": "Banaras Hindu University",
+    "location": "Varanasi",
+    "college_type": "PRIVATE",
+    "course_name": "BBA",
+    "duration_years": 3,
+    "annual_fees_inr": 80000,
+    "placement_percentage": 82,
+    "college_website": "bhu.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777888999",
+    "best_for": [
+      "Students interested in business and management",
+      "Future entrepreneurs and business leaders",
+      "Those wanting to work in corporate management"
+    ],
+    "career_paths": [
+      "Business Manager",
+      "Operations Manager",
+      "HR Manager",
+      "Marketing Manager",
+      "Finance Manager"
+    ],
+    "difficulty_level": "medium",
+    "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+    "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+    "avg_salary_range": "\u20b92.5L - \u20b96L (starting), \u20b96L - \u20b915L+ (with experience)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  },
+  {
+    "college_name": "Banaras Hindu University",
+    "location": "Varanasi",
+    "college_type": "PRIVATE",
+    "course_name": "MBA",
+    "duration_years": 2,
+    "annual_fees_inr": 250000,
+    "placement_percentage": 89,
+    "college_website": "bhu.ac.in",
+    "college_affiliation": "Deemed University",
+    "contact_phone": "+91-9777888999",
+    "best_for": [
+      "Graduates wanting advanced business skills",
+      "Professionals aiming for senior management roles",
+      "Those preparing for startups or entrepreneurship"
+    ],
+    "career_paths": [
+      "Senior Manager",
+      "Director",
+      "CEO/Co-founder",
+      "Strategy Manager",
+      "Consulting Manager"
+    ],
+    "difficulty_level": "high",
+    "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+    "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+    "avg_salary_range": "\u20b96L - \u20b912L (starting), \u20b915L - \u20b940L+ (with experience/consulting)",
+    "skill_fit": {
+      "coding": "LOW",
+      "math": "MEDIUM",
+      "business": "HIGH",
+      "creativity": "HIGH",
+      "communication": "HIGH"
+    }
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "engineering_benchmark": {
+    "avg_fees_lakh": 8.31,
+    "fees_range": "2.0\u201349.02 Lakh",
+    "avg_package_lpa": 9.66,
+    "avg_placement_pct": 69.0,
+    "note": "Based on NIRF-ranked engineering colleges. Management/Commerce programs vary."
+  },
+  "aims_stats": {
+    "BBA": {
+      "fees": "Approx. 2\u20134 Lakh total",
+      "avg_package": "3\u20138 LPA",
+      "placement_support": true
+    },
+    "BCA": {
+      "fees": "Approx. 2\u20134 Lakh total",
+      "avg_package": "4\u20138 LPA",
+      "placement_support": true
+    },
+    "MBA": {
+      "fees": "Approx. 4\u20138 Lakh total",
+      "avg_package": "6\u201312 LPA",
+      "placement_support": true
+    },
+    "B.Com": {
+      "fees": "Approx. 1.5\u20133 Lakh total",
+      "avg_package": "3\u20136 LPA",
+      "placement_support": true
+    },
+    "MCA": {
+      "fees": "Approx. 3\u20135 Lakh total",
+      "avg_package": "5\u201310 LPA",
+      "placement_support": true
+    },
+    "BHM": {
+      "fees": "Approx. 2\u20134 Lakh total",
+      "avg_package": "2.5\u20136 LPA",
+      "placement_support": true
+    }
+  }
+}

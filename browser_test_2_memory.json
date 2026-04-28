@@ -1,0 +1,173 @@
+{
+  "test_info": {
+    "timestamp": "2026-04-27T00:18:53.366675",
+    "email": "storageeapp@gmail.com",
+    "session_id": "browser_test_memory",
+    "total_turns": 4
+  },
+  "conversation_log": [
+    {
+      "turn": 1,
+      "user": "I want to do MBA",
+      "assistant": "Great choice! MBA is locked. What would you like to know?",
+      "memory": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 2,
+      "user": "What about fees",
+      "assistant": "You've chosen **MBA**. What would you like to know more about?\n\nYou seem ready for MBA. Want me to w",
+      "memory": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 3,
+      "user": "And hostel?",
+      "assistant": "You've chosen **MBA**. What would you like to know more about?",
+      "memory": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 4,
+      "user": "Can I apply now?",
+      "assistant": "**Ready to move forward with MBA!**\n\nHere is the quick 3-step path to joining AIMS:\n  1. **Eligibili",
+      "memory": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 4,
+        "conversion_stage": "none"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "step": "Turn 1",
+      "timestamp": "2026-04-27T00:18:53.366873",
+      "user_input": "I want to do MBA",
+      "assistant_response": "Great choice! MBA is locked. What would you like to know?",
+      "mode": "guidance",
+      "confidence": 0.95,
+      "memory_state": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "guidance"
+        ],
+        "stage": "guidance"
+      }
+    },
+    {
+      "step": "Turn 2",
+      "timestamp": "2026-04-27T00:18:53.367066",
+      "user_input": "What about fees",
+      "assistant_response": "You've chosen **MBA**. What would you like to know more about?\n\nYou seem ready for MBA. Want me to walk you through the application steps?",
+      "mode": "locked",
+      "confidence": 1.0,
+      "memory_state": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "locked"
+        ],
+        "stage": "locked"
+      }
+    },
+    {
+      "step": "Turn 3",
+      "timestamp": "2026-04-27T00:18:53.367227",
+      "user_input": "And hostel?",
+      "assistant_response": "You've chosen **MBA**. What would you like to know more about?",
+      "mode": "locked",
+      "confidence": 1.0,
+      "memory_state": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "locked"
+        ],
+        "stage": "locked"
+      }
+    },
+    {
+      "step": "Turn 4",
+      "timestamp": "2026-04-27T00:18:53.367321",
+      "user_input": "Can I apply now?",
+      "assistant_response": "**Ready to move forward with MBA!**\n\nHere is the quick 3-step path to joining AIMS:\n  1. **Eligibility Check:** Your profile looks good for this course.\n  2. **Documents:** Keep your 10th/12th markshe",
+      "mode": "apply",
+      "confidence": 1.0,
+      "memory_state": {
+        "locked_course": "MBA",
+        "courses": [
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 4,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "apply"
+        ],
+        "stage": "apply"
+      }
+    }
+  ],
+  "final_memory_state": {
+    "marks": null,
+    "courses": [
+      "MBA"
+    ],
+    "interests": "B.Com",
+    "locked_course": "MBA",
+    "turn_count": 4,
+    "conversion_stage": "none",
+    "confusion_count": 0,
+    "last_seen": 1777229333.367244,
+    "session_id": "browser_test_memory"
+  }
+}

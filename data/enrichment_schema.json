@@ -1,0 +1,154 @@
+{
+  "course_intelligence": {
+    "BCA": {
+      "best_for": [
+        "Students who enjoy logical thinking and coding",
+        "Career aspirants in IT/Software development",
+        "Those interested in data structures and algorithms"
+      ],
+      "career_paths": [
+        "Software Developer",
+        "Data Analyst",
+        "Web Developer",
+        "Systems Administrator",
+        "IT Consultant"
+      ],
+      "difficulty_level": "medium",
+      "recommended_if": "You enjoy problem-solving, coding, and building systems. You want a technical career in IT. You're comfortable with math and logical thinking.",
+      "not_recommended_if": "You dislike programming, avoid mathematics, prefer business or creative work, or want roles in management or finance.",
+      "avg_salary_range": "₹3L - ₹8L (starting), ₹8L - ₹20L+ (with experience)",
+      "skill_fit": {
+        "coding": "HIGH",
+        "math": "HIGH",
+        "business": "LOW",
+        "creativity": "MEDIUM",
+        "communication": "MEDIUM"
+      }
+    },
+    "BBA": {
+      "best_for": [
+        "Students interested in business and management",
+        "Future entrepreneurs and business leaders",
+        "Those wanting to work in corporate management"
+      ],
+      "career_paths": [
+        "Business Manager",
+        "Operations Manager",
+        "HR Manager",
+        "Marketing Manager",
+        "Finance Manager"
+      ],
+      "difficulty_level": "medium",
+      "recommended_if": "You're interested in business, management, or leadership. You enjoy organizing people and resources. You want a career in corporate management or entrepreneurship.",
+      "not_recommended_if": "You prefer technical work, dislike soft skills, avoid people management, or want a purely technical career in IT.",
+      "avg_salary_range": "₹2.5L - ₹6L (starting), ₹6L - ₹15L+ (with experience)",
+      "skill_fit": {
+        "coding": "LOW",
+        "math": "MEDIUM",
+        "business": "HIGH",
+        "creativity": "HIGH",
+        "communication": "HIGH"
+      }
+    },
+    "BCOM": {
+      "best_for": [
+        "Students interested in accounting and finance",
+        "Those pursuing careers in auditing or taxation",
+        "Future accountants and financial analysts"
+      ],
+      "career_paths": [
+        "Chartered Accountant (CA)",
+        "Financial Analyst",
+        "Tax Consultant",
+        "Auditor",
+        "Accounts Manager"
+      ],
+      "difficulty_level": "medium-high",
+      "recommended_if": "You're detail-oriented and enjoy numbers. You're interested in accounting, taxation, or financial management. You want a professional career as CA or financial expert.",
+      "not_recommended_if": "You dislike mathematics, prefer creative work, dislike detailed analysis, or want a technical or people-oriented career.",
+      "avg_salary_range": "₹2L - ₹5L (starting), ₹5L - ₹15L+ (with CA/qualifications)",
+      "skill_fit": {
+        "coding": "LOW",
+        "math": "HIGH",
+        "business": "MEDIUM",
+        "creativity": "LOW",
+        "communication": "MEDIUM"
+      }
+    },
+    "MBA": {
+      "best_for": [
+        "Graduates wanting advanced business skills",
+        "Professionals aiming for senior management roles",
+        "Those preparing for startups or entrepreneurship"
+      ],
+      "career_paths": [
+        "Senior Manager",
+        "Director",
+        "CEO/Co-founder",
+        "Strategy Manager",
+        "Consulting Manager"
+      ],
+      "difficulty_level": "high",
+      "recommended_if": "You have 0-3 years work experience and want to advance to senior management. You're interested in strategy, entrepreneurship, or consulting. You're ready for intensive study.",
+      "not_recommended_if": "You prefer technical specialization, dislike group projects, avoid leadership roles, or are early in your first job.",
+      "avg_salary_range": "₹6L - ₹12L (starting), ₹15L - ₹40L+ (with experience/consulting)",
+      "skill_fit": {
+        "coding": "LOW",
+        "math": "MEDIUM",
+        "business": "HIGH",
+        "creativity": "HIGH",
+        "communication": "HIGH"
+      }
+    },
+    "MCA": {
+      "best_for": [
+        "BCA graduates wanting advanced technical skills",
+        "Those interested in research or advanced development",
+        "Career aspirants in specialized tech roles"
+      ],
+      "career_paths": [
+        "Senior Software Architect",
+        "AI/ML Engineer",
+        "System Designer",
+        "Research Engineer",
+        "Technical Lead"
+      ],
+      "difficulty_level": "high",
+      "recommended_if": "You have strong coding fundamentals (BCA or equivalent). You want specialized technical skills in AI, systems, or advanced development. You enjoy research and complex problems.",
+      "not_recommended_if": "You dislike deep technical work, prefer business roles, don't enjoy continuous learning, or want to move away from coding.",
+      "avg_salary_range": "₹5L - ₹10L (starting), ₹10L - ₹25L+ (with specialization)",
+      "skill_fit": {
+        "coding": "HIGH",
+        "math": "HIGH",
+        "business": "LOW",
+        "creativity": "HIGH",
+        "communication": "MEDIUM"
+      }
+    },
+    "MCOM": {
+      "best_for": [
+        "BCOM graduates wanting advanced accounting/finance",
+        "Those pursuing advanced professional certifications",
+        "Future financial strategy experts"
+      ],
+      "career_paths": [
+        "Senior Chartered Accountant",
+        "Financial Director",
+        "Chief Financial Officer",
+        "Financial Strategy Expert",
+        "Audit Partner"
+      ],
+      "difficulty_level": "high",
+      "recommended_if": "You have BCOM background and strong accounting knowledge. You want to specialize in advanced finance, taxation, or auditing. You're preparing for CA or similar qualifications.",
+      "not_recommended_if": "You want to leave accounting/finance, dislike detailed analysis, prefer management over technical accounting, or want broader business exposure.",
+      "avg_salary_range": "₹4L - ₹8L (starting), ₹15L - ₹30L+ (as CFO/Partner)",
+      "skill_fit": {
+        "coding": "LOW",
+        "math": "HIGH",
+        "business": "MEDIUM",
+        "creativity": "LOW",
+        "communication": "MEDIUM"
+      }
+    }
+  }
+}

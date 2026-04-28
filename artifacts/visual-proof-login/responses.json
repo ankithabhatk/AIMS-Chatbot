@@ -1,0 +1,23 @@
+{
+  "email": "visual-proof-1777265370@example.com",
+  "responses": [
+    {
+      "step": 1,
+      "user": "I like coding",
+      "response": "Try asking about courses, fees, or admission process.",
+      "screenshot": "/Users/maneeth/Desktop/Chat-Bot/artifacts/visual-proof-login/step1.png"
+    },
+    {
+      "step": 2,
+      "user": "Tell me about BCA",
+      "response": "Try asking about courses, fees, or admission process.",
+      "screenshot": "/Users/maneeth/Desktop/Chat-Bot/artifacts/visual-proof-login/step2.png"
+    },
+    {
+      "step": 3,
+      "user": "What about MCA?",
+      "response": "Try asking about courses, fees, or admission process.",
+      "screenshot": "/Users/maneeth/Desktop/Chat-Bot/artifacts/visual-proof-login/step3.png"
+    }
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "timestamp": "2026-04-27T07:10:45.045470",
+  "total_scenarios": 30,
+  "hesitation_cases": 10,
+  "recovery_count": 1,
+  "drop_count": 3,
+  "recovery_rate": "10.0%",
+  "observations": [
+    {
+      "scenario": 1,
+      "name": "Soft \u2192 Compare \u2192 Recover",
+      "expected": "recover",
+      "actual": "convert",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 2,
+      "name": "Soft \u2192 Doubt \u2192 Clarify \u2192 Proceed",
+      "expected": "recover",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 3,
+      "name": "Soft \u2192 Question \u2192 Reassure \u2192 Commit",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 4,
+      "name": "Soft \u2192 Explore Alt \u2192 Return \u2192 Commit",
+      "expected": "recover",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 5,
+      "name": "Soft \u2192 Comparison \u2192 Deeper \u2192 Commit",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 6,
+      "name": "Soft \u2192 Price check \u2192 Hesitation \u2192 Proceed",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 7,
+      "name": "Soft \u2192 Slight doubt \u2192 Keep asking",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 8,
+      "name": "Soft \u2192 Concern \u2192 Address \u2192 Proceed",
+      "expected": "recover",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 9,
+      "name": "Soft \u2192 Alternative thought \u2192 Reaffirm",
+      "expected": "recover",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 10,
+      "name": "Soft \u2192 Question \u2192 Answer \u2192 Proceed",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 11,
+      "name": "Soft \u2192 Doubt \u2192 Multiple questions \u2192 Fade",
+      "expected": "drop",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 12,
+      "name": "Soft \u2192 Indecision \u2192 No clear next step",
+      "expected": "drop",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 13,
+      "name": "Soft \u2192 Regret signals \u2192 Withdraw",
+      "expected": "drop",
+      "actual": "drop",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": true
+    },
+    {
+      "scenario": 14,
+      "name": "Soft \u2192 Price shock \u2192 Withdraw",
+      "expected": "drop",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 15,
+      "name": "Soft \u2192 Overwhelm \u2192 Disengage",
+      "expected": "drop",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 16,
+      "name": "Soft \u2192 Immediate commit",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 17,
+      "name": "Soft \u2192 One question \u2192 Proceed",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 18,
+      "name": "Soft \u2192 Reassurance \u2192 Action",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": false,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 19,
+      "name": "Soft \u2192 No hesitation \u2192 Direct to apply",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 20,
+      "name": "Soft \u2192 Question \u2192 Answer \u2192 Done",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 21,
+      "name": "Soft \u2192 Deep exploration \u2192 Convert",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 22,
+      "name": "Soft \u2192 Market research \u2192 Proceed",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 23,
+      "name": "Soft \u2192 Career path \u2192 Commit",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 24,
+      "name": "Soft \u2192 Comparison deep dive \u2192 Choose",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 25,
+      "name": "Soft \u2192 Practical concerns \u2192 Resolved \u2192 Proceed",
+      "expected": "recover",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 26,
+      "name": "Soft \u2192 Comparison paralysis",
+      "expected": "drop",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 27,
+      "name": "Soft \u2192 Family concern \u2192 Stall",
+      "expected": "drop",
+      "actual": "uncertain",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": false
+    },
+    {
+      "scenario": 28,
+      "name": "Soft \u2192 External factor \u2192 Defer",
+      "expected": "drop",
+      "actual": "drop",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": true
+    },
+    {
+      "scenario": 29,
+      "name": "Soft \u2192 Timing issue \u2192 No commitment",
+      "expected": "drop",
+      "actual": "no_hesitation",
+      "soft_detected": true,
+      "hesitation_detected": false,
+      "match": null
+    },
+    {
+      "scenario": 30,
+      "name": "Soft \u2192 Unclear process \u2192 Abandon",
+      "expected": "drop",
+      "actual": "drop",
+      "soft_detected": true,
+      "hesitation_detected": true,
+      "match": true
+    }
+  ]
+}

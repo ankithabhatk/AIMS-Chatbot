@@ -1,0 +1,28 @@
+{
+  "answer": "MBA: \u20b950,000 \u2013 \u20b91,00,000 per year\n\nMBA (Master of Business Administration) - 2 years. What would you like to know about MBA? (Fees, Admission, Placement, etc.)",
+  "intent": "fees",
+  "mode": "structured",
+  "confidence": 0.9,
+  "confidence_score": 0.9,
+  "self_score": {},
+  "fallback": false,
+  "is_fallback": false,
+  "status": "unlock",
+  "sources": [],
+  "suggestions": [
+    "MBA fees",
+    "BCA admission",
+    "Placement record",
+    "Is there a payment plan available?",
+    "Are scholarships offered?",
+    "What is the scholarship eligibility?"
+  ],
+  "meta": {
+    "response_time_ms": 0,
+    "chunks_used": 0,
+    "session_id": "bddc3068-ccd3-4184-8b20-e311a4e3b2f0",
+    "intent": "fees",
+    "mode": "structured",
+    "self_score": {}
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "test_info": {
+    "timestamp": "2026-04-27T00:18:53.369153",
+    "email": "storageeapp@gmail.com",
+    "session_id": "browser_test_edge",
+    "total_turns": 3
+  },
+  "conversation_log": [
+    {
+      "turn": 1,
+      "user": "I like coding but also business",
+      "assistant": "I want to be as helpful as possible with your career choice.\n\nYou can ask me about:\n\u2022 Courses (BBA, ",
+      "memory": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 2,
+      "user": "Maybe BCA?",
+      "assistant": "Great choice! BCA is locked. What would you like to know?",
+      "memory": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA"
+        ],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      }
+    },
+    {
+      "turn": 3,
+      "user": "Actually I want MBA",
+      "assistant": "You've chosen **BCA**. What would you like to know more about?",
+      "memory": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA",
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      }
+    }
+  ],
+  "screenshots": [
+    {
+      "step": "Turn 1",
+      "timestamp": "2026-04-27T00:18:53.369891",
+      "user_input": "I like coding but also business",
+      "assistant_response": "I want to be as helpful as possible with your career choice.\n\nYou can ask me about:\n\u2022 Courses (BBA, BCA, B.Com, etc.)\n\u2022 Fees & Scholarships\n\u2022 Placements & Salary\n\u2022 Admission process\n\nWhat would you li",
+      "mode": "fallback",
+      "confidence": 0.0,
+      "memory_state": {
+        "locked_course": null,
+        "courses": [],
+        "marks": null,
+        "turn_count": 1,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "error"
+        ],
+        "stage": "fallback"
+      }
+    },
+    {
+      "step": "Turn 2",
+      "timestamp": "2026-04-27T00:18:53.370065",
+      "user_input": "Maybe BCA?",
+      "assistant_response": "Great choice! BCA is locked. What would you like to know?",
+      "mode": "guidance",
+      "confidence": 0.95,
+      "memory_state": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA"
+        ],
+        "marks": null,
+        "turn_count": 2,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "guidance"
+        ],
+        "stage": "guidance"
+      }
+    },
+    {
+      "step": "Turn 3",
+      "timestamp": "2026-04-27T00:18:53.370220",
+      "user_input": "Actually I want MBA",
+      "assistant_response": "You've chosen **BCA**. What would you like to know more about?",
+      "mode": "locked",
+      "confidence": 1.0,
+      "memory_state": {
+        "locked_course": "BCA",
+        "courses": [
+          "BCA",
+          "MBA"
+        ],
+        "marks": null,
+        "turn_count": 3,
+        "conversion_stage": "none"
+      },
+      "brain_output": {
+        "detected_intents": [
+          "locked"
+        ],
+        "stage": "locked"
+      }
+    }
+  ],
+  "final_memory_state": {
+    "marks": null,
+    "courses": [
+      "BCA",
+      "MBA"
+    ],
+    "interests": "B.Com",
+    "locked_course": "BCA",
+    "turn_count": 3,
+    "conversion_stage": "none",
+    "confusion_count": 0,
+    "last_seen": 1777229333.3700821,
+    "session_id": "browser_test_edge"
+  }
+}
