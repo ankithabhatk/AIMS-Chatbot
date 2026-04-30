@@ -89,23 +89,30 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+frontend_url = os.getenv("FRONTEND_URL", "")
+allowed_origins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:5000",
+    "http://localhost:5001",
+    "http://localhost:8001",
+    "http://localhost:8080",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:5000",
+    "http://127.0.0.1:5001",
+    "http://127.0.0.1:8001",
+    "http://127.0.0.1:8080",
+    "https://www.theaims.ac.in",
+]
+
+# Add production frontend URL if configured
+if frontend_url:
+    allowed_origins.extend([url.strip() for url in frontend_url.split(",") if url.strip()])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:3001",  # Added for Next.js alternate port
-        "http://localhost:5000",
-        "http://localhost:5001",
-        "http://localhost:8001",
-        "http://localhost:8080",
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:3001",  # Added for Next.js alternate port
-        "http://127.0.0.1:5000",
-        "http://127.0.0.1:5001",
-        "http://127.0.0.1:8001",
-        "http://127.0.0.1:8080",
-        "https://www.theaims.ac.in",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

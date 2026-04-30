@@ -887,3 +887,242 @@ body {
     max-width: 94%;
   }
 }
+
+/* ============================================================
+   TYPING INDICATOR — 3-dot bounce animation
+   ============================================================ */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+
+.typing-indicator-bubble {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--aims-magenta);
+  animation: typingBounce 1.2s infinite;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ============================================================
+   CONFIDENCE BAR — Animated progress bar below bot messages
+   ============================================================ */
+.confidence-bar-container {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.confidence-bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.confidence-bar-track {
+  height: 4px;
+  border-radius: 99px;
+  background-color: var(--border-light);
+  overflow: hidden;
+}
+
+.confidence-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.confidence-bar-fill.low    { background: linear-gradient(90deg, #F59E0B, #FCD34D); }
+.confidence-bar-fill.medium { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+.confidence-bar-fill.high   { background: linear-gradient(90deg, #10B981, #34D399); }
+
+/* ============================================================
+   SOURCE CARDS — Inline citation cards below bot messages
+   ============================================================ */
+.source-cards-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 8px;
+  margin-top: 12px;
+  padding-bottom: 8px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.source-cards-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.source-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: all 0.2s;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.dark .source-card {
+  background: rgba(30, 41, 59, 0.7);
+  border-color: var(--border-medium);
+}
+
+.source-card:hover {
+  border-color: var(--aims-accent);
+  color: var(--aims-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.source-card-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.source-card-domain {
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--border-light);
+  padding: 1px 6px;
+  border-radius: 99px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .source-cards-container {
+    padding-bottom: 4px;
+    margin-top: 8px;
+  }
+  .source-card {
+    flex-shrink: 0;
+  }
+}
+
+/* ============================================================
+   STUDENT MEMORY BANNER — Session awareness indicator
+   ============================================================ */
+.memory-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(147, 30, 111, 0.06), rgba(241, 90, 36, 0.06));
+  border: 1px solid rgba(147, 30, 111, 0.15);
+  margin-bottom: 8px;
+  animation: bannerSlideIn 0.4s ease-out;
+}
+
+@keyframes bannerSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.memory-banner-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.memory-banner-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.memory-banner-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--aims-magenta);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.memory-banner-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.memory-tag {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 99px;
+  background: rgba(147, 30, 111, 0.1);
+  color: var(--aims-magenta);
+  border: 1px solid rgba(147, 30, 111, 0.2);
+}
+
+.memory-confidence-change {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.confidence-delta-up   { color: #10B981; }
+.confidence-delta-down { color: #EF4444; }
+.confidence-delta-same { color: var(--text-muted); }
+
+/* ============================================================
+   MARKDOWN RENDERING — Inside bot message bubbles
+   ============================================================ */
+.bot-bubble .md-strong { font-weight: 700; }
+.bot-bubble .md-bullet-list {
+  padding-left: 4px;
+  margin: 6px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bot-bubble .md-bullet-item {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.bot-bubble .md-bullet-item::before {
+  content: "•";
+  color: var(--aims-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.bot-bubble hr { border: none; border-top: 1px solid var(--border-light); margin: 10px 0; }
+

@@ -12,6 +12,7 @@ import { AnnouncementBanner } from './AnnouncementBanner';
 import { QuickReplies } from './QuickReplies';
 import { FAQAccordion } from './FAQAccordion';
 import { ImportantDates } from './ImportantDates';
+import { StudentMemoryBanner } from './StudentMemoryBanner';
 
 export const ChatWindow: React.FC = () => {
   const { messages, isLoading, profile, sendMessage, isChatOpen } = useChat();
@@ -26,6 +27,24 @@ export const ChatWindow: React.FC = () => {
       scrollToBottom();
     }
   }, [messages, isLoading]);
+
+  // Extract dynamic suggestions from the last bot message
+  const lastBotMessage = [...messages].reverse().find(m => !m.isUser && m.metadata?.suggestions);
+  const dynamicSuggestions = lastBotMessage?.metadata?.suggestions;
+
+  // Extract confidence history for StudentMemoryBanner
+  const counselorMessages = messages.filter(m => !m.isUser && m.metadata?.counselor_mode);
+  const isCounselorMode = counselorMessages.length > 0;
+  
+  let currentConfidence: number | null = null;
+  let prevConfidence: number | null = null;
+  
+  if (counselorMessages.length > 0) {
+    currentConfidence = counselorMessages[counselorMessages.length - 1].metadata?.profile_confidence_score ?? null;
+    if (counselorMessages.length > 1) {
+      prevConfidence = counselorMessages[counselorMessages.length - 2].metadata?.profile_confidence_score ?? null;
+    }
+  }
 
   if (!isChatOpen) return null;
 
@@ -42,6 +61,15 @@ export const ChatWindow: React.FC = () => {
         <div className="messages-container">
           <AnnouncementBanner />
           
+          {profile && (
+            <StudentMemoryBanner 
+              visible={isCounselorMode} 
+              interests={profile.course ? [profile.course] : []}
+              confidenceScore={currentConfidence}
+              prevConfidenceScore={prevConfidence}
+            />
+          )}
+
           {!profile ? (
             <WelcomeMessage />
           ) : (
@@ -86,7 +114,10 @@ export const ChatWindow: React.FC = () => {
 
       <div className="chat-input-section">
         {profile && !isLoading && (
-          <QuickReplies onSelect={(query) => sendMessage(query)} />
+          <QuickReplies 
+            onSelect={(query) => sendMessage(query)} 
+            suggestions={dynamicSuggestions}
+          />
         )}
         <ChatInput />
       </div>

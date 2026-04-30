@@ -140,3 +140,4 @@ next-env.d.ts
 !.yarn/releases
 !.yarn/versions
 
+.aider*

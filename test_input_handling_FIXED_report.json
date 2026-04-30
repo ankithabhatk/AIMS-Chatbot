@@ -1,7 +1,7 @@
 [
   {
     "query": "asdfgh",
-    "input_classification": "QUESTION",
+    "input_classification": "NONSENSE",
     "intent_detected": "unknown",
     "intent_score": 0.0,
     "structured_intent": "none",
@@ -9,7 +9,9 @@
     "program_detected": null,
     "typo_corrected": null,
     "fallback": true,
-    "notes": []
+    "notes": [
+      "NONSENSE detected"
+    ]
   },
   {
     "query": "123456",
@@ -107,7 +109,7 @@
   },
   {
     "query": "bca!!!",
-    "input_classification": "QUESTION",
+    "input_classification": "NONSENSE",
     "intent_detected": "unknown",
     "intent_score": 0.0,
     "structured_intent": "none",
@@ -115,7 +117,9 @@
     "program_detected": "BCA",
     "typo_corrected": null,
     "fallback": true,
-    "notes": []
+    "notes": [
+      "NONSENSE detected"
+    ]
   },
   {
     "query": "admission???",

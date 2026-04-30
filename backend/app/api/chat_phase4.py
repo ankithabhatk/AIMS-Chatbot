@@ -100,42 +100,12 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         session = get_or_create_session(session_id)
         
         # ================================================================
-        # 2. SENSITIVE DATA PROTECTION (Strict Gating)
+        # 2. SENSITIVE DATA PROTECTION (Moved to Orchestration Layer)
         # ================================================================
-        sensitive_keywords = [
-            "fee", "scholarship", "cost", "price", "salary", "expensive",
-            "package", "ctc", "placement %", "placement rate", "exact placement",
-            "how much", "financial"
-        ]
-        if any(keyword in query.lower() for keyword in sensitive_keywords) and not session["has_lead"]:
-            session["gate_active"] = True
-            logger.info(f"[{session_id}] Sensitive query intercepted - Triggering immediate gate")
-            gate_answer = f"{FEES_DISCLAIMER}\n\n{get_gate_invitation()}"
-            # Log to in-memory admin system
-            try:
-                from app.services.chat_logger import log_chat as _log_chat
-                _log_chat(session_id, query, "[Gated — fee/financial query]",
-                          confidence=1.0, intent="Fees Inquiry", status="lock")
-            except Exception:
-                pass
-            # Persist to Supabase
-            from app.services.database.db_logger import persist_chat_turn as _persist
-            background_tasks.add_task(
-                _persist,
-                session_id=session_id, query=query, response=gate_answer,
-                intent="Fees Inquiry", confidence_score=1.0,
-                processing_time_ms=0, status="lock", is_fallback=False,
-            )
-            return {
-                "answer": gate_answer,
-                "status": "lock",
-                "fallback": False,
-                "confidence": 1.0,
-                "sources": [],
-                "suggestions": ["Programs offered", "Placement record", "Campus tour"],
-                "meta": {"intent": "sensitive_data_conversion", "session_id": session_id}
-            }
-
+        # Blanket interception of "fee" queries is removed here.
+        # The Orchestration layer (SelfHealingEngine) now distinguishes between
+        # informational queries and lead-intent queries.
+        
         # ================================================================
         # 3. MANDATORY GATE INTERCEPT (Hard Block)
         # ================================================================
@@ -297,6 +267,54 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
             user_email = request.user.email
         
         logger.info(f"[{session_id}] Processing Question: {query[:60]}...")
+        
+        # ================================================================
+        # 1.5 ORCHESTRATION LAYER (Decision Engine)
+        # ================================================================
+        from app.services.orchestration.self_healing_engine import SelfHealingEngine
+        from app.services.orchestration.engine import get_structured_response_for_intent
+        
+        engine = SelfHealingEngine()
+        decision = engine.decide(query)
+        
+        if decision.mode == "structured":
+            # Pass session_id in context for the structured handler
+            structured_res = get_structured_response_for_intent(
+                decision.intent, query, {"session_id": session_id}
+            )
+            if structured_res:
+                logger.info(f"[{session_id}] Structured response found for intent: {decision.intent}")
+                
+                # If the structured handler says it's a lock (gate), respect it
+                status = structured_res.get("status", "unlock")
+                if status == "lock":
+                    session["gate_active"] = True
+                
+                response_time_ms = int((time.time() - start_time) * 1000)
+                
+                # Persist turn
+                from app.services.database.db_logger import persist_chat_turn as _p
+                background_tasks.add_task(
+                    _p,
+                    session_id=session_id, query=query, response=structured_res["answer"],
+                    intent=decision.intent, confidence_score=structured_res.get("confidence", 1.0),
+                    processing_time_ms=response_time_ms, status=status, is_fallback=False,
+                )
+                
+                return {
+                    "answer": structured_res["answer"],
+                    "status": status,
+                    "fallback": False,
+                    "confidence": structured_res.get("confidence", 1.0),
+                    "sources": [],
+                    "suggestions": structured_res.get("suggestions", ["Admission process", "Placements"]),
+                    "meta": {
+                        "intent": decision.intent, 
+                        "mode": "structured", 
+                        "session_id": session_id,
+                        "response_time_ms": response_time_ms
+                    }
+                }
         
         # ================================================================
         # 2. REWRITE QUERY (Only for Questions)

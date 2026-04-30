@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 
 interface QuickRepliesProps {
   onSelect: (query: string) => void;
+  suggestions?: string[];
 }
 
-export const QuickReplies: React.FC<QuickRepliesProps> = ({ onSelect }) => {
-  const suggestions = [
+export const QuickReplies: React.FC<QuickRepliesProps> = ({ onSelect, suggestions: propSuggestions }) => {
+  const defaultSuggestions = [
     "Courses offered?",
     "Admission process",
     "Fees structure",
@@ -17,6 +18,8 @@ export const QuickReplies: React.FC<QuickRepliesProps> = ({ onSelect }) => {
     "Important dates",
     "Contact admissions"
   ];
+  
+  const suggestions = propSuggestions && propSuggestions.length > 0 ? propSuggestions : defaultSuggestions;
 
   return (
     <motion.div 

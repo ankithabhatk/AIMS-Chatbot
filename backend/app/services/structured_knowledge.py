@@ -6,6 +6,7 @@ Bypasses RAG entirely for enumeration questions.
 
 import re
 from difflib import SequenceMatcher
+from typing import Optional
 
 
 def partial_ratio(value: str, pattern: str) -> int:
@@ -99,14 +100,35 @@ ELIGIBILITY = {
 }
 
 PLACEMENT_STATS = {
-    "highest_overall": "₹27 LPA",
-    "highest_current": "₹16.5 LPA",
-    "average": "₹8 LPA",
-    "placement_rate": "84% of eligible students placed",
-    "ppo_conversion": "70% internship-to-PPO conversion",
+    "highest_overall": "Up to ₹27 LPA (top performers; varies by batch)",
+    "highest_current": "Up to ₹16.5 LPA",
+    "average": "Around ₹8 LPA",
+    "placement_rate": "Around 80%+ placement rate",
+    "placement_rate_note": "(varies by program and year)",
+    "ppo_conversion": "Around 70% internship-to-PPO conversion",
     "recruiters": "300+ corporate tie-ups and 100+ annual recruiters",
-    "companies": "Deloitte, EY, KPMG, Accenture, Amazon, Infosys, Wipro, TCS, Cognizant, Capgemini, HDFC Bank, Axis Bank, ICICI Bank",
+    "companies": ["TCS", "Infosys", "Wipro", "Capgemini", "Accenture", "Cognizant", "Deloitte", "EY", "KPMG", "Amazon", "HDFC Bank", "Axis Bank", "ICICI Bank"],
+    "companies_note": "(Companies vary by year and program)",
 }
+
+# Skepticism detection patterns
+SKEPTICISM_PATTERNS = [
+    "which year",
+    "show proof",
+    "show me proof",
+    "is it real",
+    "source",
+    "are you sure",
+    "how do you know",
+    "prove",
+    "verify",
+    "evidence",
+    "don't believe",
+    "sounds fake",
+    "really",
+    "which program",
+    "for which course",
+]
 
 HOSTEL_FACILITIES = [
     "Separate hostel facilities for boys and girls",
@@ -309,8 +331,39 @@ def get_admission_structured(program: str = None, documents_only: bool = False) 
     }
 
 
-def get_placements_structured(program: str = None) -> dict:
-    """Return structured placement information from the local placement summary."""
+def detect_skepticism(query: str) -> bool:
+    """Detect if user is skeptical/challenging claims."""
+    q = query.lower()
+    return any(pattern in q for pattern in SKEPTICISM_PATTERNS)
+
+
+def get_placements_structured(program: str = None, is_skeptical: bool = False) -> dict:
+    """Return structured placement information from the local placement summary.
+    
+    Args:
+        program: Specific program (MBA, BCA, etc.)
+        is_skeptical: If True, provide honest fallback with contact info
+    """
+    # If skeptical, provide honest response
+    if is_skeptical:
+        return {
+            "answer": (
+                "Good question — placement figures can vary by year.\n\n"
+                f"The {PLACEMENT_STATS['placement_rate']} {PLACEMENT_STATS['placement_rate_note']} "
+                "is based on recent placement data across programs, but exact numbers change depending on:\n"
+                "• The course (MBA, BCA, etc.)\n"
+                "• Market conditions\n"
+                "• Student performance\n\n"
+                "**For the most accurate and latest data:**\n"
+                f"Contact: placements@theaims.ac.in or {CONTACT['phone']}\n\n"
+                "Would you like course-wise placement details?"
+            ),
+            "sections": None,
+            "ctas": [{"label": "Contact Placements", "action": "contact"}],
+            "sources": [{"title": "AIMS Placement", "url": "https://www.theaims.ac.in/placement"}],
+        }
+    
+    # MBA-specific
     if program and program.replace(".", "").upper() == "MBA":
         return {
             "answer": (
@@ -334,30 +387,38 @@ def get_placements_structured(program: str = None) -> dict:
             "sources": [{"title": "AIMS Placement", "url": "https://www.theaims.ac.in/placement"}],
         }
 
+    # General placement response with company names
+    companies_list = ", ".join(PLACEMENT_STATS["companies"][:8])  # First 8 companies
+    
     return {
         "answer": (
-            "Placement highlights:\n"
-            f"Highest package (current): {PLACEMENT_STATS['highest_current']}\n"
+            "Placement highlights:\n\n"
+            "**Top recruiters include:**\n"
+            f"{companies_list}\n"
+            f"{PLACEMENT_STATS['companies_note']}\n\n"
+            "**Package range:**\n"
             f"Highest package (overall): {PLACEMENT_STATS['highest_overall']}\n"
-            f"Average package: {PLACEMENT_STATS['average']}\n"
-            f"Placement rate: {PLACEMENT_STATS['placement_rate']}\n"
-            f"Recruiter base: {PLACEMENT_STATS['recruiters']}"
+            f"Highest package (current): {PLACEMENT_STATS['highest_current']}\n"
+            f"Average package: {PLACEMENT_STATS['average']}\n\n"
+            f"**Placement rate:** {PLACEMENT_STATS['placement_rate']} {PLACEMENT_STATS['placement_rate_note']}\n\n"
+            "For program-specific placement data, contact: placements@theaims.ac.in"
         ),
         "sections": [
             {
                 "type": "info",
                 "title": "Placement highlights",
                 "items": [
-                    f"Highest package (current): {PLACEMENT_STATS['highest_current']}",
+                    f"Top recruiters: {companies_list}",
+                    PLACEMENT_STATS["companies_note"],
                     f"Highest package (overall): {PLACEMENT_STATS['highest_overall']}",
+                    f"Highest package (current): {PLACEMENT_STATS['highest_current']}",
                     f"Average package: {PLACEMENT_STATS['average']}",
-                    f"Placement rate: {PLACEMENT_STATS['placement_rate']}",
-                    f"Recruiter base: {PLACEMENT_STATS['recruiters']}",
+                    f"Placement rate: {PLACEMENT_STATS['placement_rate']} {PLACEMENT_STATS['placement_rate_note']}",
                 ],
             }
         ],
         "ctas": [
-            {"label": "Contact Admissions", "action": "contact"},
+            {"label": "Contact Placements", "action": "contact"},
         ],
         "sources": [{"title": "AIMS Placement", "url": "https://www.theaims.ac.in/placement"}],
     }
@@ -593,28 +654,49 @@ def is_structured_intent(query: str) -> tuple:
     if has_any(["features", "facilities", "campus facilities", "infrastructure", "what facilities"]):
         return ("aims_features", 1.0)
     
+    # HOSTEL: Now structured (we have get_hostel_structured)
+    if has_any(["hostel", "accommodation"]):
+        return ("hostel", 1.0)
+    
+    # PLACEMENTS: Now structured (we have get_placements_structured)
+    if has_any(["placement", "placements", "salary", "package", "salary package", "recruiter", "recruiting"]):
+        return ("placements", 1.0)
+    
     # ⛔ NOT STRUCTURED (force RAG instead)
     # These are descriptive/dynamic and should go through RAG
-    if has_any(["placement", "placements", "salary", "package", "salary package", "recruiter", "recruiting"]):
-        return (None, 0)  # Force to RAG
-    if has_any(["hostel", "accommodation", "facility", "facilities"]):
-        return (None, 0)  # Force to RAG
     if has_any(["campus"]):
         return (None, 0)  # Force to RAG
 
     return (None, 0)
 
 
-def get_structured_response(query: str) -> dict:
+
+
+
+def get_structured_response(query: str, session_id: Optional[str] = None) -> dict:
     """Get structured response for known intents. Returns None if not applicable.
     
     Routing rules:
     - program detected + fees keywords → program-specific fees
     - confidence >= 0.8: Structured (broad queries)
     - confidence < 0.8: None (RAG handles specifics)
+    
+    CRITICAL: If user is in active counselor session, return None to keep them in counselor mode.
     """
     import logging
     logger = logging.getLogger(__name__)
+    
+    # COUNSELOR LOCK: Check centralized lock function before returning structured responses
+    if session_id:
+        from app.services.counselor_lock import should_lock_counselor
+        from app.services.conversation_memory import get_memory_store
+        
+        memory = get_memory_store()
+        profile = memory.get_profile(session_id)
+        
+        if should_lock_counselor(profile):
+            logger.info(f"[structured] Counselor lock active - skipping")
+            return None
     
     q = query.lower()
     
@@ -660,7 +742,8 @@ def get_structured_response(query: str) -> dict:
         }
     
     if intent == "placements":
-        return {**get_placements_structured(program), "intent": intent, "confidence": 0.95, "mode": "structured"}
+        is_skeptical = detect_skepticism(query)
+        return {**get_placements_structured(program, is_skeptical=is_skeptical), "intent": intent, "confidence": 0.95, "mode": "structured"}
     
     if intent == "hostel":
         return {**get_hostel_structured(), "intent": intent, "confidence": 0.95, "mode": "structured"}
@@ -709,3 +792,187 @@ def get_structured_response(query: str) -> dict:
         }
     
     return None
+
+
+def detect_all_structured_intents(query: str) -> list:
+    """Detect ALL structured intents in a query (for multi-intent support).
+    
+    Returns list of (intent, confidence) tuples.
+    Example: "fees and hostel" → [("fees", 1.0), ("hostel", 0.0)]
+    
+    IMPORTANT: Returns empty list if constraint signals detected (should route to counselor instead).
+    """
+    q = query.lower()
+    intents = []
+    
+    # P2 FIX: Check for constraint signals FIRST
+    # If constraint signals present, this should route to counselor, not structured
+    constraint_signals = [
+        "weak in", "not good at", "bad at", "struggle with",
+        "poor at", "not great at", "difficulty with",
+        "but i", "however i", "although i",
+        "confused", "not sure", "don't know",
+    ]
+    
+    for signal in constraint_signals:
+        if signal in q:
+            # Constraint signal detected - should route to counselor, not structured
+            return []
+    
+    # DECISION SYNTHESIS FIX: Check for goal-only queries (should route to counselor if in active session)
+    # Queries like "I want good salary" should be treated as goal signals, not placement queries
+    # when user is in an active counselor conversation
+    goal_only_patterns = [
+        r"^i want\s+\w+",
+        r"^i need\s+\w+",
+        r"^i'm looking for\s+\w+",
+    ]
+    
+    is_goal_only = any(re.match(pattern, q) for pattern in goal_only_patterns)
+    if is_goal_only and len(q.split()) <= 5:
+        # Short goal statement - likely part of counselor conversation
+        # Let counselor handle it (will extract as goal signal)
+        return []
+    
+    def has_any(terms):
+        return any(
+            re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", q)
+            for term in terms
+        )
+    
+    # Check all structured intents
+    if has_any(["fee", "fees", "cost", "price", "tuition"]):
+        intents.append(("fees", 1.0))
+    
+    if has_any(["scholarship", "scholarships", "financial aid", "fee waiver"]):
+        intents.append(("scholarship", 1.0))
+    
+    if has_any(["course", "courses", "program", "programs", "specialization", "specializations"]):
+        intents.append(("courses", 1.0))
+    
+    if has_any(["admission", "eligibility"]) or (
+        has_any(["application"]) and has_any(["document", "requirement", "criteria"])
+    ):
+        if not has_any(["location", "where", "distance", "how far", "directions", "map", "address"]):
+            intents.append(("admission", 1.0))
+    
+    if has_any(["document", "documents", "certificate", "mark sheet", "marksheet", "score card", "scorecard"]):
+        if not any(intent[0] == "admission" for intent in intents):  # Avoid duplicate
+            intents.append(("admission", 1.0))
+    
+    if has_any(["contact", "phone", "email"]) and not has_any(["placement", "campus", "hostel", "location", "where", "distance"]):
+        intents.append(("contact", 1.0))
+    
+    if has_any(["about aims", "what is aims", "tell me about aims", "aims overview", "aims introduction"]):
+        intents.append(("about_aims", 1.0))
+    
+    if has_any(["why aims", "why choose aims", "why should i join aims", "advantages of aims", "benefits of aims"]):
+        intents.append(("why_aims", 1.0))
+    
+    if has_any(["features", "facilities", "campus facilities", "infrastructure", "what facilities"]):
+        intents.append(("aims_features", 1.0))
+    
+    if has_any(["hostel", "accommodation"]):
+        intents.append(("hostel", 1.0))
+    
+    if has_any(["placement", "placements", "salary", "package", "salary package", "recruiter", "recruiting"]):
+        intents.append(("placements", 1.0))
+    
+    return intents
+
+
+def get_multi_intent_response(query: str, session_id: Optional[str] = None) -> dict:
+    """Get response for multi-intent queries (e.g., "fees and hostel").
+    
+    Returns combined response for up to 2 intents.
+    Returns None if no structured intents detected.
+    
+    CRITICAL: If user is in active counselor session, return None to keep them in counselor mode.
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    # COUNSELOR LOCK: Check centralized lock function before returning structured responses
+    if session_id:
+        from app.services.counselor_lock import should_lock_counselor
+        from app.services.conversation_memory import get_memory_store
+        
+        memory = get_memory_store()
+        profile = memory.get_profile(session_id)
+        
+        if should_lock_counselor(profile):
+            logger.info(f"[multi-intent] Counselor lock active - skipping")
+            return None
+    
+    # Detect all intents
+    all_intents = detect_all_structured_intents(query)
+    
+    if not all_intents:
+        return None
+    
+    # Filter to structured intents only (confidence >= 0.8)
+    structured_intents = [(intent, conf) for intent, conf in all_intents if conf >= 0.8]
+    
+    if not structured_intents:
+        return None
+    
+    # Limit to top 2 intents (prevent bloat)
+    primary_intents = structured_intents[:2]
+    
+    logger.info(f"[multi-intent] Query: '{query}' → intents={[i[0] for i in primary_intents]}")
+    
+    # Get program if specified
+    program = detect_program(query)
+    
+    # Get responses for each intent
+    responses = []
+    intent_names = []
+    
+    for intent, confidence in primary_intents:
+        intent_names.append(intent)
+        
+        # Get structured response for this intent
+        if intent == "courses":
+            result = get_courses_structured(program)
+        elif intent == "fees":
+            result = get_fees_structured(program)
+        elif intent == "admission":
+            documents_only = any(term in query.lower() for term in ["document", "documents", "certificate"])
+            result = get_admission_structured(program=program, documents_only=documents_only)
+        elif intent == "scholarship":
+            result = get_scholarship_structured()
+        elif intent == "hostel":
+            result = get_hostel_structured()
+        elif intent == "placements":
+            is_skeptical = detect_skepticism(query)
+            result = get_placements_structured(program, is_skeptical=is_skeptical)
+        elif intent == "about_aims":
+            result = get_about_aims_structured()
+        elif intent == "why_aims":
+            result = get_why_aims_structured()
+        elif intent == "aims_features":
+            result = get_aims_features_structured()
+        elif intent == "contact":
+            result = {
+                "answer": f"Contact Admissions\n\nEmail: {CONTACT['email']}\nPhone: {CONTACT['phone']}\nWebsite: {CONTACT['website']}",
+            }
+        else:
+            continue
+        
+        if result and result.get("answer"):
+            responses.append(result["answer"])
+    
+    if not responses:
+        return None
+    
+    # Combine responses with clear separators
+    combined_answer = "\n\n---\n\n".join(responses)
+    
+    # Return combined response
+    return {
+        "answer": combined_answer,
+        "intent": "+".join(intent_names),  # e.g., "fees+hostel"
+        "confidence": 1.0,
+        "mode": "multi-intent",
+        "sources": [{"title": "AIMS Information", "url": "https://www.theaims.ac.in"}],
+    }

@@ -25,6 +25,10 @@ from app.services.query_cache import get_query_response_cache
 from app.services.response.confidence import calculate_confidence, get_confidence_label
 from app.services.retrieval.faiss_index import get_index
 from app.services.retrieval.hybrid_retriever import get_hybrid_retriever
+from app.services.structured_knowledge import get_structured_response, get_multi_intent_response
+from app.services.boundary_handler import is_out_of_scope, get_out_of_scope_response
+from app.services.counselor_handler import is_exploratory_query, get_counselor_response
+from app.services.conversation_memory import get_memory_store, extract_user_profile, should_force_counselor
 from app.services.suggestions.engine import get_suggestion_engine
 
 logger = logging.getLogger(__name__)
@@ -63,6 +67,199 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
 
     if query_data.get("needs_clarification"):
         response = _build_clarification_response(query_data, session_id, start_time)
+        _queue_persistence(
+            background_tasks,
+            request=request,
+            session_id=session_id,
+            user_query=query,
+            response=response,
+            query_data=query_data,
+        )
+        return response
+
+    # CHECK: Out-of-scope queries (external exams, comparisons, external cutoffs)
+    # This prevents hallucination on queries outside AIMS knowledge boundary
+    if is_out_of_scope(query):
+        logger.info(f"[ROUTING] Using: out-of-scope | Query: {query}")
+        boundary_result = get_out_of_scope_response(query)
+        response = ChatResponseSuccess(
+            answer=boundary_result.get("answer", ""),
+            sources=boundary_result.get("sources", []),
+            confidence=boundary_result.get("confidence", 1.0),
+            status="unlock",
+            intent=boundary_result.get("intent", "out_of_scope"),
+            course=query_data.get("course") or "General",
+            fallback=False,
+            suggestions=["AIMS admission process", "Courses offered", "Contact admissions"],
+            meta={
+                "response_time_ms": int((time.time() - start_time) * 1000),
+                "session_id": session_id,
+                "original_query": query_data.get("original_query"),
+                "corrected_query": query_data.get("corrected_query"),
+                "confidence_label": "high",
+                "retrieved_chunks": 0,
+                "control_tokens": query_data.get("control_tokens", []),
+                "memory_notes": query_data.get("memory_notes", []),
+                "boundary_handler": True,
+            },
+        )
+        _log_interaction(
+            session_id=session_id,
+            query=query,
+            answer=response.answer,
+            confidence=response.confidence,
+            intent=response.intent,
+            status=response.status,
+        )
+        _queue_persistence(
+            background_tasks,
+            request=request,
+            session_id=session_id,
+            user_query=query,
+            response=response,
+            query_data=query_data,
+        )
+        return response
+
+    # CHECK: Multi-intent structured knowledge (fees and hostel, courses and fees, etc.)
+    # This handles queries like "fees and hostel" by combining multiple structured responses
+    # IMPORTANT: Runs BEFORE counselor to avoid hijacking specific queries
+    # COUNSELOR LOCK: If user is in active counselor session, skip multi-intent
+    multi_intent_result = get_multi_intent_response(query, session_id)
+    
+    if multi_intent_result:
+        logger.info(f"[ROUTING] Using: multi-intent | Query: {query} | Intent: {multi_intent_result.get('intent')}")
+        # Multi-intent response available - use it
+        response = ChatResponseSuccess(
+            answer=multi_intent_result.get("answer", ""),
+            sources=multi_intent_result.get("sources", []),
+            confidence=multi_intent_result.get("confidence", 1.0),
+            status="unlock",
+            intent=multi_intent_result.get("intent", "multi-intent"),
+            course=query_data.get("course") or "General",
+            fallback=False,
+            suggestions=_default_suggestions_for_intent("factual"),
+            meta={
+                "response_time_ms": int((time.time() - start_time) * 1000),
+                "session_id": session_id,
+                "original_query": query_data.get("original_query"),
+                "corrected_query": query_data.get("corrected_query"),
+                "confidence_label": "high",
+                "retrieved_chunks": 0,
+                "control_tokens": query_data.get("control_tokens", []),
+                "memory_notes": query_data.get("memory_notes", []),
+                "multi_intent": True,
+            },
+        )
+        _log_interaction(
+            session_id=session_id,
+            query=query,
+            answer=response.answer,
+            confidence=response.confidence,
+            intent=response.intent,
+            status=response.status,
+        )
+        _queue_persistence(
+            background_tasks,
+            request=request,
+            session_id=session_id,
+            user_query=query,
+            response=response,
+            query_data=query_data,
+        )
+        return response
+    
+    # CHECK: Counselor layer (exploratory queries, career guidance)
+    # This handles queries like "I like coding, what should I choose?"
+    # Provides conversational guidance instead of info dumps
+    # IMPORTANT: Runs AFTER multi-intent to avoid hijacking specific queries
+    # Memory-aware: uses session history for follow-up continuity
+    counselor_result = get_counselor_response(query, session_id, query_data=query_data)
+    _profile_after = get_memory_store().get_profile(session_id)
+    logger.info(
+        f"[COUNSELOR] query={query!r} | intent={counselor_result.get('intent') if counselor_result else None} "
+        f"| profile_confidence={_profile_after.confidence_score:.3f}"
+    )
+
+    if counselor_result:
+        logger.info(f"[ROUTING] Using: counselor | Query: {query} | Intent: {counselor_result.get('intent')}")
+        response = ChatResponseSuccess(
+            answer=counselor_result.get("answer", ""),
+            sources=counselor_result.get("sources", []),
+            confidence=counselor_result.get("confidence", 1.0),
+            status="unlock",
+            intent=counselor_result.get("intent", "counselor"),
+            course=query_data.get("course") or "General",
+            fallback=False,
+            suggestions=["Tell me more about BCA", "What are the fees?", "Admission process"],
+            meta={
+                "response_time_ms": int((time.time() - start_time) * 1000),
+                "session_id": session_id,
+                "original_query": query_data.get("original_query"),
+                "corrected_query": query_data.get("corrected_query"),
+                "confidence_label": "high",
+                "retrieved_chunks": 0,
+                "control_tokens": query_data.get("control_tokens", []),
+                "memory_notes": query_data.get("memory_notes", []),
+                "counselor_mode": True,
+                "profile_confidence_score": _profile_after.confidence_score,
+            },
+        )
+        _log_interaction(
+            session_id=session_id,
+            query=query,
+            answer=response.answer,
+            confidence=response.confidence,
+            intent=response.intent,
+            status=response.status,
+        )
+        _queue_persistence(
+            background_tasks,
+            request=request,
+            session_id=session_id,
+            user_query=query,
+            response=response,
+            query_data=query_data,
+        )
+        return response
+    
+    # CHECK: Single-intent structured knowledge override (courses, fees, admission, etc.)
+    # This prevents RAG from returning wrong chunks for well-defined queries
+    # IMPORTANT: Pass session_id for counselor lock check
+    structured_result = get_structured_response(query, session_id=session_id)
+    
+    if structured_result:
+        logger.info(f"[ROUTING] Using: structured | Query: {query} | Intent: {structured_result.get('intent')}")
+        # Structured knowledge available - use it instead of RAG
+        response = ChatResponseSuccess(
+            answer=structured_result.get("answer", ""),
+            sources=structured_result.get("sources", []),
+            confidence=structured_result.get("confidence", 1.0),
+            status="unlock",
+            intent=structured_result.get("intent", "factual"),
+            course=query_data.get("course") or "General",
+            fallback=False,
+            suggestions=_default_suggestions_for_intent(structured_result.get("intent", "factual")),
+            meta={
+                "response_time_ms": int((time.time() - start_time) * 1000),
+                "session_id": session_id,
+                "original_query": query_data.get("original_query"),
+                "corrected_query": query_data.get("corrected_query"),
+                "confidence_label": "high",
+                "retrieved_chunks": 0,
+                "control_tokens": query_data.get("control_tokens", []),
+                "memory_notes": query_data.get("memory_notes", []),
+                "structured_override": True,
+            },
+        )
+        _log_interaction(
+            session_id=session_id,
+            query=query,
+            answer=response.answer,
+            confidence=response.confidence,
+            intent=response.intent,
+            status=response.status,
+        )
         _queue_persistence(
             background_tasks,
             request=request,
@@ -117,33 +314,16 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
         )
         return response
 
-    if _is_sensitive_query(query_data) and not session["has_lead"]:
-        session["gate_active"] = True
-        response = ChatResponseSuccess(
-            answer=f"{FEES_DISCLAIMER}\n\n{get_gate_invitation()}",
-            sources=[],
-            confidence=1.0,
-            status="lock",
-            intent="Lead Capture",
-            course=query_data.get("course") or "General",
-            suggestions=["Programs offered", "Campus life", "Admission process"],
-            meta={
-                "session_id": session_id,
-                "gated": True,
-                "original_query": query_data.get("original_query"),
-                "corrected_query": query_data.get("corrected_query"),
-                "control_tokens": query_data.get("control_tokens", []),
-            },
-        )
-        _queue_persistence(
-            background_tasks,
-            request=request,
-            session_id=session_id,
-            user_query=query,
-            response=response,
-            query_data=query_data,
-        )
-        return response
+    # REMOVED: Lead-capture gate was blocking legitimate information queries
+    # FIX: Queries like "What are fees for BCA?" should return RAG/structured info,
+    # not a form request. The gate mechanism causes the "lead hijack" pathology where
+    # high-confidence form requests override actual information retrieval.
+    # Lead capture can happen at application/admission stage instead.
+    #
+    # if _is_sensitive_query(query_data) and not session["has_lead"]:
+    #     session["gate_active"] = True
+    #     response = ChatResponseSuccess(...)
+    #     return response
 
     cache = get_query_response_cache()
     cache_key = cache.make_key(query_data)
@@ -195,6 +375,7 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
 
     retriever = get_hybrid_retriever()
     retrieval_results = await asyncio.to_thread(retriever.search, query_data, 8, 16, 16)
+    logger.info(f"[ROUTING] Using: rag | Query: {query} | Retrieved: {len(retrieval_results)} chunks")
     confidence = calculate_confidence(query_data["query"], retrieval_results, query_data=query_data)
     chunk_tuples = retriever.to_chunk_tuples(retrieval_results)
 
@@ -482,9 +663,12 @@ def _resolve_session_id(request: ChatRequest) -> str:
 
 
 def _derive_status(session: Dict[str, Any], intent: str) -> str:
-    if intent not in {"greeting", "exit"} and session["query_count"] >= 2 and not session["has_lead"]:
-        session["gate_active"] = True
-        return "lock"
+    # DISABLED: Lead-gate was hijacking information queries
+    # Users asking "fees", "scholarship", "hostel" should get ANSWERS, not forms
+    # Lead capture should only trigger on explicit application intent
+    # if intent not in {"greeting", "exit"} and session["query_count"] >= 2 and not session["has_lead"]:
+    #     session["gate_active"] = True
+    #     return "lock"
     return "unlock"
 
 
@@ -594,6 +778,31 @@ def _queue_persistence(
         status=response.status,
         is_fallback=bool(response.fallback),
     )
+    
+    # NEW: Log to Supabase conversation_analytics
+    try:
+        from app.services.production_analytics import log_conversation_analytics
+        from app.services.conversation_memory import get_memory_store
+        
+        # Determine contradiction/pivot based on reflection or memory
+        reflection_str = (response.meta or {}).get("reflection", "")
+        pivot_detected = "pivot" in reflection_str.lower() or "contradict" in reflection_str.lower()
+        contradiction_detected = pivot_detected
+        provider_used = (response.meta or {}).get("provider")
+
+        background_tasks.add_task(
+            log_conversation_analytics,
+            session_id=session_id,
+            detected_intent=response.intent,
+            confidence_score=float(response.confidence),
+            contradiction_detected=contradiction_detected,
+            pivot_detected=pivot_detected,
+            selected_program=response.course if response.course and response.course != "General" else None,
+            provider_used=provider_used,
+            response_latency_ms=float((response.meta or {}).get("response_time_ms", 0))
+        )
+    except Exception as e:
+        logger.warning(f"Could not queue Supabase analytics: {e}")
 
 
 def _persist_remote_log(

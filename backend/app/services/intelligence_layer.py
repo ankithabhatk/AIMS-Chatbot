@@ -61,7 +61,9 @@ class IntelligenceLayer:
 
         if not needs_clarification and topic in self.CONTEXTUAL_TOPICS and not course and not session.get("active_course"):
             clarification_message = f"Which course would you like {topic} information for?"
-            needs_clarification = topic in {"fees", "hostel"}
+            # ONLY ask for clarification if the query is SPECIFICALLY about course-dependent topics
+            # General queries like "scholarship info" or "hostel facilities" should get general answers
+            needs_clarification = False  # Disabled - let structured knowledge handle it
 
         if not needs_clarification:
             session["last_query"] = query

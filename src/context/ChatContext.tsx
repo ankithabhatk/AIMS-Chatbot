@@ -13,6 +13,8 @@ export interface ChatMessage {
     confidence?: number;
     sources?: Array<{ url: string; title: string }>;
     suggestions?: string[];
+    counselor_mode?: boolean;
+    profile_confidence_score?: number;
   };
 }
 
@@ -61,6 +63,9 @@ const mapPersistedConversation = (conversation: PersistedConversation): Conversa
           confidence: message.confidence,
           sources: message.sources,
           suggestions: message.suggestions,
+          // DB persistence doesn't save these currently, but we declare them optional
+          counselor_mode: false,
+          profile_confidence_score: undefined,
         }
       : undefined,
   })),
@@ -303,6 +308,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
           confidence: data.confidence,
           sources: data.sources,
           suggestions: data.suggestions,
+          counselor_mode: data.meta?.counselor_mode as boolean | undefined,
+          profile_confidence_score: data.meta?.profile_confidence_score as number | undefined,
         };
       }
 
