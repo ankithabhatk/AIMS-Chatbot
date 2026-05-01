@@ -1,0 +1,49 @@
+{
+  "missing_programs": [
+    {
+      "name": "BA (Journalism, Psychology, Optional English, Sociology, Economics)",
+      "category": "UG",
+      "priority": "High"
+    },
+    {
+      "name": "B.Sc (Microbiology, Genetics, Biochemistry, Mathematics, Statistics, Computer Science)",
+      "category": "UG",
+      "priority": "High"
+    },
+    {
+      "name": "MSW (Master of Social Work)",
+      "category": "PG",
+      "priority": "Medium"
+    },
+    {
+      "name": "MFA (Master of Fine Arts)",
+      "category": "PG",
+      "priority": "Medium"
+    },
+    {
+      "name": "M.Sc (Mathematics)",
+      "category": "PG",
+      "priority": "Medium"
+    },
+    {
+      "name": "PhD in Management",
+      "category": "PhD",
+      "priority": "Critical"
+    },
+    {
+      "name": "PhD in Commerce",
+      "category": "PhD",
+      "priority": "Critical"
+    },
+    {
+      "name": "Diploma in Culinary Arts",
+      "category": "Others",
+      "priority": "Low"
+    },
+    {
+      "name": "VET by EHL (Swiss Hospitality)",
+      "category": "Others",
+      "priority": "Medium"
+    }
+  ]
+}

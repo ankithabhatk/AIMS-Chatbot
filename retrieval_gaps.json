@@ -1,0 +1,29 @@
+{
+  "gaps": [
+    {
+      "query": "PhD programs offered",
+      "issue": "Matches testimonials but lacks structured program details (duration, criteria, specializations).",
+      "severity": "High"
+    },
+    {
+      "query": "BA programs",
+      "issue": "Complete absence of program descriptions for School of Arts.",
+      "severity": "High"
+    },
+    {
+      "query": "B.Sc programs",
+      "issue": "Complete absence of program descriptions for School of Science.",
+      "severity": "High"
+    },
+    {
+      "query": "PGDM",
+      "issue": "Scattered mentions in news/events; lacks a dedicated canonical program chunk.",
+      "severity": "Medium"
+    },
+    {
+      "query": "Swiss Hospitality",
+      "issue": "Mentioned but lacks partnership details (VET by EHL).",
+      "severity": "Low"
+    }
+  ]
+}

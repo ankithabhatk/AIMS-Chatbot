@@ -30,22 +30,29 @@ def partial_ratio(value: str, pattern: str) -> int:
         best = max(best, SequenceMatcher(None, shorter, candidate).ratio())
 
     return int(best * 100)
-
 COURSES = {
     "postgraduate": [
         {"name": "MBA", "full": "Master of Business Administration", "duration": "2 years", "specializations": "Finance, Marketing, HR, Business Analytics"},
         {"name": "MCA", "full": "Master of Computer Applications", "duration": "2 years", "eligibility": "BCA / B.Sc (CS/IT/Maths) / B.Com with Maths"},
         {"name": "M.Com", "full": "Master of Commerce", "duration": "2 years"},
+        {"name": "PGDM", "full": "Post Graduate Diploma in Management", "duration": "2 years"},
+        {"name": "MSW", "full": "Master of Social Work", "duration": "2 years"},
+        {"name": "MFA", "full": "Master of Fine Arts", "duration": "2 years"},
+        {"name": "M.Sc", "full": "Master of Science", "duration": "2 years"},
     ],
     "undergraduate": [
         {"name": "BBA", "full": "Bachelor of Business Administration", "duration": "3 years"},
         {"name": "BBA Aviation", "full": "BBA in Aviation Management", "duration": "3 years"},
         {"name": "BCA", "full": "Bachelor of Computer Applications", "duration": "3 years"},
         {"name": "B.Com", "full": "Bachelor of Commerce", "duration": "3 years"},
-        {"name": "BHM", "full": "Bachelor of Hotel Management", "duration": "3 years"},
+        {"name": "BHM", "full": "Bachelor of Hotel Management", "duration": "4 years"},
+        {"name": "BA", "full": "Bachelor of Arts", "duration": "3 years", "specializations": "Journalism, Psychology, English, Sociology"},
+        {"name": "B.Sc", "full": "Bachelor of Science", "duration": "3 years", "specializations": "Microbiology, Genetics, Biochemistry, Computer Science"},
+    ],
+    "doctoral": [
+        {"name": "PhD", "full": "Doctor of Philosophy", "duration": "3-5 years", "specializations": "Management, Commerce"},
     ]
 }
-
 FEES = {
     "MBA": {"annual": "₹50,000 - ₹1,00,000", "note": "Varies by specialization. Contact admissions for exact figures."},
     "MCA": {"annual": "₹40,000 - ₹80,000", "note": "Contact admissions for exact figures."},
@@ -54,8 +61,11 @@ FEES = {
     "B.Com": {"annual": "₹20,000 - ₹40,000", "note": "Contact admissions for exact figures."},
     "M.Com": {"annual": "₹30,000 - ₹50,000", "note": "Contact admissions for exact figures."},
     "BHM": {"annual": "₹40,000 - ₹80,000", "note": "Varies by specialization. Contact admissions for exact figures."},
+    "PhD": {"annual": "Consult Admissions", "note": "Research fees as per UoM norms."},
+    "PGDM": {"annual": "₹1,00,000+", "note": "Industry-aligned program."},
+    "BA": {"annual": "₹20,000+", "note": "Varies by specialization."},
+    "B.Sc": {"annual": "₹30,000+", "note": "Varies by specialization."},
 }
-
 PROGRAM_ALIASES = {
     "MBA": ["mba", "master of business administration"],
     "MCA": ["mca", "master of computer applications"],
@@ -64,6 +74,11 @@ PROGRAM_ALIASES = {
     "B.Com": ["b.com", "bcom", "bachelor of commerce"],
     "M.Com": ["m.com", "mcom", "master of commerce"],
     "BHM": ["bhm", "bachelor of hotel management"],
+    "PhD": ["phd", "doctoral", "doctor of philosophy", "research program"],
+    "BA": ["ba ", "bachelor of arts"],
+    "B.Sc": ["bsc", "b.sc", "bachelor of science"],
+    "PGDM": ["pgdm", "post graduate diploma"],
+    "MSW": ["msw", "master of social work"],
 }
 
 CONTACT = {
@@ -90,13 +105,15 @@ ADMISSION_DOCUMENTS = [
     "Transfer certificate and migration certificate if required",
     "Passport-size photographs and valid ID proof",
 ]
-
 ELIGIBILITY = {
     "MBA": "Graduation with 50% marks (any discipline)",
     "MCA": "BCA / B.Sc with Mathematics",
     "BBA": "10+2 with 50% marks",
     "BCA": "10+2 with Mathematics or Computer Science",
     "B.Com": "10+2 with 50% marks",
+    "PhD": "Post Graduation with 55% marks + Entrance Exam",
+    "BA": "10+2 (any stream)",
+    "B.Sc": "10+2 with Science (PCB/PCM)",
 }
 
 PLACEMENT_STATS = {
@@ -221,20 +238,24 @@ def get_courses_structured(program: str = None) -> dict:
 
     pg = ", ".join(course["name"] for course in COURSES["postgraduate"])
     ug = ", ".join(course["name"] for course in COURSES["undergraduate"])
+    phd = ", ".join(course["name"] for course in COURSES.get("doctoral", []))
+    
     return {
         "answer": (
-            "Courses offered:\n"
-            f"Postgraduate: {pg}\n"
-            f"Undergraduate: {ug}\n"
-            "MBA specializations: Finance, Marketing, HR, Business Analytics"
+            "AIMS Institutes offers a comprehensive range of programs:\n\n"
+            f"**Doctoral:** {phd}\n"
+            f"**Postgraduate:** {pg}\n"
+            f"**Undergraduate:** {ug}\n\n"
+            "MBA specializations: Finance, Marketing, HR, Business Analytics, Logistics"
         ),
         "sections": [
+            {"type": "info", "title": "Doctoral programs", "items": [phd]},
             {"type": "info", "title": "Postgraduate programs", "items": [pg]},
             {"type": "info", "title": "Undergraduate programs", "items": [ug]},
             {
                 "type": "info",
                 "title": "MBA specializations",
-                "items": ["Finance, Marketing, HR, Business Analytics"],
+                "items": ["Finance, Marketing, HR, Business Analytics, Logistics"],
             },
         ],
         "ctas": [
@@ -632,7 +653,7 @@ def is_structured_intent(query: str) -> tuple:
         return ("fees", 1.0)
     if has_any(["scholarship", "scholarships", "financial aid", "fee waiver"]):
         return ("scholarship", 1.0)
-    if has_any(["course", "courses", "program", "programs", "specialization", "specializations"]):
+    if has_any(["course", "courses", "program", "programs", "specialization", "specializations", "offering", "offerings", "major", "majors"]):
         return ("courses", 1.0)
     # IMPORTANT: Don't claim "admission" if it's a location or apply-only query (→ TOOL layer)
     if has_any(["admission", "eligibility"]) or (

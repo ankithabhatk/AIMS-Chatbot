@@ -3,279 +3,170 @@
     "min_marks": 50,
     "recommended_marks": 60,
     "ideal_marks_range": "50\u201375%",
-    "best_for": [
-      "business",
-      "management",
-      "marketing",
-      "finance"
-    ],
-    "streams": [
-      "management",
-      "commerce",
-      "arts"
-    ],
-    "entrance_exams": [
-      "cet",
-      "none"
-    ],
+    "best_for": ["business", "management", "marketing", "finance"],
+    "streams": ["management", "commerce", "arts"],
+    "entrance_exams": ["cet", "none"],
     "next_step": "MBA",
     "duration": "3 years",
     "career_direction": "Business Management, Marketing, HR, Finance",
     "difficulty": "moderate",
-    "tags": [
-      "business",
-      "management",
-      "marketing",
-      "leadership",
-      "hr",
-      "sales"
-    ],
-    "interest_signals": [
-      "tech",
-      "entrepreneurship",
-      "hardwareskill",
-      "food",
-      "computerskill"
-    ],
+    "tags": ["business", "management", "marketing", "leadership", "hr", "sales"],
+    "interest_signals": ["tech", "entrepreneurship", "hardwareskill", "food", "computerskill"],
     "aptitude_strengths": {
-      "O_score": 6.58,
-      "C_score": 7.36,
-      "E_score": 8.25,
-      "A_score": 7.54,
-      "N_score": 5.64,
-      "Numerical Aptitude": 4.82,
-      "Spatial Aptitude": 3.41,
-      "Perceptual Aptitude": 4.12,
-      "Abstract Reasoning": 4.93,
-      "Verbal Reasoning": 7.89
+      "O_score": 6.58, "C_score": 7.36, "E_score": 8.25, "A_score": 7.54, "N_score": 5.64,
+      "Numerical Aptitude": 4.82, "Spatial Aptitude": 3.41, "Perceptual Aptitude": 4.12,
+      "Abstract Reasoning": 4.93, "Verbal Reasoning": 7.89
     },
-    "typical_careers": [
-      "Salesperson",
-      "Product Manager",
-      "Marketing Coordinator",
-      "Human Resources Manager",
-      "Social Media Manager",
-      "Marketing Manager"
-    ]
+    "typical_careers": ["Salesperson", "Product Manager", "Marketing Coordinator", "Human Resources Manager", "Social Media Manager", "Marketing Manager"]
   },
   "BCA": {
     "min_marks": 50,
     "recommended_marks": 65,
     "ideal_marks_range": "55\u201385%",
-    "best_for": [
-      "technology",
-      "computers",
-      "software",
-      "it"
-    ],
-    "streams": [
-      "computer applications",
-      "science",
-      "engineering"
-    ],
-    "entrance_exams": [
-      "cet",
-      "none"
-    ],
+    "best_for": ["technology", "computers", "software", "it"],
+    "streams": ["computer applications", "science", "engineering"],
+    "entrance_exams": ["cet", "none"],
     "next_step": "MCA",
     "duration": "3 years",
     "career_direction": "Software Development, Data Analysis, IT Management",
     "difficulty": "moderate-high",
-    "tags": [
-      "coding",
-      "technology",
-      "computer",
-      "software",
-      "programming",
-      "developer"
-    ],
-    "interest_signals": [
-      "tech",
-      "leadership",
-      "computerskill",
-      "entrepreneurship",
-      "creativity"
-    ],
+    "tags": ["coding", "technology", "computer", "software", "programming", "developer"],
+    "interest_signals": ["tech", "leadership", "computerskill", "entrepreneurship", "creativity"],
     "aptitude_strengths": {
-      "O_score": 7.33,
-      "C_score": 7.91,
-      "E_score": 4.94,
-      "A_score": 6.44,
-      "N_score": 5.46,
-      "Numerical Aptitude": 6.36,
-      "Spatial Aptitude": 3.9,
-      "Perceptual Aptitude": 4.48,
-      "Abstract Reasoning": 5.43,
-      "Verbal Reasoning": 6.84
+      "O_score": 7.33, "C_score": 7.91, "E_score": 4.94, "A_score": 6.44, "N_score": 5.46,
+      "Numerical Aptitude": 6.36, "Spatial Aptitude": 3.9, "Perceptual Aptitude": 4.48,
+      "Abstract Reasoning": 5.43, "Verbal Reasoning": 6.84
     },
-    "typical_careers": [
-      "Architect",
-      "Insurance Underwriter",
-      "Market Research Analyst",
-      "Technical Writer",
-      "Software Quality Assurance Tester",
-      "IT Project Manager"
-    ]
+    "typical_careers": ["Architect", "Insurance Underwriter", "Market Research Analyst", "Technical Writer", "Software Quality Assurance Tester", "IT Project Manager"]
   },
   "MBA": {
     "min_marks": 50,
     "recommended_marks": 65,
     "ideal_marks_range": "55\u201380%",
-    "best_for": [
-      "business",
-      "management",
-      "leadership",
-      "strategy"
-    ],
-    "streams": [
-      "management",
-      "commerce",
-      "any"
-    ],
-    "entrance_exams": [
-      "cat",
-      "mat",
-      "cet"
-    ],
+    "best_for": ["business", "management", "leadership", "strategy"],
+    "streams": ["management", "commerce", "any"],
+    "entrance_exams": ["cat", "mat", "cet"],
     "next_step": "Senior Management / Entrepreneurship",
     "duration": "2 years",
     "career_direction": "Senior Management, Consulting, Entrepreneurship",
     "difficulty": "high",
-    "tags": [
-      "management",
-      "strategy",
-      "leadership",
-      "consulting",
-      "corporate"
-    ]
+    "tags": ["management", "strategy", "leadership", "consulting", "corporate"]
   },
   "B.Com": {
     "min_marks": 45,
     "recommended_marks": 55,
     "ideal_marks_range": "45\u201370%",
-    "best_for": [
-      "accounts",
-      "finance",
-      "banking",
-      "commerce"
-    ],
-    "streams": [
-      "commerce",
-      "arts"
-    ],
-    "entrance_exams": [
-      "none"
-    ],
+    "best_for": ["accounts", "finance", "banking", "commerce"],
+    "streams": ["commerce", "arts"],
+    "entrance_exams": ["none"],
     "next_step": "M.Com / CA / MBA",
     "duration": "3 years",
     "career_direction": "Accounting, Banking, Finance, Taxation",
     "difficulty": "moderate",
-    "tags": [
-      "accounts",
-      "accountancy",
-      "commerce",
-      "banking",
-      "taxation",
-      "audit",
-      "finance"
-    ],
-    "interest_signals": [
-      "food",
-      "criticalthinking",
-      "tech",
-      "entrepreneurship",
-      "research"
-    ],
+    "tags": ["accounts", "accountancy", "commerce", "banking", "taxation", "audit", "finance"],
+    "interest_signals": ["food", "criticalthinking", "tech", "entrepreneurship", "research"],
     "aptitude_strengths": {
-      "O_score": 6.63,
-      "C_score": 8.86,
-      "E_score": 4.04,
-      "A_score": 6.23,
-      "N_score": 5.15,
-      "Numerical Aptitude": 8.75,
-      "Spatial Aptitude": 3.86,
-      "Perceptual Aptitude": 4.97,
-      "Abstract Reasoning": 5.89,
-      "Verbal Reasoning": 7.16
+      "O_score": 6.63, "C_score": 8.86, "E_score": 4.04, "A_score": 6.23, "N_score": 5.15,
+      "Numerical Aptitude": 8.75, "Spatial Aptitude": 3.86, "Perceptual Aptitude": 4.97,
+      "Abstract Reasoning": 5.89, "Verbal Reasoning": 7.16
     },
-    "typical_careers": [
-      "Financial Auditor",
-      "Tax Accountant",
-      "Accountant"
-    ]
+    "typical_careers": ["Financial Auditor", "Tax Accountant", "Accountant"]
   },
   "MCA": {
     "min_marks": 50,
     "recommended_marks": 65,
     "ideal_marks_range": "55\u201385%",
-    "best_for": [
-      "technology",
-      "software",
-      "advanced it"
-    ],
-    "streams": [
-      "computer applications",
-      "science"
-    ],
-    "entrance_exams": [
-      "cet",
-      "nimcet"
-    ],
+    "best_for": ["technology", "software", "advanced it"],
+    "streams": ["computer applications", "science"],
+    "entrance_exams": ["cet", "nimcet"],
     "next_step": "Software Industry / PhD",
     "duration": "2 years",
     "career_direction": "Senior Software Engineer, IT Consultant, Data Scientist",
     "difficulty": "high",
-    "tags": [
-      "computer science",
-      "advanced it",
-      "software development",
-      "mca"
-    ]
+    "tags": ["computer science", "advanced it", "software development", "mca"]
   },
   "BHM": {
     "min_marks": 45,
     "recommended_marks": 55,
     "ideal_marks_range": "45\u201370%",
-    "best_for": [
-      "hospitality",
-      "hotel management",
-      "tourism",
-      "travel"
-    ],
-    "streams": [
-      "management",
-      "arts",
-      "commerce"
-    ],
-    "entrance_exams": [
-      "none",
-      "nchmct"
-    ],
+    "best_for": ["hospitality", "hotel management", "tourism", "travel"],
+    "streams": ["management", "arts", "commerce"],
+    "entrance_exams": ["none", "nchmct"],
     "next_step": "MBA in Hospitality",
     "duration": "3\u20134 years",
     "career_direction": "Hotel Management, Tourism, Event Management",
     "difficulty": "moderate",
-    "tags": [
-      "hotel",
-      "hospitality",
-      "travel",
-      "tourism",
-      "event"
-    ],
+    "tags": ["hotel", "hospitality", "travel", "tourism", "event"],
     "aptitude_strengths": {
-      "O_score": 6.78,
-      "C_score": 6.45,
-      "E_score": 8.45,
-      "A_score": 7.67,
-      "N_score": 4.56,
-      "Numerical Aptitude": 3.45,
-      "Spatial Aptitude": 3.12,
-      "Perceptual Aptitude": 9.34,
-      "Abstract Reasoning": 3.67,
-      "Verbal Reasoning": 4.23
+      "O_score": 6.78, "C_score": 6.45, "E_score": 8.45, "A_score": 7.67, "N_score": 4.56,
+      "Numerical Aptitude": 3.45, "Spatial Aptitude": 3.12, "Perceptual Aptitude": 9.34,
+      "Abstract Reasoning": 3.67, "Verbal Reasoning": 4.23
     },
-    "typical_careers": [
-      "Chef"
-    ]
+    "typical_careers": ["Chef"]
+  },
+  "PhD": {
+    "min_marks": 55,
+    "recommended_marks": 65,
+    "ideal_marks_range": "55-90%",
+    "best_for": ["research", "academia", "specialized consulting"],
+    "streams": ["management", "commerce"],
+    "entrance_exams": ["uom entrance", "ugc net"],
+    "next_step": "Post-Doctoral / Professor",
+    "duration": "3-5 years",
+    "career_direction": "Academic Research, University Professorship, Senior Policy Advisory",
+    "difficulty": "very high",
+    "tags": ["research", "doctoral", "phd", "academic", "management", "commerce"]
+  },
+  "BA": {
+    "min_marks": 50,
+    "recommended_marks": 60,
+    "ideal_marks_range": "50-80%",
+    "best_for": ["humanities", "social sciences", "journalism"],
+    "streams": ["arts"],
+    "entrance_exams": ["none"],
+    "next_step": "MA / MSW / Journalism",
+    "duration": "3 years",
+    "career_direction": "Journalism, Psychology, Counseling, Social Work, Public Relations",
+    "difficulty": "moderate",
+    "tags": ["arts", "humanities", "journalism", "psychology", "sociology"]
+  },
+  "B.Sc": {
+    "min_marks": 50,
+    "recommended_marks": 65,
+    "ideal_marks_range": "50-85%",
+    "best_for": ["science", "research", "healthcare"],
+    "streams": ["science"],
+    "entrance_exams": ["none"],
+    "next_step": "M.Sc / Research",
+    "duration": "3 years",
+    "career_direction": "Microbiology, Genetics, Laboratory Research, Data Science",
+    "difficulty": "moderate-high",
+    "tags": ["science", "microbiology", "genetics", "biochemistry"]
+  },
+  "PGDM": {
+    "min_marks": 50,
+    "recommended_marks": 65,
+    "ideal_marks_range": "55-80%",
+    "best_for": ["business", "management", "industry-ready skills"],
+    "streams": ["any"],
+    "entrance_exams": ["cat", "mat", "xat", "cmat"],
+    "next_step": "Corporate Leadership",
+    "duration": "2 years",
+    "career_direction": "Corporate Management, Strategy, Operations",
+    "difficulty": "high",
+    "tags": ["management", "pgdm", "business", "industry"]
+  },
+  "MSW": {
+    "min_marks": 50,
+    "recommended_marks": 60,
+    "ideal_marks_range": "50-75%",
+    "best_for": ["social work", "community development", "hr"],
+    "streams": ["any"],
+    "entrance_exams": ["none"],
+    "next_step": "Senior Social Worker / NGO Head",
+    "duration": "2 years",
+    "career_direction": "NGO Management, Counseling, HR in Social Sector",
+    "difficulty": "moderate",
+    "tags": ["social work", "msw", "community", "counseling"]
   }
 }
