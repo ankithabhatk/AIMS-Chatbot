@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('AIMS Chatbot UX Validation', () => {
 
-  // Helper to bypass the welcome form
+  // Helper to fill and submit the welcome/onboarding form
   async function fillWelcomeForm(page) {
     await page.goto('/');
     
@@ -10,19 +10,36 @@ test.describe('AIMS Chatbot UX Validation', () => {
     await page.waitForSelector('.floating-robot-trigger', { state: 'visible', timeout: 60000 });
     await page.click('.floating-robot-trigger');
     
-    // Wait for either the form or the chat body to be visible
-    await page.waitForSelector('.welcome-form-container, .chat-body', { state: 'visible', timeout: 10000 });
+    // Wait for the chat to open
+    await page.waitForSelector('.chat-body', { state: 'visible', timeout: 15000 });
     
-    const formVisible = await page.locator('.welcome-form-container').isVisible();
+    // Check if the onboarding form is visible (WelcomeMessage component)
+    // The form has: input[name='name'], input[name='email'], input[name='mobile'], .radio-card divs
+    const nameInput = page.locator('input[name="name"]');
+    const formVisible = await nameInput.isVisible().catch(() => false);
+    
     if (formVisible) {
       await page.fill('input[name="name"]', 'Test User');
-      await page.fill('input[name="mobile"]', '9999999999');
       await page.fill('input[name="email"]', 'test@example.com');
-      await page.selectOption('select[name="course"]', 'BCA');
+      await page.fill('input[name="mobile"]', '9999999999');
+      
+      // Click BCA radio card (course selection uses .radio-card divs with text)
+      // Use force:true to bypass pointer interception on mobile viewport
+      const bcaCard = page.locator('.radio-card', { hasText: 'BCA' });
+      await bcaCard.scrollIntoViewIfNeeded();
+      await bcaCard.click({ force: true });
+      
+      // Submit the form
       await page.click('button[type="submit"]');
-      await expect(page.locator('.welcome-form-container')).toBeHidden({ timeout: 10000 });
+      
+      // Wait for the form to disappear (profile is set, chat takes over)
+      await page.waitForSelector('input[name="name"]', { state: 'detached', timeout: 10000 });
     }
+    
+    // Wait for chat input to be ready
+    await page.waitForSelector('.chat-textarea', { state: 'visible', timeout: 15000 });
   }
+
 
   test('Greeting and initial render', async ({ page }) => {
     await page.goto('/');
@@ -40,38 +57,53 @@ test.describe('AIMS Chatbot UX Validation', () => {
     const chatInput = page.locator('.chat-textarea');
     await expect(chatInput).toBeVisible();
 
-    // Step 1: Send "I like coding"
+    // Helper: wait for loading to finish (typing-indicator-bubble is the real DOM class)
+    const waitForResponse = async (timeout = 30000) => {
+      // Wait for typing bubble to appear (loading started)
+      await page.waitForSelector('.typing-indicator-bubble', { state: 'attached', timeout: 5000 }).catch(() => {});
+      // Wait for it to disappear (loading done)
+      await page.waitForSelector('.typing-indicator-bubble', { state: 'detached', timeout });
+    };
+
+    // Step 1: Send "idk"
+    await chatInput.fill('idk');
+    await page.locator('.send-btn').click();
+    await waitForResponse(30000);
+    
+    // Step 2: Send "maybe coding"
+    await chatInput.fill('maybe coding');
+    await page.locator('.send-btn').click();
+    await waitForResponse(30000);
+
+    // Step 3: Send "I like coding"
     await chatInput.fill('I like coding');
     await page.locator('.send-btn').click();
+    await waitForResponse(30000);
     
-    // Wait for typing indicator to disappear (it might flash too fast to catch toBeVisible)
-    await expect(page.locator('.typing-indicator')).toBeHidden({ timeout: 30000 });
-    
-    // Wait for bot response
-    const botResponses = page.locator('.message-bubble.bot-bubble');
-    await expect(botResponses.last()).toBeVisible();
-    
-    await page.waitForTimeout(1000); // UI settle
+    // Confirm bot responded
+    await expect(page.locator('.message-bubble.bot-bubble').last()).toBeVisible();
+    await page.waitForTimeout(800); // UI settle
     await page.screenshot({ path: 'testing/screenshots/2-coding-interest.png', fullPage: true });
 
-    // Step 2: Send "actually I hate coding"
+    // Step 4: Send "actually I hate coding" (contradiction)
     await chatInput.fill('actually I hate coding');
     await page.locator('.send-btn').click();
-    await expect(page.locator('.typing-indicator')).toBeHidden({ timeout: 20000 });
-    
-    // The confidence bar should visually update
+    await waitForResponse(30000);
+    await expect(page.locator('.message-bubble.bot-bubble').last()).toBeVisible();
+
+    // The confidence bar should now be visible (counselor mode returns profile_confidence_score)
     const confidenceBar = page.locator('.confidence-bar-fill');
-    await expect(confidenceBar.last()).toBeVisible();
+    await expect(confidenceBar.last()).toBeVisible({ timeout: 10000 });
     
-    await page.waitForTimeout(1000); // UI settle
+    await page.waitForTimeout(800); // UI settle
     await page.screenshot({ path: 'testing/screenshots/3-contradiction-hate-coding.png', fullPage: true });
 
-    // Step 3: Send "maybe business is better"
+    // Step 5: Send "maybe business is better" (pivot)
     await chatInput.fill('maybe business is better');
     await page.locator('.send-btn').click();
-    await expect(page.locator('.typing-indicator')).toBeHidden({ timeout: 20000 });
+    await waitForResponse(30000);
     
-    await page.waitForTimeout(1000); // UI settle
+    await page.waitForTimeout(800); // UI settle
     await page.screenshot({ path: 'testing/screenshots/4-pivot-business.png', fullPage: true });
   });
 

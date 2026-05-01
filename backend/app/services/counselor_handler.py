@@ -105,6 +105,7 @@ def is_exploratory_query(query: str) -> bool:
         "poor at", "not great at", "difficulty with",
         "but i", "however i", "although i",
         "confused", "not sure", "don't know",
+        "hate", "dislike", "don't like", "not interested in", "boring",
     ]
     
     # Check for constraint signals FIRST (highest priority)
@@ -345,6 +346,11 @@ def _generate_reflection(profile: UserProfile, query: str) -> str:
 def _detect_interest_area(query: str) -> str:
     """Detect student's interest area from query."""
     q = query.lower()
+    
+    # Check for avoidance (if they hate it, don't route to that interest)
+    avoidance_signals = ["hate", "dislike", "don't like", "not interested in", "boring"]
+    if any(signal in q for signal in avoidance_signals):
+        return "general"
     
     # Coding/tech signals
     coding_signals = ["coding", "programming", "software", "tech", "computer", "app", "website", "developer"]

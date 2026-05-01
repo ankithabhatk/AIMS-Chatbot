@@ -36,6 +36,7 @@ export const ConfidenceBar: React.FC<ConfidenceBarProps> = ({ confidence }) => {
           initial={{ width: 0 }}
           animate={{ width: `${targetPct}%` }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
+          style={{ minWidth: "4px" }}
         />
       </div>
     </div>
