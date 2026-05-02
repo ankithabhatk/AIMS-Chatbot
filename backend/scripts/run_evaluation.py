@@ -3,6 +3,8 @@
 import os
 import sys
 
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 # Ensure backend root is on PYTHONPATH when run directly
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if _ROOT not in sys.path:
