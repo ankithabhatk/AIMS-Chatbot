@@ -36,51 +36,28 @@ class TierGenerator:
         }
         
         model = model_map.get(tier, "gpt-3.5-turbo")
-        
+
         try:
-            # Format context - extract key info only
-            context_lines = []
-            for chunk in context_chunks[:5]:  # Limit to 5 chunks max
-                heading = chunk.get('heading', 'Info')
-                content = chunk.get('content', '')[:400]  # Limit per chunk
-                if content.strip():
-                    context_lines.append(f"[{heading}]\n{content}")
-            
-            context_text = "\n\n".join(context_lines) if context_lines else "No relevant data found."
-
-            prompt = f"""You are an academic assistant for AIMS Institutes.
-Answer the student's question concisely using ONLY the provided context.
-
-QUESTION: {query}
-
-CONTEXT:
-{context_text}
-
-INSTRUCTIONS:
-- Answer in 3-4 sentences maximum
-- Use bullet points only if listing items
-- Only include relevant information
-- Do NOT repeat raw text verbatim
-- Do NOT mention unrelated programs
-- If information is missing, say so clearly
-- Always be professional and helpful
-
-ANSWER:"""
+            from app.services.llm.prompt_builder import (
+                build_messages, validate_answer, apply_grounding_prefix, FALLBACK_ANSWER
+            )
+            messages = build_messages(query, context_chunks)
 
             response = self.client.chat.completions.create(
                 model=model,
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.3,          # Lower = more focused
-                max_tokens=200,           # Cost control
-                top_p=0.95
+                messages=messages,
+                temperature=0.1,
+                max_tokens=250,
+                top_p=1.0,
             )
-            
-            answer = response.choices[0].message.content.strip()
-            logger.info(f"TierGenerator: Generated answer ({len(answer)} chars) using {model}")
+
+            raw = response.choices[0].message.content.strip()
+            answer = apply_grounding_prefix(validate_answer(raw))
+            logger.info("TierGenerator: answer=%d chars model=%s", len(answer), model)
             return answer
-            
+
         except Exception as e:
-            logger.error(f"TierGenerator: Generation failed for tier {tier}: {e}")
+            logger.error("TierGenerator: generation failed tier=%s: %s", tier, e)
             return ""
 
     def judge_answer(

@@ -30,7 +30,7 @@ router = APIRouter(prefix="/api/v1", tags=["chat"])
 logger = logging.getLogger(__name__)
 
 # Constants
-FAISS_K = 25
+FAISS_K = 20
 MAX_ANSWER_LENGTH = 800
 CONFIDENCE_THRESHOLD = 0.45  # Lowered from 0.55 — placements/hostel content scores ~0.50–0.55
 RERANK_MIN_SCORE = 0.65
@@ -319,14 +319,24 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
         # ================================================================
         # 2. REWRITE QUERY (Only for Questions)
         # ================================================================
-        from app.services.query_rewriter import rewrite_query
+        from app.services.query_rewriter import rewrite_with_context
         
         original_query = query
-        rewritten_query = rewrite_query(query)
+        rewritten_query = rewrite_with_context(query, session_id)
         
         logger.info(f"[{session_id}] Original:  '{original_query}'")
         logger.info(f"[{session_id}] Rewritten: '{rewritten_query}'")
-        
+
+        # ================================================================
+        # 2.1 INTENT ROUTING (Guided Flows)
+        # ================================================================
+        from app.services.intent_router import route as intent_route
+        guided = intent_route(original_query, session_id)
+        if guided:
+            guided.setdefault("meta", {})["session_id"] = session_id
+            logger.info(f"[{session_id}] Guided flow: {guided.get('flow')} step {guided.get('step')}")
+            return guided
+
         # ================================================================
         # 3. EMBED QUERY
         # ================================================================
@@ -404,24 +414,29 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
             )
         
         # ================================================================
-        # 5. RERANK RESULTS (Semantic + Keyword Precision)
+        # 5. RERANK RESULTS (Model-based: ~20 docs → top 5)
         # ================================================================
-        from app.services.reranker import simple_rerank
+        from app.services.reranker import get_reranker
         
         # Convert FAISS tuples to dicts for reranker
-        # Format: (text, score, url, heading, doc_id)
+        # Format: (text, score, url, heading, doc_id, source, priority, course, topic, importance)
         candidate_dicts = [
             {
                 "content": c[0],
                 "score": c[1],
                 "url": c[2],
                 "heading": c[3],
-                "id": c[4] if len(c) > 4 else None
+                "id": c[4] if len(c) > 4 else None,
+                "source": c[5] if len(c) > 5 else "web",
+                "priority": c[6] if len(c) > 6 else 1.0,
             } for c in retrieved_chunks
         ]
         
-        # Rerank and pick top 5 (increased for better synthesis)
-        reranked_dicts = simple_rerank(rewritten_query, candidate_dicts, min_score=MIN_SCORE_FILTER)
+        logger.info(f"[{session_id}] Reranking: {len(candidate_dicts)} candidates → top 5")
+        
+        # Model-based re-ranking: picks top 5 by relevance
+        # Falls back to TF-IDF or heuristic automatically if model unavailable
+        reranked_dicts = get_reranker().rerank(rewritten_query, candidate_dicts, top_k=5)
         
         # ================================================================
         # 5.1 DOMAIN-SPECIFIC BOOSTING (Heuristic precision)
@@ -628,7 +643,20 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
             session_id=session_id,
             sources=sources
         )
-        
+
+        from app.services.logger import log_event as _structured_log
+        background_tasks.add_task(
+            _structured_log,
+            session_id=session_id,
+            query=original_query,
+            rewritten_query=rewritten_query,
+            intent=intent,
+            chunks=filtered_chunks,
+            confidence=confidence,
+            response=answer,
+            response_time_ms=response_time_ms,
+        )
+
         logger.info(f"[{session_id}] ✅ Response sent in {response_time_ms}ms")
         
         # ================================================================
@@ -695,6 +723,16 @@ async def chat_endpoint(request: ChatRequest, background_tasks: BackgroundTasks)
     
     except Exception as e:
         logger.error(f"[{session_id}] Unexpected error: {e}", exc_info=True)
+        try:
+            from app.services.logger import log_event as _structured_log
+            _structured_log(
+                session_id=session_id or "",
+                query=getattr(request, "query", ""),
+                error=str(e),
+                response_time_ms=int((time.time() - start_time) * 1000),
+            )
+        except Exception:
+            pass
         return {
             "error": True,
             "message": "Internal server error",

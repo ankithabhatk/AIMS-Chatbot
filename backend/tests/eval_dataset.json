@@ -1,0 +1,62 @@
+[
+  {
+    "query": "What is the MBA fee at AIMS?",
+    "expected_keywords": ["MBA", "fee"],
+    "expected_answer": "MBA fee is around 8.5 lakhs for 2 years",
+    "category": "fees"
+  },
+  {
+    "query": "Does AIMS have hostel facility?",
+    "expected_keywords": ["hostel"],
+    "expected_answer": "AIMS has hostel accommodation for students",
+    "category": "campus"
+  },
+  {
+    "query": "What are the placement statistics?",
+    "expected_keywords": ["placement"],
+    "expected_answer": "placement rate with top recruiters and salary packages",
+    "category": "placements"
+  },
+  {
+    "query": "What is the eligibility for MBA?",
+    "expected_keywords": ["eligibility", "MBA"],
+    "expected_answer": "MBA eligibility requires bachelor degree with 50 percent marks",
+    "category": "admission"
+  },
+  {
+    "query": "What specializations are offered in MBA?",
+    "expected_keywords": ["specialization", "MBA"],
+    "expected_answer": "MBA specializations include finance marketing HR analytics",
+    "category": "courses"
+  },
+  {
+    "query": "Tell me about BBA program",
+    "expected_keywords": ["BBA"],
+    "expected_answer": "BBA is a 3 year undergraduate management program",
+    "category": "courses"
+  },
+  {
+    "query": "What is the MCA fee?",
+    "expected_keywords": ["MCA", "fee"],
+    "expected_answer": "MCA fee details at AIMS college",
+    "category": "fees"
+  },
+  {
+    "query": "Is AIMS accredited?",
+    "expected_keywords": ["accredited", "NAAC"],
+    "expected_answer": "AIMS is NAAC accredited and AICTE approved",
+    "category": "accreditation"
+  },
+  {
+    "query": "What companies recruit from AIMS?",
+    "expected_keywords": ["recruiter", "placement"],
+    "expected_answer": "companies like Deloitte Amazon Infosys recruit from AIMS",
+    "category": "placements"
+  },
+  {
+    "query": "How to apply for admission?",
+    "expected_keywords": ["admission", "apply"],
+    "expected_answer": "apply online through the AIMS admission portal",
+    "category": "admission"
+  }
+]

@@ -98,38 +98,25 @@ class ResponseGenerator:
             (response, confidence, is_fallback)
         """
         try:
-            # Build context from top 3 chunks
-            context = "\n\n".join([
-                f"[{chunk[3]} - {chunk[2]}]\n{chunk[0][:400]}"
-                for chunk in retrieved_chunks[:3]
-            ])
-            
-            prompt = f"""
-You are a helpful college information assistant for AIMS College.
+            from app.services.llm.prompt_builder import (
+                build_messages, validate_answer, apply_grounding_prefix, FALLBACK_ANSWER
+            )
+            messages = build_messages(query, retrieved_chunks)
 
-Context (from college documentation):
-{context}
-
-Student Question: {query}
-
-Provide a clear, concise answer based only on the context provided. 
-If the context doesn't contain relevant information, say "I don't have specific information about that."
-
-Answer:
-"""
-            
             response = self.client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.3,
-                max_tokens=200
+                messages=messages,
+                temperature=0.1,
+                max_tokens=250,
+                top_p=1.0,
             )
-            
-            answer = response.choices[0].message.content.strip()
+
+            raw = response.choices[0].message.content.strip()
+            answer = apply_grounding_prefix(validate_answer(raw))
             confidence = float(retrieved_chunks[0][1])
-            
-            return answer, confidence, False
-            
+            is_fallback = answer == FALLBACK_ANSWER
+            return answer, confidence, is_fallback
+
         except Exception as e:
             logger.error(f"OpenAI generation failed: {e}, using template")
             return self._generate_template(query, retrieved_chunks)
