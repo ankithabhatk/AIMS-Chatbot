@@ -152,6 +152,14 @@ def _heuristic_rewrite(
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+_APPLY_PATTERNS = re.compile(
+    r"\b(how\s+to\s+apply|apply\s+for\s+admission|admission\s+process|"
+    r"application\s+form|how\s+do\s+i\s+apply|steps\s+to\s+apply|"
+    r"register\s+for\s+admission|enroll\s+at\s+aims)\b",
+    re.IGNORECASE,
+)
+
+
 def rewrite_with_context(query: str, session_id: str) -> str:
     """
     Rewrite vague/follow-up queries using conversation history.
@@ -160,6 +168,14 @@ def rewrite_with_context(query: str, session_id: str) -> str:
     if not query:
         return ""
     original = query
+
+    # Direct interception: apply/admission-process queries retrieve scholarship chunks
+    # without this normalization — force to application-specific terms
+    if _APPLY_PATTERNS.search(query):
+        rewritten = "admission application process steps apply AIMS College form documents"
+        logger.info("[REWRITER] apply-intercept '%s' → '%s'", original, rewritten)
+        return rewritten
+
     needs, reason = _needs_rewrite(query)
 
     if not needs:

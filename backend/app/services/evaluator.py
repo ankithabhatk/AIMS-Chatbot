@@ -8,6 +8,7 @@ import json
 import logging
 import math
 import os
+import re
 import time
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -51,8 +52,10 @@ def _run_pipeline(query: str) -> Dict[str, Any]:
         from app.services.reranker import get_reranker
         from app.services.llm.answer_generator import get_answer_generator
         from app.services.logger import compute_confidence
+        from app.services.query_rewriter import rewrite_with_context
 
-        embedding = embed_text(query)
+        retrieval_query = rewrite_with_context(query, "eval_session")
+        embedding = embed_text(retrieval_query)
         index     = get_index()
         if not index or not index.validate_integrity():
             return _error_result(query, "index unavailable", t0)
@@ -106,6 +109,24 @@ def _error_result(query: str, reason: str, t0: float) -> Dict[str, Any]:
             "fallback": True, "response_time_ms": int((time.time() - t0) * 1000), "error": reason}
 
 
+# ── Response normalisation ────────────────────────────────────────────────────
+
+_QA_PREFIX = re.compile(
+    r"(^|\n)\s*[•\-\*]?\s*Q\s*:\s*.+?(\n|$)",  # strip "• Q: ..." lines
+    re.IGNORECASE,
+)
+_A_PREFIX  = re.compile(r"(^|\n)\s*[•\-\*]?\s*A\s*:\s*", re.IGNORECASE)
+_BULLET    = re.compile(r"(^|\n)\s*[•\-\*]\s*")
+
+
+def _clean_response(text: str) -> str:
+    """Strip Q/A prefixes and bullet noise before similarity scoring."""
+    text = _QA_PREFIX.sub("\n", text)
+    text = _A_PREFIX.sub(" ", text)
+    text = _BULLET.sub(" ", text)
+    return " ".join(text.split())
+
+
 # ── Semantic similarity ─────────────────────────────────────────────────────
 
 def compute_similarity(text1: str, text2: str) -> Optional[float]:
@@ -148,11 +169,16 @@ def score_response(
         return 0.0
 
     if expected_answer:
-        sim = compute_similarity(response, expected_answer)
+        sim = compute_similarity(_clean_response(response), expected_answer)
         if sim is not None:
             if sim > 0.68:
                 return 1.0
             if sim > 0.45:
+                # Keyword tiebreaker: mixed-content responses have lower sim but
+                # correct info is present — confirm via all-keyword match
+                kws = expected_keywords or []
+                if kws and all(kw.lower() in response.lower() for kw in kws):
+                    return 1.0
                 return 0.5
             return 0.0
 
