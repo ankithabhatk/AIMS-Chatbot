@@ -157,6 +157,27 @@ def is_exploratory_query(query: str) -> bool:
     return False
 
 
+_COUNSELOR_BYPASS_COMPARISON = (
+    " vs ", "versus", " compare ", "difference between",
+    "confused between", "which is better",
+)
+_COUNSELOR_BYPASS_FACTUAL = (
+    "i want to know",   # covers "know about", "know more about", "know details"
+    "tell me about",
+    "give me info",
+    "what about",
+    "explain",
+    "information on",
+    "details about",
+    "info on",
+    "info about",
+)
+_COUNSELOR_BYPASS_PROGRAMS = frozenset([
+    "mca", "mba", "bca", "bba", "bcom", "pgdm",
+    "fees", "fee", "hostel", "placement", "admission", "courses",
+])
+
+
 def get_counselor_response(query: str, session_id: Optional[str] = None, query_data: Optional[Dict[str, Any]] = None) -> Optional[Dict]:
     """Generate guided counselor response for exploratory queries.
 
@@ -170,6 +191,25 @@ def get_counselor_response(query: str, session_id: Optional[str] = None, query_d
     Returns None if not an exploratory query.
     Returns dict with answer, intent, confidence if exploratory.
     """
+    q_lc = query.lower()
+
+    # Hard bypass 1: comparison queries — handled by comparison_handler
+    if any(kw in q_lc for kw in _COUNSELOR_BYPASS_COMPARISON):
+        return None
+
+    # Hard bypass 2: explicit factual requests about specific AIMS topics
+    # e.g. "i want to know about mca", "tell me about bca fees"
+    if (any(phrase in q_lc for phrase in _COUNSELOR_BYPASS_FACTUAL)
+            and any(prog in q_lc for prog in _COUNSELOR_BYPASS_PROGRAMS)):
+        return None
+
+    # Hard bypass 3: query has strong specific topic keyword — not exploratory
+    # e.g. "what about mca", "mca fees", "give me bca info"
+    if (not any(sig in q_lc for sig in ("confused", "not sure", "help me choose", "recommend", "what should"))
+            and any(prog in q_lc for prog in _COUNSELOR_BYPASS_PROGRAMS)
+            and len(q_lc.split()) <= 6):
+        return None
+
     # Get or create session profile
     memory = get_memory_store()
     profile = memory.get_profile(session_id) if session_id else UserProfile()

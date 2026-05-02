@@ -2,6 +2,12 @@
 import re
 from typing import Dict
 
+# Matches "MBA or MCA", "BCA or BBA" etc — program-vs-program via "or"
+_OR_COMPARE_PAT = re.compile(
+    r"\b(mba|mca|bba|bca|bcom|pgdm|b\.sc|msc)\s+or\s+(mba|mca|bba|bca|bcom|pgdm|b\.sc|msc)\b",
+    re.IGNORECASE,
+)
+
 _RULES: list[tuple[str, list[str], float]] = [
     ("admissions",  ["apply", "application", "enroll", "admission", "how to join",
                      "register", "last date", "deadline", "eligib", "entrance"],      0.9),
@@ -16,9 +22,29 @@ _RULES: list[tuple[str, list[str], float]] = [
     ("general",     [],                                                                0.4),
 ]
 
+# Strong comparison markers
+_COMPARISON_KW = [
+    "vs", "versus", "compare",
+    "difference between", "confused between",
+    "which is better", "which one is better",
+    "which should i choose",
+]
+
+
+def _is_comparison(q: str) -> bool:
+    if any(kw in q for kw in _COMPARISON_KW) or _OR_COMPARE_PAT.search(q):
+        return True
+    # "confused ... X and Y" or "difference ... X and Y"
+    if ("confused" in q or "difference" in q) and " and " in q:
+        return True
+    return False
+
 
 def classify(query: str) -> Dict[str, object]:
     q = query.lower()
+    # Comparison takes priority — checked before topic rules
+    if _is_comparison(q):
+        return {"intent": "comparison", "confidence": 0.9}
     for intent, keywords, confidence in _RULES[:-1]:
         if any(kw in q for kw in keywords):
             return {"intent": intent, "confidence": confidence}

@@ -169,6 +169,46 @@ async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
         )
         return response
     
+    # CHECK: Comparison + Guided flow intent routing
+    # Must run BEFORE counselor so "compare mca and mba" / "MBA vs MCA" are handled here
+    from app.services.intent_router import route as _intent_route
+    _guided = _intent_route(query, session_id)
+    if _guided:
+        _ans = _guided.get("answer", "")
+        if _ans:
+            response = ChatResponseSuccess(
+                answer=_ans,
+                sources=[],
+                confidence=float(_guided.get("confidence", 0.9)),
+                status="unlock",
+                intent=_guided.get("flow", "comparison"),
+                course=query_data.get("course") or "General",
+                fallback=False,
+                suggestions=["Tell me about fees", "Admission process", "Placement record"],
+                meta={
+                    "response_time_ms": int((time.time() - start_time) * 1000),
+                    "session_id": session_id,
+                    "routing": "intent_router",
+                },
+            )
+            _log_interaction(
+                session_id=session_id,
+                query=query,
+                answer=response.answer,
+                confidence=response.confidence,
+                intent=response.intent,
+                status=response.status,
+            )
+            _queue_persistence(
+                background_tasks,
+                request=request,
+                session_id=session_id,
+                user_query=query,
+                response=response,
+                query_data=query_data,
+            )
+            return response
+
     # CHECK: Counselor layer (exploratory queries, career guidance)
     # This handles queries like "I like coding, what should I choose?"
     # Provides conversational guidance instead of info dumps

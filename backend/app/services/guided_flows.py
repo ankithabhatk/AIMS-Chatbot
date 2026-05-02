@@ -55,6 +55,20 @@ _FLOWS = {
 
 GUIDED_INTENTS = set(_FLOWS.keys())
 
+_NEW_TOPIC_KEYWORDS = frozenset([
+    "bca", "mca", "mba", "bba", "pgdm",
+    "fees", "fee", "hostel", "admission",
+    "placements", "placement", "courses",
+    "salary", "scholarship",
+])
+
+
+def is_new_topic(query: str) -> bool:
+    """Return True if the query clearly introduces a new subject."""
+    q = query.lower()
+    return any(k in q for k in _NEW_TOPIC_KEYWORDS)
+
+
 _LEAD_STEPS = [
     {"key": "__consent__",
      "message": "Would you like us to contact you for personalized assistance?",
@@ -106,6 +120,15 @@ def advance_flow(session_id: str, user_input: str) -> Optional[dict]:
         if _is_expired(state):
             del _state[session_id]
             return None
+        # Secondary safety net: bail out if user changed topic
+        if is_new_topic(user_input):
+            del _state[session_id]
+            return None
+        # Loop prevention: same query twice → exit flow
+        if state.get("last_query") == user_input.strip().lower():
+            del _state[session_id]
+            return None
+        state["last_query"] = user_input.strip().lower()
         state["_ts"] = time.time()
         flow = state["flow"]
         step = state["step"]
