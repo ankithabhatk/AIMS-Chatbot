@@ -8,7 +8,6 @@ import { RobotAvatar } from './RobotAvatar';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { WelcomeMessage } from './WelcomeMessage';
-import { AnnouncementBanner } from './AnnouncementBanner';
 import { QuickReplies } from './QuickReplies';
 import { FAQAccordion } from './FAQAccordion';
 import { ImportantDates } from './ImportantDates';
@@ -59,8 +58,6 @@ export const ChatWindow: React.FC = () => {
 
       <div className="chat-body" style={{ position: 'relative' }}>
         <div className="messages-container">
-          <AnnouncementBanner />
-          
           {profile && (
             <StudentMemoryBanner 
               visible={isCounselorMode} 

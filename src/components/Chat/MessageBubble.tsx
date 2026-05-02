@@ -6,7 +6,6 @@ import { ChatMessage, useChat } from '../../context/ChatContext';
 import { FeedbackButtons } from './FeedbackButtons';
 import { UserSummaryCard } from './UserSummaryCard';
 import { RobotAvatar } from './RobotAvatar';
-import { ConfidenceBar } from './ConfidenceBar';
 import { SourceCards } from './SourceCards';
 
 interface MessageBubbleProps {
@@ -167,11 +166,6 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
               </div>
             )}
           </div>
-        )}
-
-        {/* Confidence bar — bot messages only, when confidence is available */}
-        {!isUser && !isOnboardingSummary && typeof confidence === 'number' && (
-          <ConfidenceBar confidence={confidence} />
         )}
 
         {/* Source cards — bot messages only */}
