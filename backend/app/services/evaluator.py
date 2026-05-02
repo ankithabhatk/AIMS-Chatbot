@@ -150,9 +150,9 @@ def score_response(
     if expected_answer:
         sim = compute_similarity(response, expected_answer)
         if sim is not None:
-            if sim > 0.75:
+            if sim > 0.68:
                 return 1.0
-            if sim > 0.5:
+            if sim > 0.45:
                 return 0.5
             return 0.0
 

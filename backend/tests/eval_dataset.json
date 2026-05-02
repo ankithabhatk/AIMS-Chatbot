@@ -2,61 +2,61 @@
   {
     "query": "What is the MBA fee at AIMS?",
     "expected_keywords": ["MBA", "fee"],
-    "expected_answer": "MBA fee is around 8.5 lakhs for 2 years",
+    "expected_answer": "MBA fee regulated by Bangalore City University committee structured as annual installments over 2 years contact admissions for current figures",
     "category": "fees"
   },
   {
     "query": "Does AIMS have hostel facility?",
     "expected_keywords": ["hostel"],
-    "expected_answer": "AIMS has hostel accommodation for students",
+    "expected_answer": "AIMS has on-campus hostel separate blocks for boys and girls 24/7 security CCTV wifi mess facility medical support",
     "category": "campus"
   },
   {
     "query": "What are the placement statistics?",
     "expected_keywords": ["placement"],
-    "expected_answer": "placement rate with top recruiters and salary packages",
+    "expected_answer": "placements are an outcome 84 percent MBA placement record 75 percent BBA placement record dedicated placement teams companies",
     "category": "placements"
   },
   {
     "query": "What is the eligibility for MBA?",
     "expected_keywords": ["eligibility", "MBA"],
-    "expected_answer": "MBA eligibility requires bachelor degree with 50 percent marks",
+    "expected_answer": "MBA eligibility requires bachelor degree from recognized university candidates must pass entrance exam for admission",
     "category": "admission"
   },
   {
     "query": "What specializations are offered in MBA?",
     "expected_keywords": ["specialization", "MBA"],
-    "expected_answer": "MBA specializations include finance marketing HR analytics",
+    "expected_answer": "MBA specializations include business analytics digital marketing financial strategy operations management organisational behaviour",
     "category": "courses"
   },
   {
     "query": "Tell me about BBA program",
     "expected_keywords": ["BBA"],
-    "expected_answer": "BBA is a 3 year undergraduate management program",
+    "expected_answer": "BBA is a 3 year undergraduate management program at AIMS with aviation management specialization",
     "category": "courses"
   },
   {
     "query": "What is the MCA fee?",
     "expected_keywords": ["MCA", "fee"],
-    "expected_answer": "MCA fee details at AIMS college",
+    "expected_answer": "MCA fee follows BCU undergraduate program norms contact admissions at theaims for current fee details",
     "category": "fees"
   },
   {
     "query": "Is AIMS accredited?",
     "expected_keywords": ["accredited", "NAAC"],
-    "expected_answer": "AIMS is NAAC accredited and AICTE approved",
+    "expected_answer": "AIMS is re-accredited with NAAC A Grade CGPA 3.25 out of 4 and holds IACBE accreditation ranked among top business schools",
     "category": "accreditation"
   },
   {
     "query": "What companies recruit from AIMS?",
-    "expected_keywords": ["recruiter", "placement"],
-    "expected_answer": "companies like Deloitte Amazon Infosys recruit from AIMS",
+    "expected_keywords": ["companies", "placement"],
+    "expected_answer": "graduates from AIMS have been recruited by top companies across sectors with strong industry connections and placement cell support",
     "category": "placements"
   },
   {
     "query": "How to apply for admission?",
     "expected_keywords": ["admission", "apply"],
-    "expected_answer": "apply online through the AIMS admission portal",
+    "expected_answer": "apply for admission at AIMS through the admissions office contact admissions at theaims ac in for application process and entrance requirements",
     "category": "admission"
   }
 ]
